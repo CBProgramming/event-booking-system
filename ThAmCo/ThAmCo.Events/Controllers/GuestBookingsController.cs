@@ -74,10 +74,16 @@ namespace ThAmCo.Events.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(guestBooking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var existingGuest = _context.Guests.Where(g => g.CustomerId == guestBooking.CustomerId && g.EventId == guestBooking.EventId).ToList();
+                if (existingGuest == null)
+                {
+                    _context.Add(guestBooking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
+            
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
             return View(guestBooking);
