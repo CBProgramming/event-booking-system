@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Event.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Attended)
+                @Html.DisplayNameFor(model => model.Attended)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new  { eventId = item.EventId, customerId = item.CustomerId }) |
