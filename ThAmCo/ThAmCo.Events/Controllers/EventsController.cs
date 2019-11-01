@@ -92,6 +92,15 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
 
+
+
+            //var eventToUpdate = await _context.Events
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            //@event.Date = eventToUpdate.Date;
+            //@event.TypeId = eventToUpdate.TypeId;
+
+
+
             if (ModelState.IsValid)
             {
                 try
