@@ -5,6 +5,7 @@
 }
 
 <h2>Index</h2>
+<h5>@ViewData["ErrorMessage"]</h5>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -34,7 +35,8 @@
                 @Html.DisplayFor(modelItem => item.Event.Title)
             </td>
             <td>
-                @Html.DisplayNameFor(model => model.Attended)
+                @Html.DisplayFor(model => item.Attended)
+                <input asp-for="@item.Attended" asp-route-id="@item.EventId"/>
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new  { eventId = item.EventId, customerId = item.CustomerId }) |

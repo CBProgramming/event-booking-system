@@ -34,7 +34,7 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> CustomerBookings(int id)
         {
             var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g => g.CustomerId == id);
-            return View("Index",await eventsDbContext.ToListAsync());
+            return View(await eventsDbContext.ToListAsync());
         }
 
         // GET: GuestBookings/Details/5
@@ -74,16 +74,18 @@ namespace ThAmCo.Events.Controllers
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
+            ViewData["GuestBookingMessage"] = "";
+
             if (ModelState.IsValid)
             {
                 var existingGuest = _context.Guests.Where(g => g.CustomerId == guestBooking.CustomerId && g.EventId == guestBooking.EventId).ToList();
-                if (existingGuest == null)
+                if (existingGuest == null || existingGuest.Count == 0)
                 {
                     _context.Add(guestBooking);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-
+                ViewData["GuestBookingMessage"] = "Booking already exists.";
             }
             
             return View(guestBooking);
@@ -147,15 +149,22 @@ namespace ThAmCo.Events.Controllers
         // GET: GuestBookings/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? customerId)
         {
+            ViewData["ErrorMessage"] = "";
             if (eventId == null || customerId == null)
             {
                 return NotFound();
             }
-
             var guestBooking = await _context.Guests.FindAsync(customerId, eventId);
             if (guestBooking == null)
             {
                 return NotFound();
+            }
+            var deletedEvent = await _context.Events.FindAsync(eventId);
+            if (deletedEvent.Date < DateTime.Today)
+            {
+                ViewData["ErrorMessage"] = "Event has already happened, cancellation not required";
+                return RedirectToAction(nameof(Index));
+
             }
 
             return View(guestBooking);
