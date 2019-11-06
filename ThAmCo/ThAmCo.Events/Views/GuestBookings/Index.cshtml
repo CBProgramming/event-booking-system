@@ -4,8 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
-<h5>@ViewData["ErrorMessage"]</h5>
+<h1>Index</h1>
+<h2>Total guests: @Model.Count()</h2>
+<h3>@ViewData["ErrorMessage"]</h3>
 
 <p>
     <a asp-action="Create">Create New</a>
