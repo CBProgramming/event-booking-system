@@ -93,7 +93,6 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -124,15 +123,14 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-
-            return View(customer);
+            var customerVM = new ViewModels.Customers.CustomerVM(customer);
+            return View(customerVM);
         }
 
         // POST: Customers/Delete/5

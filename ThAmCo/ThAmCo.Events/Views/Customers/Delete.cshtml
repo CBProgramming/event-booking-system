@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.Data.Customer
+﻿@model ThAmCo.Events.ViewModels.Customers.CustomerVM
 
 @{
     ViewData["Title"] = "Delete";
@@ -30,7 +30,7 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |

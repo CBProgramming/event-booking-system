@@ -40,8 +40,8 @@
                 <input asp-for="@item.Attended" asp-route-id="@item.EventId"/>
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new  { eventId = item.EventId, customerId = item.CustomerId }) |
-                @Html.ActionLink("Details", "Details",new { eventId = item.EventId, customerId = item.CustomerId }) |
+                @*@Html.ActionLink("Edit", "Edit", new  { eventId = item.EventId, customerId = item.CustomerId }) |
+                @Html.ActionLink("Details", "Details",new { eventId = item.EventId, customerId = item.CustomerId }) |*@
                 @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = item.CustomerId })
             </td>
         </tr>

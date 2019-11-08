@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ThAmCo.Events.Data.Event>
+﻿@model ThAmCo.Events.ViewModels.Events.EventsVM
 
 @{
     ViewData["Title"] = "Index";
@@ -13,22 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Duration)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TypeId)
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().TypeId)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Events) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)

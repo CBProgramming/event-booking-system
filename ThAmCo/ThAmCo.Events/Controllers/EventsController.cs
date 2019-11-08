@@ -21,7 +21,8 @@ namespace ThAmCo.Events.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Events.ToListAsync());
+            var eventsVM = new ViewModels.Events.EventsVM(await _context.Events.ToListAsync());
+            return View(eventsVM);
         }
 
         // GET: Events/Details/5
@@ -31,15 +32,14 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             var @event = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
             }
-
-            return View(@event);
+            var eventVM = new ViewModels.Events.EventVM(@event);
+            return View(eventVM);
         }
 
         // GET: Events/Create
@@ -71,13 +71,13 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             var @event = await _context.Events.FindAsync(id);
             if (@event == null)
             {
                 return NotFound();
             }
-            return View(@event);
+            var eventVM = new ViewModels.Events.EventVM(@event);
+            return View(eventVM);
         }
 
         // POST: Events/Edit/5
@@ -91,16 +91,6 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
-
-
-            //var eventToUpdate = await _context.Events
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            //@event.Date = eventToUpdate.Date;
-            //@event.TypeId = eventToUpdate.TypeId;
-
-
-
             if (ModelState.IsValid)
             {
                 try
@@ -131,15 +121,14 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             var @event = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
             }
-
-            return View(@event);
+            var eventVM = new ViewModels.Events.EventVM(@event);
+            return View(eventVM);
         }
 
         // POST: Events/Delete/5

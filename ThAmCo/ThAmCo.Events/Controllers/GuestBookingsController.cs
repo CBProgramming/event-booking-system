@@ -33,29 +33,30 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> CustomerBookings(int id)
         {
+            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
             var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g => g.CustomerId == id);
+
             return View(await eventsDbContext.ToListAsync());
         }
 
-        // GET: GuestBookings/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var guestBooking = await _context.Guests
-                .Include(g => g.Customer)
-                .Include(g => g.Event)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (guestBooking == null)
-            {
-                return NotFound();
-            }
-
-            return View(guestBooking);
-        }
+        //// GET: GuestBookings/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var guestBooking = await _context.Guests
+        //        .Include(g => g.Customer)
+        //        .Include(g => g.Event)
+        //        .FirstOrDefaultAsync(m => m.CustomerId == id);
+        //    if (guestBooking == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var guestBookingVM = new ViewModels.GuestBookings.GuestBookingVM(guestBooking);
+        //    return View(guestBooking);
+        //}
 
         // GET: GuestBookings/Create
         public IActionResult Create()
@@ -91,60 +92,60 @@ namespace ThAmCo.Events.Controllers
             return View(guestBooking);
         }
 
-        // GET: GuestBookings/Edit/5
-        public async Task<IActionResult> Edit(int? eventId, int? customerId)
-        {
-            if (eventId == null || customerId == null)
-            {
-                return NotFound();
-            }
+        //// GET: GuestBookings/Edit/5
+        //public async Task<IActionResult> Edit(int? eventId, int? customerId)
+        //{
+        //    if (eventId == null || customerId == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var guestBooking = await _context.Guests.FindAsync(customerId,eventId);
-            if (guestBooking == null)
-            {
-                return NotFound();
-            }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", customerId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", eventId);
-            return View(guestBooking);
-        }
+        //    var guestBooking = await _context.Guests.FindAsync(customerId,eventId);
+        //    if (guestBooking == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var guestBookingVM = new ViewModels.GuestBookings.GuestBookingVM(guestBooking);
+        //    //ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", customerId);
+        //    //ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", eventId);
+        //    return View(guestBookingVM);
+        //}
 
         // POST: GuestBookings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
-        {
-            if (id != guestBooking.CustomerId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(guestBooking);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GuestBookingExists(guestBooking.CustomerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
-            return View(guestBooking);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int EventId, int CustomerId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        //{
+        //    if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(guestBooking);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!GuestBookingExists(guestBooking.CustomerId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
+        //    ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
+        //    return View(guestBooking);
+        //}
 
         // GET: GuestBookings/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? customerId)
@@ -159,15 +160,9 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var deletedEvent = await _context.Events.FindAsync(eventId);
-            if (deletedEvent.Date < DateTime.Today)
-            {
-                ViewData["ErrorMessage"] = "Event has already happened, cancellation not required";
-                return RedirectToAction(nameof(Index));
+            var guestBookingVM = new ViewModels.GuestBookings.GuestBookingVM(guestBooking);
 
-            }
-
-            return View(guestBooking);
+            return View(guestBookingVM);
         }
 
         // POST: GuestBookings/Delete/5
