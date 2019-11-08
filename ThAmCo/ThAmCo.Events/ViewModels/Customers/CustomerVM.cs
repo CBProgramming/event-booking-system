@@ -2,16 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.ViewModels.Customers
 {
     public class CustomerVM
     {
-        public CustomerVM(List<Data.Customer> customers)
+        public CustomerVM(Data.Customer customer)
         {
-            Customers = customers;
+            Id = customer.Id;
+            Surname = customer.Surname;
+            FirstName = customer.FirstName;
+            Email = customer.Email;
+            Bookings = customer.Bookings;
         }
 
-        public List<Data.Customer> Customers { get; set; }
+        public int Id { get; set; }
+
+        public string FullName
+        {
+            get { return FirstName + " " + Surname; }
+        }
+
+        public string Surname { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string Email { get; set; }
+
+        public List<GuestBooking> Bookings { get; set; }
     }
 }
+

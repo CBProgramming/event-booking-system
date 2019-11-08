@@ -22,7 +22,7 @@ namespace ThAmCo.Events.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var customersVM = new ThAmCo.Events.ViewModels.Customers.CustomerVM(await _context.Customers.ToListAsync());
+            var customersVM = new ViewModels.Customers.CustomersVM(await _context.Customers.ToListAsync());
             return View(customersVM);
         }
 
@@ -33,15 +33,14 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-
-            return View(customer);
+            var customerVM = new ViewModels.Customers.CustomerVM(customer);
+            return View(customerVM);
         }
 
         // GET: Customers/Create
@@ -73,12 +72,13 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customers
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
+            var customerVM = new ViewModels.Customers.CustomerVM(customer);
             return View(customer);
         }
 
