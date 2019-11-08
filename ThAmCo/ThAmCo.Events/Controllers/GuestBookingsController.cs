@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.ViewModels.CustomerEvents;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -34,9 +35,14 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> CustomerBookings(int id)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
-            var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g => g.CustomerId == id);
+            var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).ToListAsync();
+            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, bookings);
+            return View(customerEvents);
 
-            return View(await eventsDbContext.ToListAsync());
+
+
+            //var eventsDbContext = _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id);
+            //return View(await eventsDbContext.ToListAsync());
         }
 
         //// GET: GuestBookings/Details/5
