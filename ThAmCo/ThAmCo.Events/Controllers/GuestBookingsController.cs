@@ -36,7 +36,9 @@ namespace ThAmCo.Events.Controllers
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
             var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).ToListAsync();
-            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, bookings);
+            var events = await _context.Events.ToListAsync();
+            var filteredEvents = events.Where(e => bookings.Any(b => b.EventId.Equals(e.Id)));
+            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, filteredEvents);
             return View(customerEvents);
 
 
