@@ -4,83 +4,71 @@
     ViewData["Title"] = "CustomerBookings";
 }
 
-<h2>CustomerBookings</h2>
+    <h2>@Html.DisplayFor(model => model.Customer.FirstName) @Html.DisplayFor(model => model.Customer.Surname)'s Bookings</h2>
+    <h4>@Html.DisplayNameFor(model => model.Customer.Email): @Html.DisplayFor(model => model.Customer.Email)</h4>
 
-
-
-<div>
-    <h4>Customer</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.Surname)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Customer.Surname)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Customer.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.Email)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Customer.Email)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Customer.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-
+<br>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Book new event</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().TypeId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Events)
-        {
+
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duration)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TypeId)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.FirstOrDefault().TypeId)
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Events)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeId)
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bookings.FirstOrDefault().Attended)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Bookings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Attended)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = item.CustomerId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

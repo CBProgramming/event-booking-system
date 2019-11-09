@@ -35,10 +35,9 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> CustomerBookings(int id)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
-            var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).ToListAsync();
-            var events = await _context.Events.ToListAsync();
-            var filteredEvents = events.Where(e => bookings.Any(b => b.EventId.Equals(e.Id)));
-            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, filteredEvents);
+            var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).OrderBy(e => e.EventId).ToListAsync();
+            var events = await _context.Events.Where(e => bookings.Any(b => b.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, events, bookings);
             return View(customerEvents);
 
 

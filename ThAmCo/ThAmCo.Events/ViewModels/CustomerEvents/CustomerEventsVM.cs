@@ -9,14 +9,18 @@ namespace ThAmCo.Events.ViewModels.CustomerEvents
 {
     public class CustomerEventsVM
     {
-        public CustomerEventsVM(Customer customer, IEnumerable<Data.Event> events)
+        public CustomerEventsVM(Customer customer, IEnumerable<Data.Event> events, IEnumerable<Data.GuestBooking> bookings)
         {
             Customer = customer;
             Events = events;
+            Bookings = bookings;
         }
 
         public Customer Customer { get; set; }
 
         public IEnumerable<Data.Event> Events { get; set; }
+
+        public IEnumerable<Data.GuestBooking> Bookings { get; set; }
+
     }
 }
