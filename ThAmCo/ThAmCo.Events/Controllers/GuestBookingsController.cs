@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.ViewModels.CustomerEvents;
+using ThAmCo.Events.ViewModels.Events;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -37,11 +39,13 @@ namespace ThAmCo.Events.Controllers
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
             var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).OrderBy(e => e.EventId).ToListAsync();
             var events = await _context.Events.Where(e => bookings.Any(b => b.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
-            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, events, bookings);
+            List<EventBookingVM> eventBookings = new List<EventBookingVM>();
+            for (int i = 0; i < bookings.Count; i++)
+            {
+                eventBookings.Add(new EventBookingVM(events[i],bookings[i]));
+            }
+            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, eventBookings);
             return View(customerEvents);
-
-            //var eventsDbContext = _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id);
-            //return View(await eventsDbContext.ToListAsync());
         }
 
         // POST: GuestBookings/CustomerBookings/5

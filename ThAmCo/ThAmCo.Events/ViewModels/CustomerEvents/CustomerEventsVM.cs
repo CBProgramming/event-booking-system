@@ -4,23 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.ViewModels.Events;
 
 namespace ThAmCo.Events.ViewModels.CustomerEvents
 {
     public class CustomerEventsVM
     {
-        public CustomerEventsVM(Customer customer, IEnumerable<Data.Event> events, IEnumerable<Data.GuestBooking> bookings)
+        public CustomerEventsVM(Customer customer, List<EventBookingVM> events)
         {
             Customer = customer;
             Events = events;
-            Bookings = bookings;
         }
 
         public Customer Customer { get; set; }
 
-        public IEnumerable<Data.Event> Events { get; set; }
-
-        public IEnumerable<Data.GuestBooking> Bookings { get; set; }
+        public List<EventBookingVM> Events { get; set; }
 
     }
 }

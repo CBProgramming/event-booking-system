@@ -12,7 +12,7 @@
     <a asp-action="Create">Book new event</a>
 </p>
 
-
+<form>
     <table class="table">
         <thead>
             <tr>
@@ -28,8 +28,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Events.FirstOrDefault().TypeId)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Attended)
+                </th>
             </tr>
         </thead>
+
         <tbody>
             @foreach (var item in Model.Events)
             {
@@ -46,40 +50,17 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.TypeId)
                     </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Attended)
+                        <input asp-for="@item.Attended" asp-route-id="@item.EventId" />
+                    </td>
+                    <td>
+                        <input type="submit" value="Save" class="btn btn-default" />
+                        @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id })
+                    </td>
                 </tr>
             }
 
         </tbody>
-    </table>
-    <form asp-action="CustomerBookings">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Bookings.FirstOrDefault().Attended)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
 
-            <tbody>
-                @foreach (var item in Model.Bookings)
-                {
-
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Attended)
-                            <input asp-for="@item.Attended" asp-route-id="@item.EventId" />
-                        </td>
-                        <td>
-                            <input type="submit" value="Save" class="btn btn-default" />
-                            @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = item.CustomerId })
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-
-        </table>
-
-    </form>
+</form>
