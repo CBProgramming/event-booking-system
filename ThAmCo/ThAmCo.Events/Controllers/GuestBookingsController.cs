@@ -195,6 +195,41 @@ namespace ThAmCo.Events.Controllers
             return View("CustomerBookings");
         }
 
+        // POST: GuestBookings/Save/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        {
+            if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(guestBooking);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GuestBookingExists(guestBooking.CustomerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                await CustomerBookings(CustomerId);
+            }
+            // else initialise error message
+            await CustomerBookings(CustomerId);
+        }
+
         // GET: GuestBookings/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? customerId)
         {

@@ -51,11 +51,12 @@
                         @Html.DisplayFor(modelItem => item.TypeId)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Attended)
-                        <input asp-for="@item.Attended" asp-route-id="@item.EventId" />
+                        @*@@Html.DisplayFor(modelItem => item.Attended)*@
+                        <input asp-for="@item.Attended" @*@asp-route-id="@item.EventId"*@ />
                     </td>
                     <td>
-                        <input type="submit" value="Save" class="btn btn-default" />
+                        @*<input type="submit" value="Save" class="btn btn-default" />*@
+                        @Html.ActionLink("Save", "Save", new { customerId = Model.Customer.Id, eventId = item.EventId})
                         @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id })
                     </td>
                 </tr>
