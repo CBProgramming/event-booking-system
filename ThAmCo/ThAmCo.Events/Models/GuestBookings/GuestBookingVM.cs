@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
 
-namespace ThAmCo.Events.ViewModels.GuestBookings
+namespace ThAmCo.Events.Models.GuestBookings
 {
     public class GuestBookingVM
     { 

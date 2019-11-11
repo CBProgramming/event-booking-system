@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
 
-namespace ThAmCo.Events.ViewModels.Events
+namespace ThAmCo.Events.Models.Events
 {
     public class EventVM
     {

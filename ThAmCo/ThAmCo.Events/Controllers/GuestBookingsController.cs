@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
-using ThAmCo.Events.ViewModels.CustomerEvents;
-using ThAmCo.Events.ViewModels.Events;
+using ThAmCo.Events.Models.CustomerEvents;
+using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.GuestBookings;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -89,7 +90,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
         {
             if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
             {
@@ -99,8 +100,10 @@ namespace ThAmCo.Events.Controllers
             {
                 try
                 {
-                    _context.Update(guestBooking);
+                    var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
+                    dbGuestBooking.Attended = guestBooking.Attended;
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,7 +135,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var guestBookingVM = new ViewModels.GuestBookings.GuestBookingVM(guestBooking);
+            var guestBookingVM = new Models.GuestBookings.GuestBookingVM(guestBooking);
 
             return View(guestBookingVM);
         }

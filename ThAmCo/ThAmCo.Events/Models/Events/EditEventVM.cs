@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ThAmCo.Events.ViewModels.Events
+namespace ThAmCo.Events.Models.Events
 {
     public class EditEventVM
     {

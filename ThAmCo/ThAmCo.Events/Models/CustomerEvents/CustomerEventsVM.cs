@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
-using ThAmCo.Events.ViewModels.Events;
+using ThAmCo.Events.Models.Events;
 
-namespace ThAmCo.Events.ViewModels.CustomerEvents
+namespace ThAmCo.Events.Models.CustomerEvents
 {
     public class CustomerEventsVM
     {

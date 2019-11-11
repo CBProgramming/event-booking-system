@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
-using ThAmCo.Events.ViewModels;
+
 
 namespace ThAmCo.Events.Controllers
 {
@@ -22,7 +22,7 @@ namespace ThAmCo.Events.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var customersVM = new ViewModels.Customers.CustomersVM(await _context.Customers.ToListAsync());
+            var customersVM = new Models.Customers.CustomersVM(await _context.Customers.ToListAsync());
             return View(customersVM);
         }
 
@@ -39,7 +39,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customerVM = new ViewModels.Customers.CustomerVM(customer);
+            var customerVM = new Models.Customers.CustomerVM(customer);
             return View(customerVM);
         }
 
@@ -78,7 +78,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customerVM = new ViewModels.Customers.CustomerVM(customer);
+            var customerVM = new Models.Customers.CustomerVM(customer);
             return View(customer);
         }
 
@@ -129,7 +129,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customerVM = new ViewModels.Customers.CustomerVM(customer);
+            var customerVM = new Models.Customers.CustomerVM(customer);
             return View(customerVM);
         }
 

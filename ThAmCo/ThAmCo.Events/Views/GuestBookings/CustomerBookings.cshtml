@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.ViewModels.CustomerEvents.CustomerEventsVM
+﻿@model ThAmCo.Events.Models.CustomerEvents.CustomerEventsVM
 
 @{
     ViewData["Title"] = "CustomerBookings";
@@ -12,7 +12,7 @@
     <a asp-action="Create">Book new event</a>
 </p>
 
-<form>
+<form asp-action="Save">
     <table class="table">
         <thead>
             <tr>
@@ -51,17 +51,16 @@
                         @Html.DisplayFor(modelItem => item.TypeId)
                     </td>
                     <td>
-                            @*@@Html.DisplayFor(modelItem => item.Attended)*@
-                            <input asp-for="@item.Attended" asp-route-id="@item.EventId"  />
+                            <input asp-for="@item.Attended" />
                     </td>
                     <td>
                         <input type="submit" value="Save" class="btn btn-default" />
-                        @Html.ActionLink("Save", "Save", new { customerId = Model.Customer.Id, eventId = item.EventId})
+                        @Html.ActionLink("Save", "Save", new { customerId = Model.Customer.Id, eventId = item.EventId })
                         @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id })
                     </td>
                 </tr>
             }
 
         </tbody>
-
+    </table>/>
 </form>

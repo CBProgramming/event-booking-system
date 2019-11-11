@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
-using ThAmCo.Events.ViewModels.Events;
+using ThAmCo.Events.Models.Events;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -22,7 +22,7 @@ namespace ThAmCo.Events.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var eventsVM = new ViewModels.Events.EventsVM(await _context.Events.ToListAsync());
+            var eventsVM = new Models.Events.EventsVM(await _context.Events.ToListAsync());
             return View(eventsVM);
         }
 
@@ -39,7 +39,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new ViewModels.Events.EventVM(@event);
+            var eventVM = new Models.Events.EventVM(@event);
             return View(eventVM);
         }
 
@@ -77,7 +77,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new ViewModels.Events.EventVM(@event);
+            var eventVM = new Models.Events.EventVM(@event);
             return View(eventVM);
         }
 
@@ -130,7 +130,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new ViewModels.Events.EventVM(@event);
+            var eventVM = new Models.Events.EventVM(@event);
             return View(eventVM);
         }
 
