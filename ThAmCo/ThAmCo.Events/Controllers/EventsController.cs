@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.ViewModels.Events;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -85,7 +86,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Duration")] EditEventVM @event)
         {
             if (id != @event.Id)
             {
@@ -95,7 +96,9 @@ namespace ThAmCo.Events.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    var dbEvent = await _context.Events.FindAsync(@event.Id);
+                    dbEvent.Title = @event.Title;
+                    dbEvent.Duration = @event.Duration;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
