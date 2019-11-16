@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.CustomerEvents;
+using ThAmCo.Events.Models.Customers;
 using ThAmCo.Events.Models.Events;
 using ThAmCo.Events.Models.GuestBookings;
 
@@ -90,7 +91,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
+        public async Task<IActionResult> Save(int CustomerId, int EventId, bool Attended, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
         {
             if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
             {
@@ -135,28 +136,34 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var guestBookingVM = new Models.GuestBookings.GuestBookingVM(guestBooking);
-
+            var customer = new CustomerVM(await _context.Customers.FindAsync(customerId));
+            var @event = new EventVM(await _context.Events.FindAsync(eventId));
+            var guestBookingVM = new GuestBookingVM(guestBooking,customer,@event);
             return View(guestBookingVM);
         }
 
         // POST: GuestBookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? eventId, int? customerId)
+        public async Task<IActionResult> DeleteConfirmed(int eventId, int customerId)
         {
             var guestBooking = await _context.Guests.FindAsync(customerId, eventId);
             _context.Guests.Remove(guestBooking);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return CustomerBookings(customerId);
+            return RedirectToAction("CustomerBookings", new { id = customerId });
         }
 
         // GET: GuestBookings/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int customerId)
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email");
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title");
-            return View();
+            var unavailableEvents = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == customerId).ToListAsync();
+            var unevents = await _context.Events.Where(e => unavailableEvents.Any(a => a.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var events = await _context.Events.Except(unevents).ToListAsync();
+            var eventList = new SelectList(events, "Id", "Title");
+            var customer = new CustomerVM(await _context.Customers.FindAsync(customerId));
+            GuestBookingCreateVM creator = new GuestBookingCreateVM(customer, eventList);
+            return View(creator);
         }
 
         // POST: GuestBookings/Create
@@ -164,7 +171,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        public async Task<IActionResult> Create(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
@@ -177,12 +184,12 @@ namespace ThAmCo.Events.Controllers
                 {
                     _context.Add(guestBooking);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("CustomerBookings", new { id = guestBooking.CustomerId });
                 }
                 ViewData["GuestBookingMessage"] = "Booking already exists.";
             }
 
-            return View(guestBooking);
+            return RedirectToAction("CustomerBookings", new { id = guestBooking.CustomerId });
         }
 
         private bool GuestBookingExists(int id)
