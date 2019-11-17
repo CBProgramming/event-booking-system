@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models.Availability;
 using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.Venues;
 using ThAmCo.Events.Services;
 
 namespace ThAmCo.Events.Controllers
@@ -52,12 +54,26 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        //[HttpPost]
+        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId")] EventVM @event)
         {
-            var availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result;
-            return View(availabilities);
+
+            List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
+            EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
+            return View(venueSelector);
         }
+
+
+        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date)
+        {
+            EventVM eventVM = new EventVM(eventName, date, duration, type);
+            EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date);
+            return View(selectedEventVenue);
+        }
+
+
+
+
 
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -163,7 +179,7 @@ namespace ThAmCo.Events.Controllers
 
 
         //IEnumerable<AvailabilityGetDto>
-        private async Task<IEnumerable<AvailabilityGetDto>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
+        private async Task<IEnumerable<AvailabilitiesVM>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
         {
             //DateTime endDateTest = new DateTime(2021, 01, 01);
 
@@ -172,7 +188,7 @@ namespace ThAmCo.Events.Controllers
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
 
-            IEnumerable<AvailabilityGetDto> availabilities;
+            IEnumerable<AvailabilitiesVM> availabilities;
             try
             {
                 //api / Availability ? eventType = X ? beginDate = X & endDate = X
@@ -184,12 +200,12 @@ namespace ThAmCo.Events.Controllers
                 //string uriEndDate = "&endDate=" + endDateTest;
                 var response = await client.GetAsync(uri + uriEventType + uriBeginDate + uriEndDate);
                 response.EnsureSuccessStatusCode();
-                availabilities =  await response.Content.ReadAsAsync<IEnumerable<AvailabilityGetDto>>();
+                availabilities =  await response.Content.ReadAsAsync<IEnumerable<AvailabilitiesVM>>();
             }
             catch (HttpRequestException e)
             {
                 //_logger.LogError("Bad response from Availabilities");
-                availabilities = Array.Empty<AvailabilityGetDto>();
+                availabilities = Array.Empty<AvailabilitiesVM>();
             }
             return availabilities;
         }

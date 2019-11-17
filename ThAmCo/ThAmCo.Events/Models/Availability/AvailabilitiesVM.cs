@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ThAmCo.Events.Services
+namespace ThAmCo.Events.Models.Availability
 {
-    public class AvailabilityGetDto
+    public class AvailabilitiesVM
     {
+        
         public string Code { get; set; }
 
         public string Name { get; set; }

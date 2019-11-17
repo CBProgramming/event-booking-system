@@ -8,6 +8,9 @@ namespace ThAmCo.Events.Models.Events
 {
     public class EventVM
     {
+        public EventVM()
+        { }
+
         public EventVM(Data.Event eventData)
         {
             Id = eventData.Id;
@@ -16,6 +19,14 @@ namespace ThAmCo.Events.Models.Events
             Duration = eventData.Duration;
             TypeId = eventData.TypeId;
             Bookings = eventData.Bookings;
+        }
+
+        public EventVM(string title, DateTime date, TimeSpan duration, string typeId)
+        {
+            Title = title;
+            Date = date;
+            Duration = duration;
+            TypeId = typeId;
         }
 
         public int Id { get; set; }

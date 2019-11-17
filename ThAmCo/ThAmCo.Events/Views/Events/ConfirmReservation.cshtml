@@ -1,0 +1,49 @@
+﻿@model ThAmCo.Events.Models.Events.EventVenueVM
+
+@{
+    ViewData["Title"] = "ConfirmReservation";
+}
+
+<h2>ConfirmReservation</h2>
+<form asp-action="BookEvent">
+    <div>
+        <h4>EventVenueVM</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Code)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Code)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EventVM.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EventVM.Title)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EventVM.Duration)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EventVM.Duration)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EventVM.TypeId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EventVM.TypeId)
+            </dd>
+        </dl>
+    </div>
+    </form>/>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Back to List</a>
+    </div>
