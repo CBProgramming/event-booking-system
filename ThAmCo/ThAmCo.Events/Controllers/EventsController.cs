@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Services;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -47,6 +49,14 @@ namespace ThAmCo.Events.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        {
+            var availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result;
+            return View(availabilities);
         }
 
         // POST: Events/Create
@@ -148,6 +158,40 @@ namespace ThAmCo.Events.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);
+        }
+
+
+
+        //IEnumerable<AvailabilityGetDto>
+        private async Task<IEnumerable<AvailabilityGetDto>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
+        {
+            //DateTime endDateTest = new DateTime(2021, 01, 01);
+
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:23652");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            client.Timeout = TimeSpan.FromSeconds(5);
+
+            IEnumerable<AvailabilityGetDto> availabilities;
+            try
+            {
+                //api / Availability ? eventType = X ? beginDate = X & endDate = X
+                //var response = await client.GetAsync("/api/Availability");
+                string uri = "/api/Availability";
+                string uriEventType = "?eventType=" + eventType;
+                string uriBeginDate = "&beginDate=" + beginDate;
+                string uriEndDate = "&endDate=" + endDate;
+                //string uriEndDate = "&endDate=" + endDateTest;
+                var response = await client.GetAsync(uri + uriEventType + uriBeginDate + uriEndDate);
+                response.EnsureSuccessStatusCode();
+                availabilities =  await response.Content.ReadAsAsync<IEnumerable<AvailabilityGetDto>>();
+            }
+            catch (HttpRequestException e)
+            {
+                //_logger.LogError("Bad response from Availabilities");
+                availabilities = Array.Empty<AvailabilityGetDto>();
+            }
+            return availabilities;
         }
     }
 }
