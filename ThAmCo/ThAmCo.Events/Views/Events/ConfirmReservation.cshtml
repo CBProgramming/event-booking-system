@@ -14,36 +14,36 @@
                 @Html.DisplayNameFor(model => model.Code)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Code)
+                <input asp-for=@Model.Code class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Date)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Date)
+                <input asp-for=@Model.EventVM.Date name="Date" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Title)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.EventVM.Title)
+                <input asp-for=@Model.EventVM.Title name="Title" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Duration)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.EventVM.Duration)
+                <input asp-for=@Model.EventVM.Duration name="Duration" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.TypeId)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.EventVM.TypeId)
+                <input asp-for=@Model.EventVM.TypeId name="TypeId" class="form-control" readonly />
             </dd>
         </dl>
     </div>
-    </form>/>
     <div>
-        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="BookEvent" class="btn btn-default" />
     </div>
+</form>
+

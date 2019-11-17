@@ -71,6 +71,13 @@ namespace ThAmCo.Events.Controllers
             return View(selectedEventVenue);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> BookEvent([Bind("Code,Date,Title,Duration,TypeId")] FinalBookingVM booking)
+        {
+            int var = 1;
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
 
