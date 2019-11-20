@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Availability;
 using ThAmCo.Events.Models.Events;
@@ -17,10 +18,13 @@ namespace ThAmCo.Events.Controllers
     public class EventsController : Controller
     {
         private readonly EventsDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public EventsController(EventsDbContext context)
+        public EventsController(EventsDbContext context,
+                                IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Events
@@ -47,10 +51,11 @@ namespace ThAmCo.Events.Controllers
             return View(eventVM);
         }
 
+
         // GET: Events/Create
-        public IActionResult Create()
+        public IActionResult Create(EventVM @event)
         {
-            return View();
+            return View(@event);
         }
 
 
@@ -59,7 +64,13 @@ namespace ThAmCo.Events.Controllers
         {
 
             List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
+            if (availabilities.Count == 0)
+            {
+                @event.Message = "No venues available on this date";
+                return View("Create",@event);
+            }
             EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
+
             return View(venueSelector);
         }
 
@@ -74,9 +85,35 @@ namespace ThAmCo.Events.Controllers
         [HttpPost]
         public async Task<IActionResult> BookEvent([Bind("Code,Date,Title,Duration,TypeId")] FinalBookingVM booking)
         {
-            int var = 1;
+            var client = setupVenueClient();
+            string reference = geenerateReservationRef(booking.Code, booking.Date);
+            string uri = "/api/Reservations";
+            string uriWithRef = uri + "? reference = " + reference;
+            ReservationPostDto res = new ReservationPostDto(booking.Date, booking.Code);
+            try
+            {
+                if ((await client.GetAsync(uriWithRef)).IsSuccessStatusCode)
+                {
+                    var deleteResponse = await client.DeleteAsync(uriWithRef);
+                    deleteResponse.EnsureSuccessStatusCode();
+                }
+                var postResponse = await client.PostAsJsonAsync(uri, res);
+                postResponse.EnsureSuccessStatusCode();
+                Event @event = new Event();
+                @event.Date = booking.Date;
+                @event.Title = booking.Title;
+                @event.Duration = booking.Duration;
+                @event.TypeId = booking.TypeId;
+                _context.Add(@event);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
             return RedirectToAction(nameof(Index));
-        }
+            }
+
 
 
 
@@ -191,15 +228,13 @@ namespace ThAmCo.Events.Controllers
             //DateTime endDateTest = new DateTime(2021, 01, 01);
 
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:23652");
+            client.BaseAddress = new Uri(_configuration["VenuesBaseURI"]);
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
 
             IEnumerable<AvailabilitiesVM> availabilities;
             try
             {
-                //api / Availability ? eventType = X ? beginDate = X & endDate = X
-                //var response = await client.GetAsync("/api/Availability");
                 string uri = "/api/Availability";
                 string uriEventType = "?eventType=" + eventType;
                 string uriBeginDate = "&beginDate=" + beginDate;
@@ -215,6 +250,24 @@ namespace ThAmCo.Events.Controllers
                 availabilities = Array.Empty<AvailabilitiesVM>();
             }
             return availabilities;
+        }
+
+        private string geenerateReservationRef(string code, DateTime date)
+        {
+            string day = date.Day.ToString("00");
+            string month = date.Month.ToString("00");
+            string year = date.Year.ToString("0000");
+            string reference = code + year + month + day;
+            return reference;
+        }
+
+        private HttpClient setupVenueClient()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration["VenuesBaseURI"]);
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            client.Timeout = TimeSpan.FromSeconds(5);
+            return client;
         }
     }
 }

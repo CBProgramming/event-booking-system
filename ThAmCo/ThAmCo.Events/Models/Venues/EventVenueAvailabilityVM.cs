@@ -17,10 +17,13 @@ namespace ThAmCo.Events.Models.Venues
         {
             Event = @event;
             Venues = venues;
+            Message = "";
         }
 
         public EventVM Event { get; set; }
 
         public List<AvailabilitiesVM> Venues { get; set; }
+
+        public string Message { get; set; }
     }
 }

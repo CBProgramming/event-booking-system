@@ -29,6 +29,14 @@ namespace ThAmCo.Events.Models.Events
             TypeId = typeId;
         }
 
+        public EventVM(FinalBookingVM booking)
+        {
+            Title = booking.Title;
+            Date = booking.Date;
+            Duration = booking.Duration;
+            TypeId = booking.TypeId;
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -40,5 +48,7 @@ namespace ThAmCo.Events.Models.Events
         public string TypeId { get; set; }
 
         public List<GuestBooking> Bookings { get; set; }
+
+        public string Message { get; set; }
     }
 }
