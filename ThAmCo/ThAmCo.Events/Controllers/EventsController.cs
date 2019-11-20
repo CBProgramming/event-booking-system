@@ -31,7 +31,12 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> Index()
         {
             var eventsVM = new Models.Events.EventsVM(await _context.Events.ToListAsync());
-            return View(eventsVM);
+            List<EventVM> events = new List<EventVM>();
+            foreach (Event e in eventsVM.Events)
+            {
+                events.Add(new EventVM(e));
+            }
+            return View(events);
         }
 
         // GET: Events/Details/5
