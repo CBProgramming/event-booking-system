@@ -11,7 +11,7 @@ namespace ThAmCo.Events.Models.Events
         public EventVM()
         { }
 
-        public EventVM(Data.Event eventData)
+        public EventVM(Event eventData)
         {
             Id = eventData.Id;
             Title = eventData.Title;
@@ -19,6 +19,8 @@ namespace ThAmCo.Events.Models.Events
             Duration = eventData.Duration;
             TypeId = eventData.TypeId;
             Bookings = eventData.Bookings;
+            VenueRef = eventData.VenueRef;
+            VenueName = eventData.VenueName;
         }
 
         public EventVM(string title, DateTime date, TimeSpan duration, string typeId)
@@ -27,6 +29,7 @@ namespace ThAmCo.Events.Models.Events
             Date = date;
             Duration = duration;
             TypeId = typeId;
+            VenueRef = "No venue allocated";
         }
 
         public EventVM(FinalBookingVM booking)
@@ -35,6 +38,7 @@ namespace ThAmCo.Events.Models.Events
             Date = booking.Date;
             Duration = booking.Duration;
             TypeId = booking.TypeId;
+            VenueRef = booking.VenueRef;
         }
 
         public int Id { get; set; }
@@ -48,6 +52,10 @@ namespace ThAmCo.Events.Models.Events
         public string TypeId { get; set; }
 
         public List<GuestBooking> Bookings { get; set; }
+
+        public string VenueRef { get; set; }
+
+        public string VenueName { get; set; }
 
         public string Message { get; set; }
     }

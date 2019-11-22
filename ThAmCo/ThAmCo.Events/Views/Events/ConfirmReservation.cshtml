@@ -23,6 +23,13 @@
                 <input asp-for=@Model.EventVM.Date name="Date" class="form-control" readonly />
             </dd>
             <dt>
+                @Html.DisplayNameFor(model => model.VenueName)
+            </dt>
+            <dd>
+                <input asp-for=@Model.VenueName name="VenueName" class="form-control" readonly />
+            </dd>
+
+            <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Title)
             </dt>
             <dd>

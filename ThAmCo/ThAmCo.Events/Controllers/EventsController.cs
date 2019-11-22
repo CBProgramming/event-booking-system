@@ -80,20 +80,19 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date)
+        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName)
         {
             EventVM eventVM = new EventVM(eventName, date, duration, type);
-            EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date);
+            EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date, venueName);
             return View(selectedEventVenue);
         }
 
         [HttpPost]
-        public async Task<IActionResult> BookEvent([Bind("Code,Date,Title,Duration,TypeId")] FinalBookingVM booking)
+        public async Task<IActionResult> BookEvent([Bind("Code,Date,VenueName,Title,Duration,TypeId")] FinalBookingVM booking)
         {
             var client = setupVenueClient();
-            string reference = geenerateReservationRef(booking.Code, booking.Date);
             string uri = "/api/Reservations";
-            string uriWithRef = uri + "? reference = " + reference;
+            string uriWithRef = uri + "? reference = " + booking.VenueRef;
             ReservationPostDto res = new ReservationPostDto(booking.Date, booking.Code);
             try
             {
@@ -109,6 +108,8 @@ namespace ThAmCo.Events.Controllers
                 @event.Title = booking.Title;
                 @event.Duration = booking.Duration;
                 @event.TypeId = booking.TypeId;
+                @event.VenueRef = booking.VenueRef;
+                @event.VenueName = booking.VenueName;
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
             }
