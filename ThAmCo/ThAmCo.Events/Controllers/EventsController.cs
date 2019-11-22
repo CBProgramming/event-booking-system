@@ -245,14 +245,15 @@ namespace ThAmCo.Events.Controllers
             client.BaseAddress = new Uri(_configuration["VenuesBaseURI"]);
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
-
+            string startDate = stringDate(beginDate);
+            string finishDate = stringDate(endDate);
             IEnumerable<AvailabilitiesVM> availabilities;
             try
             {
                 string uri = "/api/Availability";
                 string uriEventType = "?eventType=" + eventType;
-                string uriBeginDate = "&beginDate=" + beginDate;
-                string uriEndDate = "&endDate=" + endDate;
+                string uriBeginDate = "&beginDate=" + startDate;
+                string uriEndDate = "&endDate=" + finishDate;
                 //string uriEndDate = "&endDate=" + endDateTest;
                 var response = await client.GetAsync(uri + uriEventType + uriBeginDate + uriEndDate);
                 response.EnsureSuccessStatusCode();
