@@ -154,7 +154,15 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var eventVM = new Models.Events.EventVM(@event);
-            return View(eventVM);
+            List<AvailabilitiesVM> availabilities = GetAvailability(eventVM.TypeId, eventVM.Date, eventVM.Date).Result.ToList();
+            var venueList = new SelectList(availabilities, "Code", "Name");
+            EventToEditVM eventEditor = new EventToEditVM(eventVM, venueList);
+            if (availabilities.Count == 0)
+            {
+                eventVM.Message = "No venues available on this date";
+                return View("Index");
+            }
+            return View(eventEditor);
         }
 
         // POST: Events/Edit/5
@@ -274,6 +282,13 @@ namespace ThAmCo.Events.Controllers
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
             return client;
+        }
+
+        public string stringDate(DateTime date)
+        {
+            string stringDate = date.Day.ToString("00") + "/" + date.Month.ToString("00") + "/" + date.Year.ToString("0000") + " "
+                                + date.Hour.ToString("00") + ":" + date.Minute.ToString("00") + ":" + date.Second.ToString("00");
+            return stringDate;
         }
     }
 }
