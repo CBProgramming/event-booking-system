@@ -30,6 +30,12 @@ namespace ThAmCo.Events.Models.Events
             }
         }
 
+        public string VenueDescription { get; set; }
+
+        public int VenueCapacity { get; set; }
+
+        public double VenueCost { get; set; }
+
 
     }
 }

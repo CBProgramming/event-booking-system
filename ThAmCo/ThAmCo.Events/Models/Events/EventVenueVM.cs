@@ -10,17 +10,17 @@ namespace ThAmCo.Events.Models.Events
         EventVenueVM()
         { }
 
-        public EventVenueVM(EventVM eventVM, string code, DateTime date, string venueName)
+        public EventVenueVM(EventVM eventVM, string venueRef, DateTime date, string venueName)
         {
             EventVM = eventVM;
-            Code = code;
+            VenueRef = venueRef;
             Date = date;
             VenueName = venueName;
         }
 
         public EventVM EventVM { get; set; }
 
-        public string Code { get; set; }
+        public string VenueRef { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -30,7 +30,7 @@ namespace ThAmCo.Events.Models.Events
         {
             get
             {
-                return Code + Date.Year.ToString("0000") + Date.Month.ToString("00") + Date.Day.ToString("00");
+                return VenueRef + Date.Year.ToString("0000") + Date.Month.ToString("00") + Date.Day.ToString("00");
             }
         }
     }

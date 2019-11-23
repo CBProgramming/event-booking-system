@@ -35,7 +35,7 @@ namespace ThAmCo.Events.Controllers
             {
                 //api / Availability ? eventType = X ? beginDate = X & endDate = X
                 //var response = await client.GetAsync("/api/Availability");
-                string eventType = "CON";
+                string eventType = "WED";
                 DateTime beginDate = new DateTime(2018, 01, 01);
                 string beginDateTest = stringDate(beginDate);
                 DateTime endDate = new DateTime(2020, 01, 31);
@@ -56,7 +56,7 @@ namespace ThAmCo.Events.Controllers
                 availabilities = Array.Empty<AvailabilityGetDto>();
             }
 
-            return View(availabilities.ToList());
+            return View(availabilities.OrderBy(a => a.Date).ToList());
         }
 
         public string stringDate(DateTime date)

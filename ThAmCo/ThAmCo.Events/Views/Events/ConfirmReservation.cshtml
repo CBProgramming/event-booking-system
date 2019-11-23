@@ -9,12 +9,14 @@
     <div>
         <h4>EventVenueVM</h4>
         <hr />
+        <input type="hidden" asp-for=@Model.EventVM.OldRef name="OldRef" />
+        <input type="hidden" asp-for=@Model.EventVM.Existing name="Existing" />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.Code)
+                @Html.DisplayNameFor(model => model.VenueRef)
             </dt>
             <dd>
-                <input asp-for=@Model.Code class="form-control" readonly />
+                <input asp-for=@Model.VenueRef class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Date)
@@ -47,6 +49,7 @@
             <dd>
                 <input asp-for=@Model.EventVM.TypeId name="TypeId" class="form-control" readonly />
             </dd>
+
         </dl>
     </div>
     <div>

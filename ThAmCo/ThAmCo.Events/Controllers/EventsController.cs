@@ -65,14 +65,18 @@ namespace ThAmCo.Events.Controllers
 
 
         //[HttpPost]
-        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId")] EventVM @event)
+        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing")] EventVM @event)
         {
-
+            if (@event.Existing)
+                @event.OldRef = @event.getBookingRef;
             List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
             if (availabilities.Count == 0)
             {
                 @event.Message = "No venues available on this date";
-                return View("Create",@event);
+                if (@event.Existing == false)
+                    return View("Create", @event);
+                else
+                    return View("Edit", @event);
             }
             EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
 
@@ -80,45 +84,78 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName)
+        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,
+                                                string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef)
         {
-            EventVM eventVM = new EventVM(eventName, date, duration, type);
+            EventVM eventVM = new EventVM(eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
             EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date, venueName);
             return View(selectedEventVenue);
         }
 
         [HttpPost]
-        public async Task<IActionResult> BookEvent([Bind("Code,Date,VenueName,Title,Duration,TypeId")] FinalBookingVM booking)
+        public async Task<IActionResult> BookEvent([Bind("VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Existing,OldRef")] EventVM booking)
         {
             var client = setupVenueClient();
             string uri = "/api/Reservations";
-            string uriWithRef = uri + "? reference = " + booking.VenueRef;
-            ReservationPostDto res = new ReservationPostDto(booking.Date, booking.Code);
+            string uriOldRef = uri + "/" + booking.OldRef;
+            ReservationPostDto res = new ReservationPostDto(booking.Date, booking.VenueRef);
+
+
+            //ReservationGetDto reservation = null;
+            //var getResponse = await client.GetAsync(uriOldRef);
+            //if (getResponse.IsSuccessStatusCode)
+            //    reservation = await getResponse.Content.ReadAsAsync<ReservationGetDto>();
+
+            //if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
+            //{
+            //    var deleteResponse = await client.DeleteAsync(uriOldRef);
+            //    deleteResponse.EnsureSuccessStatusCode();
+            //}
             try
             {
-                if ((await client.GetAsync(uriWithRef)).IsSuccessStatusCode)
+                //var getResponse = await client.GetAsync(uriOldRef);
+                if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
                 {
-                    var deleteResponse = await client.DeleteAsync(uriWithRef);
+                    var deleteResponse = await client.DeleteAsync(uriOldRef);
                     deleteResponse.EnsureSuccessStatusCode();
                 }
                 var postResponse = await client.PostAsJsonAsync(uri, res);
                 postResponse.EnsureSuccessStatusCode();
-                Event @event = new Event();
-                @event.Date = booking.Date;
-                @event.Title = booking.Title;
-                @event.Duration = booking.Duration;
-                @event.TypeId = booking.TypeId;
-                @event.VenueRef = booking.VenueRef;
-                @event.VenueName = booking.VenueName;
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
+                if(booking.Existing)  // need the ID!
+                {
+                    var @event = await _context.Events.FindAsync(booking.Id);
+                    @event.Title = booking.Title;
+                    @event.Duration = booking.Duration;
+                    @event.VenueRef = booking.VenueRef;
+                    @event.VenueName = booking.VenueName;
+                    @event.VenueDescription = booking.VenueDescription;
+                    @event.VenueCapacity = booking.VenueCapacity;
+                    @event.VenueCost = booking.VenueCost;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    Event @event = new Event();
+                    @event.Date = booking.Date;
+                    @event.Title = booking.Title;
+                    @event.Duration = booking.Duration;
+                    @event.TypeId = booking.TypeId;
+                    @event.VenueRef = booking.VenueRef;
+                    @event.VenueName = booking.VenueName;
+                    @event.VenueDescription = booking.VenueDescription;
+                    @event.VenueCapacity = booking.VenueCapacity;
+                    @event.VenueCost = booking.VenueCost;
+                    _context.Add(@event);
+                    await _context.SaveChangesAsync();
+                }
+
             }
             catch (Exception)
             {
 
             }
             return RedirectToAction(nameof(Index));
-            }
+        }
 
 
 
@@ -153,16 +190,9 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new Models.Events.EventVM(@event);
-            List<AvailabilitiesVM> availabilities = GetAvailability(eventVM.TypeId, eventVM.Date, eventVM.Date).Result.ToList();
-            var venueList = new SelectList(availabilities, "Code", "Name");
-            EventToEditVM eventEditor = new EventToEditVM(eventVM, venueList);
-            if (availabilities.Count == 0)
-            {
-                eventVM.Message = "No venues available on this date";
-                return View("Index");
-            }
-            return View(eventEditor);
+            var eventVM = new EventVM(@event,true);
+            //EventToEditVM eventEditor = new EventToEditVM(eventVM);
+            return View(eventVM);
         }
 
         // POST: Events/Edit/5

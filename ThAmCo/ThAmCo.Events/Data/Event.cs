@@ -23,5 +23,11 @@ namespace ThAmCo.Events.Data
         public string VenueRef { get; set; }
 
         public string VenueName { get; set; }
+
+        public string VenueDescription { get; set; }
+
+        public int VenueCapacity { get; set; }
+
+        public double VenueCost { get; set; }
     }
 }

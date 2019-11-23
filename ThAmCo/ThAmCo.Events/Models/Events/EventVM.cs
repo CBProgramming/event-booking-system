@@ -23,6 +23,34 @@ namespace ThAmCo.Events.Models.Events
             VenueName = eventData.VenueName;
         }
 
+        public EventVM(string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
+        {
+            Title = title;
+            Date = date;
+            Duration = duration;
+            TypeId = typeId;
+            VenueName = venueName;
+            VenueDescription = venueDescription;
+            VenueCapacity = venueCapacity;
+            VenueCost = venueCost;
+            Existing = existing;
+            VenueRef = venueRef;
+            OldRef = oldRef;
+        }
+
+        public EventVM(Event eventData, bool existing)
+        {
+            Id = eventData.Id;
+            Title = eventData.Title;
+            Date = eventData.Date;
+            Duration = eventData.Duration;
+            TypeId = eventData.TypeId;
+            Bookings = eventData.Bookings;
+            VenueRef = eventData.VenueRef;
+            VenueName = eventData.VenueName;
+            Existing = existing;
+        }
+
         public EventVM(string title, DateTime date, TimeSpan duration, string typeId)
         {
             Title = title;
@@ -39,6 +67,10 @@ namespace ThAmCo.Events.Models.Events
             Duration = booking.Duration;
             TypeId = booking.TypeId;
             VenueRef = booking.VenueRef;
+            VenueName = booking.VenueName;
+            VenueDescription = booking.VenueDescription;
+            VenueCapacity = booking.VenueCapacity;
+            VenueCost = booking.VenueCost;
         }
 
         public int Id { get; set; }
@@ -57,6 +89,24 @@ namespace ThAmCo.Events.Models.Events
 
         public string VenueName { get; set; }
 
+        public string VenueDescription { get; set; }
+
+        public int VenueCapacity { get; set; }
+
+        public double VenueCost { get; set; }
+
         public string Message { get; set; }
+
+        public bool Existing { get; set; }
+
+        public string OldRef { get; set; }
+
+        public string getBookingRef
+        {
+            get
+            {
+                return VenueRef + Date.Year.ToString("0000") + Date.Month.ToString("00") + Date.Day.ToString("00");
+            }
+        }
     }
 }

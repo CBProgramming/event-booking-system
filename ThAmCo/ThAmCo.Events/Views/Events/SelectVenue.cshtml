@@ -58,7 +58,9 @@
             <td>
                 @Html.ActionLink("Select Venue", "ConfirmReservation", new { eventName = Model.Event.Title, duration = Model.Event.Duration, 
                                                                             type = Model.Event.TypeId, code = item.Code, date = item.Date, 
-                                                                            venueName = item.Name})
+                                                                            venueName = item.Name, venueDescription = item.Description, 
+                                                                            venueCapacity = item.Capacity, venueCost = item.CostPerHour,
+                                                                            existing = Model.Event.Existing, oldRef = Model.Event.OldRef})
             </td>
         </tr>
 }
