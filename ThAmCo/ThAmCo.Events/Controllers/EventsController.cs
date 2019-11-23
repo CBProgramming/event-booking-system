@@ -287,7 +287,7 @@ namespace ThAmCo.Events.Controllers
 
         public string stringDate(DateTime date)
         {
-            string stringDate = date.Day.ToString("00") + "/" + date.Month.ToString("00") + "/" + date.Year.ToString("0000") + " "
+            string stringDate = date.Month.ToString("00") + "/" + date.Day.ToString("00") + "/" + date.Year.ToString("0000") + " "
                                 + date.Hour.ToString("00") + ":" + date.Minute.ToString("00") + ":" + date.Second.ToString("00");
             return stringDate;
         }

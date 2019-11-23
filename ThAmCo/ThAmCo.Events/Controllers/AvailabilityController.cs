@@ -36,14 +36,17 @@ namespace ThAmCo.Events.Controllers
                 //api / Availability ? eventType = X ? beginDate = X & endDate = X
                 //var response = await client.GetAsync("/api/Availability");
                 string eventType = "CON";
-                DateTime beginDate = new DateTime(2018, 12, 03);
-                DateTime endDate = new DateTime(2021, 11, 04);
+                DateTime beginDate = new DateTime(2018, 01, 01);
+                string beginDateTest = stringDate(beginDate);
+                DateTime endDate = new DateTime(2020, 01, 31);
+                string endDateTest = stringDate(endDate);
                 string uri = "/api/Availability";
                 string uriEventType = "?eventType=" + eventType;
-                string uriBeginDate = "&beginDate=" + beginDate;
-                string uriEndDate = "&endDate=" + endDate;
+                string uriBeginDate = "&beginDate=" + beginDateTest;
+                string uriEndDate = "&endDate=" + endDateTest;
+                string fullAddress = uri + uriEventType + uriBeginDate + uriEndDate;
                 //var response = await client.GetAsync(uri + uriEventType + uriBeginDate + uriEndDate);
-                var response = await client.GetAsync(uri + uriEventType + uriEndDate + uriBeginDate);
+                var response = await client.GetAsync(fullAddress);
                 response.EnsureSuccessStatusCode();
                 availabilities = await response.Content.ReadAsAsync<IEnumerable<AvailabilityGetDto>>();
             }
@@ -54,6 +57,13 @@ namespace ThAmCo.Events.Controllers
             }
 
             return View(availabilities.ToList());
+        }
+
+        public string stringDate(DateTime date)
+        {
+            string stringDate = date.Month.ToString("00") + "/" + date.Day.ToString("00") + "/" + date.Year.ToString("0000") + " "
+                                + date.Hour.ToString("00") + ":" + date.Minute.ToString("00") + ":" + date.Second.ToString("00");
+            return stringDate;
         }
 
         // GET: Availability/Details/5
