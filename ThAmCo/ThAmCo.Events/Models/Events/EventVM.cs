@@ -112,5 +112,7 @@ namespace ThAmCo.Events.Models.Events
                 return VenueRef + Date.Year.ToString("0000") + Date.Month.ToString("00") + Date.Day.ToString("00");
             }
         }
+
+        public int NumGuests { get; set; }
     }
 }

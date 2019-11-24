@@ -34,7 +34,10 @@ namespace ThAmCo.Events.Controllers
             List<EventVM> events = new List<EventVM>();
             foreach (Event e in eventsVM.Events)
             {
-                events.Add(new EventVM(e));
+                var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
+                EventVM eventVM = new EventVM(e);
+                eventVM.NumGuests = bookings.Count();
+                events.Add(eventVM);
             }
             return View(events);
         }
