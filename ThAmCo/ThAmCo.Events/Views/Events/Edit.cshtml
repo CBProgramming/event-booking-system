@@ -4,6 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
+<h3>@Model.Message</h3>
+
 <h2>Edit</h2>
 
 <h4>Event</h4>
@@ -34,9 +36,12 @@
             <div>
                 <label asp-for="VenueName" class="control-label"></label>
                 <input asp-for="VenueName" class="form-control" readonly />                   
-                @Html.ActionLink("Select Venue", "SelectVenue", new { Id = Model.Id, Title = Model.Title, Date = Model.Date, 
+                @Html.ActionLink("Change Venue", "selectVenue", new { Id = Model.Id, Title = Model.Title, Date = Model.Date, 
                                                                       Duration = Model.Duration, TypeId = Model.TypeId, 
-                                                                      VenueRef = Model.VenueRef, Existing = Model.Existing })
+                                                                      VenueRef = Model.VenueRef, Existing = Model.Existing,
+                                                                      venueName = Model.VenueName, venueDescription = Model.VenueDescription,
+                                                                      venueCapacity = Model.VenueCapacity, venueCost = Model.VenueCost,
+                                                                      oldRef = Model.OldRef})
             </div>
             <div>
                 <label asp-for="VenueDescription" class="control-label"></label>

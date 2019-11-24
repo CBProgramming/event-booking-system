@@ -23,8 +23,9 @@ namespace ThAmCo.Events.Models.Events
             VenueName = eventData.VenueName;
         }
 
-        public EventVM(string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
+        public EventVM(int id, string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
         {
+            Id = id;
             Title = title;
             Date = date;
             Duration = duration;
@@ -48,6 +49,9 @@ namespace ThAmCo.Events.Models.Events
             Bookings = eventData.Bookings;
             VenueRef = eventData.VenueRef;
             VenueName = eventData.VenueName;
+            VenueDescription = eventData.VenueDescription;
+            VenueCapacity = eventData.VenueCapacity;
+            VenueCost = eventData.VenueCost;
             Existing = existing;
         }
 

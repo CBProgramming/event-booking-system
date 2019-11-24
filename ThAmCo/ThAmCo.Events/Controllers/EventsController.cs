@@ -52,7 +52,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new Models.Events.EventVM(@event);
+            var eventVM = new EventVM(@event);
             return View(eventVM);
         }
 
@@ -63,12 +63,81 @@ namespace ThAmCo.Events.Controllers
             return View(@event);
         }
 
+        // POST: Events/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(@event);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(@event);
+        }
 
-        //[HttpPost]
-        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing")] EventVM @event)
+        // GET: Events/Edit/5
+        public async Task<IActionResult> Edit(int? id, string message)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var @event = await _context.Events.FindAsync(id);
+            if (@event == null)
+            {
+                return NotFound();
+            }
+            var eventVM = new EventVM(@event, true);
+            eventVM.Message = message;
+            //EventToEditVM eventEditor = new EventToEditVM(eventVM);
+            return View(eventVM);
+        }
+
+        // POST: Events/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
+        {
+            if (id != @event.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dbEvent = await _context.Events.FindAsync(@event.Id);
+                    dbEvent.Title = @event.Title;
+                    dbEvent.Duration = @event.Duration;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EventExists(@event.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(@event);
+        }
+
+
+        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
             if (@event.Existing)
-                @event.OldRef = @event.getBookingRef;
+               @event.OldRef = @event.getBookingRef;
             List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
             if (availabilities.Count == 0)
             {
@@ -76,41 +145,30 @@ namespace ThAmCo.Events.Controllers
                 if (@event.Existing == false)
                     return View("Create", @event);
                 else
-                    return View("Edit", @event);
+                    return RedirectToAction("Edit", new { Id = @event.Id, Message = @event.Message });
             }
-            EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
-
-            return View(venueSelector);
+            else
+            {
+                EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
+                return View(venueSelector);
+            }
         }
 
-
         public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,
-                                                string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef)
+                                                string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef, int eventId)
         {
-            EventVM eventVM = new EventVM(eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
+            EventVM eventVM = new EventVM(eventId, eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
             EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date, venueName);
             return View(selectedEventVenue);
         }
 
         [HttpPost]
-        public async Task<IActionResult> BookEvent([Bind("VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Existing,OldRef")] EventVM booking)
+        public async Task<IActionResult> BookEvent([Bind("Id,VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Existing,OldRef")] EventVM booking)
         {
             var client = setupVenueClient();
             string uri = "/api/Reservations";
             string uriOldRef = uri + "/" + booking.OldRef;
             ReservationPostDto res = new ReservationPostDto(booking.Date, booking.VenueRef);
-
-
-            //ReservationGetDto reservation = null;
-            //var getResponse = await client.GetAsync(uriOldRef);
-            //if (getResponse.IsSuccessStatusCode)
-            //    reservation = await getResponse.Content.ReadAsAsync<ReservationGetDto>();
-
-            //if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
-            //{
-            //    var deleteResponse = await client.DeleteAsync(uriOldRef);
-            //    deleteResponse.EnsureSuccessStatusCode();
-            //}
             try
             {
                 //var getResponse = await client.GetAsync(uriOldRef);
@@ -162,74 +220,7 @@ namespace ThAmCo.Events.Controllers
 
 
 
-        // POST: Events/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
-        }
 
-        // GET: Events/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            var eventVM = new EventVM(@event,true);
-            //EventToEditVM eventEditor = new EventToEditVM(eventVM);
-            return View(eventVM);
-        }
-
-        // POST: Events/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Duration")] EditEventVM @event)
-        {
-            if (id != @event.Id)
-            {
-                return NotFound();
-            }
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var dbEvent = await _context.Events.FindAsync(@event.Id);
-                    dbEvent.Title = @event.Title;
-                    dbEvent.Duration = @event.Duration;
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EventExists(@event.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
-        }
 
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)

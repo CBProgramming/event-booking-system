@@ -9,6 +9,7 @@
     <div>
         <h4>EventVenueVM</h4>
         <hr />
+        <input type="hidden" asp-for=@Model.EventVM.Id name="Id" />
         <input type="hidden" asp-for=@Model.EventVM.OldRef name="OldRef" />
         <input type="hidden" asp-for=@Model.EventVM.Existing name="Existing" />
         <dl class="dl-horizontal">
