@@ -9,6 +9,8 @@ namespace ThAmCo.Events.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<GuestBooking> Guests { get; set; }
+        public DbSet<Staff> Staff { get; set; }
+        public DbSet<Staff> Staffing { get; set; }
 
         private IHostingEnvironment HostEnv { get; }
 
@@ -45,6 +47,19 @@ namespace ThAmCo.Events.Data
             builder.Entity<Event>()
                    .Property(e => e.TypeId)
                    .IsFixedLength();
+
+            builder.Entity<Staffing>()
+                   .HasKey(s => new { s.StaffId, s.EventId });
+
+            builder.Entity<Staff>()
+                   .HasMany(s => s.Staffing)
+                   .WithOne(t => t.Staff)
+                   .HasForeignKey(b => b.StaffId);
+
+            builder.Entity<Event>()
+                   .HasMany(e => e.Staffing)
+                   .WithOne(b => b.Event)
+                   .HasForeignKey(b => b.EventId);
 
             // seed data for debug / development testing
             if (HostEnv != null && HostEnv.IsDevelopment())
