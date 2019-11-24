@@ -32,8 +32,19 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> GuestsAtEvent(int id)
         {
-            var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g =>g.EventId == id);
-            return View("Index",await eventsDbContext.ToListAsync());
+            var events = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
+            var bookings = await _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id).OrderBy(e => e.CustomerId).ToListAsync();
+            var customer = await _context.Customers.Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<CustomerBookingVM> customerBookings = new List<CustomerBookingVM>();
+            for (int i = 0; i < bookings.Count; i++)
+            {
+                customerBookings.Add(new CustomerBookingVM(customer[i], bookings[i]));
+            }
+            EventCustomersVM eventCustomers = new EventCustomersVM(events, customerBookings);
+            return View(eventCustomers);
+
+            //var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g =>g.EventId == id);
+            //return View("Index",await eventsDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> CustomerBookings(int id)
@@ -91,7 +102,7 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(int CustomerId, int EventId, bool Attended, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
+        public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
         {
             if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
             {
@@ -104,7 +115,6 @@ namespace ThAmCo.Events.Controllers
                     var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
                     dbGuestBooking.Attended = guestBooking.Attended;
                     await _context.SaveChangesAsync();
-
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,8 +129,42 @@ namespace ThAmCo.Events.Controllers
                 }
                 await CustomerBookings(CustomerId);
             }
-
             return View("CustomerBookings");
+        }
+
+        // POST: GuestBookings/Save/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEventGuests(int CustomerId, int EventId,[Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
+        {
+            if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
+                    dbGuestBooking.Attended = guestBooking.Attended;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GuestBookingExists(guestBooking.CustomerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                await GuestsAtEvent(EventId);
+            }
+            return View("GuestsAtEvent");
         }
 
         // GET: GuestBookings/Delete/5

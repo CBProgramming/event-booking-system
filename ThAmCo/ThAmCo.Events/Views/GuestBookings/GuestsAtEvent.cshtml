@@ -1,0 +1,45 @@
+﻿@model ThAmCo.Events.Models.Events.EventCustomersVM
+
+@{
+    ViewData["Title"] = "CustomerBookings";
+}
+
+<h2>@Html.DisplayFor(model => model.Event.Title)'s Guests</h2>
+
+<br>
+<p>
+    @Html.ActionLink("Book new event", "Create", new { customerId = Model.Event.Id })
+</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FullName)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Attended)
+        </div>
+    </div>
+</div>
+
+    @foreach (var item in Model.Customers)
+    {
+
+<form asp-action="SaveEventGuests">
+    <div class="container">
+        <div class="row">
+            <input type="hidden" asp-for="@item.Id" name="CustomerId" />
+            <input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
+            <div class="col-md-4">
+                @Html.DisplayFor(modelItem => item.FullName)
+            </div>
+            <div class="col-md-1 form-group">
+                <input asp-for="@item.Attended" name="Attended" onChange="this.form.submit() " class="form-control" />
+            </div>
+            <div class="col-md-1">
+                @Html.ActionLink("Delete", "Delete", new { customerId = item.Id, eventId = Model.Event.Id })
+            </div>
+        </div>
+    </div>
+</form>
+    }
+
