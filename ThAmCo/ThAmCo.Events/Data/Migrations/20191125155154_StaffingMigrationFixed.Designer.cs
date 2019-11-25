@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Data.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    partial class EventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191125155154_StaffingMigrationFixed")]
+    partial class StaffingMigrationFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,14 +153,6 @@ namespace ThAmCo.Events.Data.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Staffing");
-
-                    b.HasData(
-                        new { StaffId = 1, EventId = 1 },
-                        new { StaffId = 2, EventId = 1 },
-                        new { StaffId = 3, EventId = 1 },
-                        new { StaffId = 4, EventId = 2 },
-                        new { StaffId = 5, EventId = 2 }
-                    );
                 });
 
             modelBuilder.Entity("ThAmCo.Events.Data.GuestBooking", b =>

@@ -10,7 +10,7 @@ namespace ThAmCo.Events.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<GuestBooking> Guests { get; set; }
         public DbSet<Staff> Staff { get; set; }
-        public DbSet<Staff> Staffing { get; set; }
+        public DbSet<Staffing> Staffing { get; set; }
 
         private IHostingEnvironment HostEnv { get; }
 
@@ -54,7 +54,7 @@ namespace ThAmCo.Events.Data
             builder.Entity<Staff>()
                    .HasMany(s => s.Staffing)
                    .WithOne(t => t.Staff)
-                   .HasForeignKey(b => b.StaffId);
+                   .HasForeignKey(t => t.StaffId);
 
             builder.Entity<Event>()
                    .HasMany(e => e.Staffing)
@@ -83,6 +83,24 @@ namespace ThAmCo.Events.Data
                     new GuestBooking { CustomerId = 1, EventId = 2, Attended = false },
                     new GuestBooking { CustomerId = 3, EventId = 2, Attended = false }
                 );
+
+                builder.Entity<Staff>().HasData(
+                    new Data.Staff { Id = 1, FirstName = "Fred", Surname = "Frederickson", Email = "fred@example.com", FirstAider = true, IsActive = true },
+                    new Data.Staff { Id = 2, FirstName = "Jenny", Surname = "Jenson", Email = "jenny@example.com", FirstAider = false, IsActive = true },
+                    new Data.Staff { Id = 3, FirstName = "Simon", Surname = "Simonson", Email = "simon@example.com", FirstAider = false, IsActive = true },
+                    new Data.Staff { Id = 4, FirstName = "Linda", Surname = "Lindason", Email = "linda@example.com", FirstAider = false, IsActive = true },
+                    new Data.Staff { Id = 5, FirstName = "Tom", Surname = "Thompson", Email = "top@example.com", FirstAider = false, IsActive = true },
+                    new Data.Staff { Id = 6, FirstName = "Rachel", Surname = "Rachelson", Email = "rachel@example.com", FirstAider = false, IsActive = true },
+                    new Data.Staff { Id = 7, FirstName = "Mike", Surname = "Michaelson", Email = "michael@example.com", FirstAider = false, IsActive = true }
+                    );
+
+                builder.Entity<Staffing>().HasData(
+                    new Data.Staffing { EventId = 1, StaffId = 1 },
+                    new Data.Staffing { EventId = 1, StaffId = 2 },
+                    new Data.Staffing { EventId = 1, StaffId = 3 },
+                    new Data.Staffing { EventId = 2, StaffId = 4 },
+                    new Data.Staffing { EventId = 2, StaffId = 5 }
+                    );
             }
         }
     }
