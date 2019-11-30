@@ -57,6 +57,18 @@ namespace ThAmCo.Events.Controllers
             return View(creator);
         }
 
+        // GET: GuestBookings/Create
+        public async Task<IActionResult> AllocateNewEvent(int staffId)
+        {
+            var unavailableEvents = await _context.Staffing.Include(g => g.Event).Where(g => g.StaffId == staffId).ToListAsync();
+            var unevents = await _context.Events.Where(e => unavailableEvents.Any(a => a.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var events = await _context.Events.Except(unevents).ToListAsync();
+            var eventList = new SelectList(events, "Id", "Title");
+            var staff = new StaffVM(await _context.Staff.FindAsync(staffId));
+            AllocateNewEventVM creator = new AllocateNewEventVM(staff, eventList);
+            return View(creator);
+        }
+
         // POST: Staffing/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -77,6 +89,28 @@ namespace ThAmCo.Events.Controllers
             }
 
             return RedirectToAction("StaffAtEvent", new { id = staffing.EventId });
+        }
+
+        // POST: Staffing/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateNewEvent([Bind("StaffId,EventId")] Staffing staffing)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingStaff = _context.Staffing.Where(g => g.StaffId == staffing.StaffId && g.EventId == staffing.EventId).ToList();
+                if (existingStaff == null || existingStaff.Count == 0)
+                {
+                    _context.Add(staffing);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("StaffEvents", new { id = staffing.StaffId });
+                }
+                ViewData["CreateMessage"] = "Staff allocation already exists.";
+            }
+
+            return RedirectToAction("StaffEvents", new { id = staffing.StaffId });
         }
 
         // GET: Staffing/Delete/5
@@ -108,6 +142,20 @@ namespace ThAmCo.Events.Controllers
             _context.Staffing.Remove(staffBooking);
             await _context.SaveChangesAsync();
             return RedirectToAction("StaffAtEvent", new { id = eventId });
+        }
+
+        public async Task<IActionResult> StaffEvents(int id)
+        {
+            StaffVM staffVM = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));
+            var staffing = await _context.Staffing.Include(g => g.Event).Where(g => g.StaffId == id).OrderBy(e => e.EventId).ToListAsync();
+            var events = await _context.Events.Where(e => staffing.Any(b => b.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<EventVM> eventStaffing = new List<EventVM>();
+            for (int i = 0; i < staffing.Count; i++)
+            {
+                eventStaffing.Add(new EventVM(events[i]));
+            }
+            StaffEventsVM customerEvents = new StaffEventsVM(staffVM, eventStaffing);
+            return View(customerEvents);
         }
     }
 }

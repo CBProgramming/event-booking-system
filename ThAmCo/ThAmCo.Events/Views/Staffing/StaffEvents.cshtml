@@ -1,0 +1,60 @@
+﻿@model ThAmCo.Events.Models.Staff.StaffEventsVM
+
+@{
+    ViewData["Title"] = "StaffEvents";
+}
+
+<h2>StaffEvents</h2>
+
+<h2>@Html.DisplayFor(model => model.Staff.FirstName) @Html.DisplayFor(model => model.Staff.Surname)'s Staffings</h2>
+<h4>@Html.DisplayNameFor(model => model.Staff.Email): @Html.DisplayFor(model => model.Staff.Email)</h4>
+<h4>@Html.DisplayNameFor(model => model.Staff.FirstAider): @Html.DisplayFor(model => model.Staff.FirstAider)</h4>
+
+<br>
+<p>
+    @Html.ActionLink("Allocate to new event", "AllocateNewEvent", new { staffId = Model.Staff.Id })
+</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
+        </div>
+        <div class="col-md-1">
+            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().TypeId)
+        </div>
+    </div>
+</div>
+
+@foreach (var item in Model.Events)
+{
+
+    <form asp-action="Save">
+        <div class="container">
+            <div class="row">
+                <input type="hidden" asp-for="@item.Id" name="EventId" />
+                <input type="hidden" asp-for="@Model.Staff.Id" name="StaffId" />
+                <div class="col-md-4">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(modelItem => item.Date)
+                </div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </div>
+                <div class="col-md-1">
+                    @Html.DisplayFor(modelItem => item.TypeId)
+                </div>
+                <div class="col-md-1">
+                    @Html.ActionLink("Delete", "Delete", new { eventId = item.Id, customerId = Model.Staff.Id })
+                </div>
+            </div>
+        </div>
+    </form>
+}
