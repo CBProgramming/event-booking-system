@@ -42,9 +42,6 @@ namespace ThAmCo.Events.Controllers
             }
             EventCustomersVM eventCustomers = new EventCustomersVM(events, customerBookings);
             return View(eventCustomers);
-
-            //var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event).Where(g =>g.EventId == id);
-            //return View("Index",await eventsDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> CustomerBookings(int id)
@@ -210,6 +207,18 @@ namespace ThAmCo.Events.Controllers
             return View(creator);
         }
 
+        // GET: GuestBookings/Create
+        public async Task<IActionResult> BookNewGuest(int eventId)
+        {
+            var unavailableCustomers = await _context.Guests.Include(g => g.Customer).Where(g => g.EventId == eventId).ToListAsync();
+            var unCustomers = await _context.Customers.Where(e => unavailableCustomers.Any(a => a.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var customers = await _context.Customers.Except(unCustomers).ToListAsync();
+            var customerList = new SelectList(customers, "Id", "FullName");
+            var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
+            BookNewGuestVM creator = new BookNewGuestVM(eventVM, customerList);
+            return View(creator);
+        }
+
         // POST: GuestBookings/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -234,6 +243,34 @@ namespace ThAmCo.Events.Controllers
             }
 
             return RedirectToAction("CustomerBookings", new { id = guestBooking.CustomerId });
+        }
+
+
+
+        // POST: GuestBookings/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BookNewGuest(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
+            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
+            ViewData["GuestBookingMessage"] = "";
+
+            if (ModelState.IsValid)
+            {
+                var existingGuest = _context.Guests.Where(g => g.CustomerId == guestBooking.CustomerId && g.EventId == guestBooking.EventId).ToList();
+                if (existingGuest == null || existingGuest.Count == 0)
+                {
+                    _context.Add(guestBooking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });
+                }
+                ViewData["GuestsAtEventMessage"] = "Booking already exists.";
+            }
+
+            return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });
         }
 
         private bool GuestBookingExists(int id)

@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThAmCo.Events.Data;
+
 
 namespace ThAmCo.Events.Models.Staff
 {
     public class StaffVM
     {
+        public StaffVM(Data.Staff staff)
+        {
+            Id = staff.Id;
+            Surname = staff.Surname;
+            FirstName = staff.FirstName;
+            Email = staff.Email;
+            FirstAider = staff.FirstAider;
+        }
+
         public int Id { get; set; }
 
         public string FullName
