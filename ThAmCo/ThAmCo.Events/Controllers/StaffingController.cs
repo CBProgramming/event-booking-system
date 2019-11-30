@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,70 @@ namespace ThAmCo.Events.Controllers
             }
             EventStaffVM eventStaff = new EventStaffVM(staffVM, firstAiderPresent, id, @event.Title);
             return View(eventStaff);
+        }
+
+        public async Task<IActionResult> Create(int eventId)
+        {
+            var unavailableStaff = await _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == eventId).ToListAsync();
+            var unStaff = await _context.Staff.Where(e => unavailableStaff.Any(a => a.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var staff = await _context.Staff.Except(unStaff).ToListAsync();
+            var staffList = new SelectList(staff, "Id", "FullName");
+            var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
+            BookNewStaffVM creator = new BookNewStaffVM(eventVM, staffList);
+            return View(creator);
+        }
+
+        // POST: Staffing/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("StaffId,EventId")] Staffing staffing)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingStaff = _context.Staffing.Where(g => g.StaffId == staffing.StaffId && g.EventId == staffing.EventId).ToList();
+                if (existingStaff == null || existingStaff.Count == 0)
+                {
+                    _context.Add(staffing);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("StaffAtEvent", new { id = staffing.EventId });
+                }
+                ViewData["CreateMessage"] = "Booking already exists.";
+            }
+
+            return RedirectToAction("StaffAtEvent", new { id = staffing.EventId });
+        }
+
+        // GET: Staffing/Delete/5
+        public async Task<IActionResult> Delete(int? eventId, int? staffId)
+        {
+            ViewData["ErrorMessage"] = "";
+            if (eventId == null || staffId == null)
+            {
+                return NotFound();
+            }
+            var staffing = await _context.Staffing.FindAsync(staffId, eventId);
+            if (staffing == null)
+            {
+                return NotFound();
+            }
+            var staff = new StaffVM(await _context.Staff.FindAsync(staffId));
+            var @event = new EventVM(await _context.Events.FindAsync(eventId));
+
+            StaffingVM staffingVM = new StaffingVM(staffing, staff, @event);
+            return View(staffingVM);
+        }
+
+        // POST: Staffing/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int eventId, int staffId)
+        {
+            var staffBooking = await _context.Staffing.FindAsync(staffId, eventId);
+            _context.Staffing.Remove(staffBooking);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("StaffAtEvent", new { id = eventId });
         }
     }
 }

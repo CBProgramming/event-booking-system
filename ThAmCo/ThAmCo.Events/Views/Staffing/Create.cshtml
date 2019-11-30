@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.Models.GuestBookings.BookNewGuestVM
+﻿@model ThAmCo.Events.Models.Staffing.BookNewStaffVM
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="BookNewGuest">
+        <form asp-action="Create">
             <input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -18,8 +18,8 @@
                 <input asp-for="Event.Title" class="form-control" readonly />
             </div>
             <div class="form-group">
-                <label asp-for="Customers" class="control-label"></label>
-                @Html.DropDownList("CustomerId", Model.Customers)
+                <label asp-for="Staff" class="control-label"></label>
+                @Html.DropDownList("StaffId", Model.Staff)
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

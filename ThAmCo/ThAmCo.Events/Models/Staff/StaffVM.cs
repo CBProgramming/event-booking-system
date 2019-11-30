@@ -8,6 +8,11 @@ namespace ThAmCo.Events.Models.Staff
 {
     public class StaffVM
     {
+        public StaffVM()
+        {
+
+        }
+
         public StaffVM(Data.Staff staff)
         {
             Id = staff.Id;

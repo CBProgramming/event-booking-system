@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.Staff;
+using ThAmCo.Events.Models.Staffing;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -43,7 +46,7 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: Staff/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -53,15 +56,21 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] Staff staff)
+        public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
         {
             if (ModelState.IsValid)
             {
+                Staff staff = new Staff();
+                staff.Surname = staffVM.Surname;
+                staff.FirstName = staffVM.FirstName;
+                staff.Email = staffVM.Email;
+                staff.FirstAider = staffVM.FirstAider;
+                staff.IsActive = staffVM.IsActive;
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(staff);
+            return View(staffVM);
         }
 
         // GET: Staff/Edit/5

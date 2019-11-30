@@ -14,7 +14,7 @@
 }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @Html.ActionLink("Add Staff", "Create", new { eventId = Model.EventId })
 </p>
 <table class="table">
     <thead>
