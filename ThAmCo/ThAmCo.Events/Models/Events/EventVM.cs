@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
@@ -21,6 +22,7 @@ namespace ThAmCo.Events.Models.Events
             Bookings = eventData.Bookings;
             VenueRef = eventData.VenueRef;
             VenueName = eventData.VenueName;
+            IsActive = eventData.IsActive;
         }
 
         public EventVM(int id, string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
@@ -53,6 +55,7 @@ namespace ThAmCo.Events.Models.Events
             VenueCapacity = eventData.VenueCapacity;
             VenueCost = eventData.VenueCost;
             Existing = existing;
+            IsActive = eventData.IsActive;
         }
 
         public EventVM(string title, DateTime date, TimeSpan duration, string typeId)
@@ -114,5 +117,8 @@ namespace ThAmCo.Events.Models.Events
         }
 
         public int NumGuests { get; set; }
+
+        [DefaultValue(true)]
+        public bool IsActive { get; set; }
     }
 }

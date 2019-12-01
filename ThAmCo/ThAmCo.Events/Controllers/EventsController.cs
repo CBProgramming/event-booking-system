@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Availability;
 using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.Staffing;
 using ThAmCo.Events.Models.Venues;
 using ThAmCo.Events.Services;
 
@@ -219,12 +220,6 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-
-
-
-
-
-
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -247,9 +242,42 @@ namespace ThAmCo.Events.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            EventVM eventVM = new EventVM(await _context.Events.FindAsync(id));
+            var client = setupVenueClient();
+            string uri = "/api/Reservations";
+            string uriOldRef = uri + "/" + eventVM.OldRef;
+            ReservationPostDto res = new ReservationPostDto(eventVM.Date, eventVM.VenueRef);
+            try
+            {
+                if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
+                {
+                    var deleteResponse = await client.DeleteAsync(uriOldRef);
+                    deleteResponse.EnsureSuccessStatusCode();
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            List<StaffingVM> staffings = new List<StaffingVM>();
+            var staffData = await _context.Staffing.Where(s => s.EventId == id).ToListAsync();
+            foreach (Staffing s in staffData)
+            {
+                staffings.Add(new StaffingVM(s));
+            }
+            foreach (StaffingVM s in staffings)
+            {
+                var staffing = await _context.Staffing.FindAsync(s.StaffId);
+                _context.Staffing.Remove(staffing);
+                await _context.SaveChangesAsync();
+            }
             var @event = await _context.Events.FindAsync(id);
-            _context.Events.Remove(@event);
-            await _context.SaveChangesAsync();
+
+
+
+            //var @event = await _context.Events.FindAsync(id);
+            //_context.Events.Remove(@event);
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

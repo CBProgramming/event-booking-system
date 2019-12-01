@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ThAmCo.Events.Data
@@ -31,5 +32,8 @@ namespace ThAmCo.Events.Data
         public int VenueCapacity { get; set; }
 
         public double VenueCost { get; set; }
+
+        [DefaultValue(true)]
+        public bool IsActive { get; set; }
     }
 }

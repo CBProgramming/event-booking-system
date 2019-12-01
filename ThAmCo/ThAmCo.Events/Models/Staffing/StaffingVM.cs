@@ -18,6 +18,14 @@ namespace ThAmCo.Events.Models.Staffing
             Event = @event;
         }
 
+        public StaffingVM(Data.Staffing staffing)
+        {
+            StaffId = staffing.StaffId;
+            Staff = new StaffVM(staffing.Staff);
+            EventId = staffing.EventId;
+            Event = new EventVM(staffing.Event);
+        }
+
         public int StaffId { get; set; }
 
         public StaffVM Staff { get; set; }
