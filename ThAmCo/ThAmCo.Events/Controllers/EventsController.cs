@@ -9,7 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Availability;
+using ThAmCo.Events.Models.Customers;
 using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.Staff;
 using ThAmCo.Events.Models.Staffing;
 using ThAmCo.Events.Models.Venues;
 using ThAmCo.Events.Services;
@@ -75,12 +77,33 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var eventVM = new EventVM(@event);
-            return View(eventVM);
+            var bookings = _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id);
+            var customers = await _context.Customers.Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<CustomerVM> customersVM = new List<CustomerVM>();
+            foreach (Customer c in customers)
+            {
+                customersVM.Add(new CustomerVM(c));
+            }
+            var staffing = _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id);
+            var staff = await _context.Staff.Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<StaffVM> staffVM = new List<StaffVM>();
+            foreach (Staff s in staff)
+            {
+                staffVM.Add(new StaffVM(s));
+            }
+
+            EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM);
+            return View(eventDetailsVM);
         }
 
 
-        // GET: Events/Create
-        public IActionResult Create(EventVM @event)
+
+
+
+
+
+    // GET: Events/Create
+    public IActionResult Create(EventVM @event)
         {
             return View(@event);
         }

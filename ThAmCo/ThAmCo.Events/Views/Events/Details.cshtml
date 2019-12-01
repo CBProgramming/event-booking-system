@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.Models.Events.EventVM
+﻿@model ThAmCo.Events.Models.Events.EventDetailsVM
 
 @{
     ViewData["Title"] = "Details";
@@ -8,35 +8,106 @@
 
 <div>
     <h4>Event</h4>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Event.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Event.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Event.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Event.Date)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Event.Date)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Duration)
+            @Html.DisplayNameFor(model => model.Event.Duration)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Duration)
+            @Html.DisplayFor(model => model.Event.Duration)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TypeId)
+            @Html.DisplayNameFor(model => model.Event.TypeId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.TypeId)
+            @Html.DisplayFor(model => model.Event.TypeId)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+<h2>Guests</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Staff</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Staff)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
