@@ -122,7 +122,7 @@ namespace ThAmCo.Events.Models.Events
 
         public bool NeedStaff { get
             {
-                return NumGuests / 10 >= NumStaff;
+                return NumStaff < ((NumGuests + 9) / 10);
             }
         }
 
