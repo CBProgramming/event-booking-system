@@ -21,7 +21,6 @@ namespace ThAmCo.Events.Models.Staffing
         public StaffingVM(Data.Staffing staffing)
         {
             StaffId = staffing.StaffId;
-            Staff = new StaffVM(staffing.Staff);
             EventId = staffing.EventId;
             Event = new EventVM(staffing.Event);
         }

@@ -32,6 +32,7 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> StaffAtEvent(int id)
         {
             var @event = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
+            int numGuests = (await _context.Guests.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync()).Count();
             var staffing = await _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id).OrderBy(e => e.StaffId).ToListAsync();
             var staff = await _context.Staff.Where(s => s.IsActive == true).Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             List<StaffVM> staffVM = new List<StaffVM>();
@@ -42,7 +43,7 @@ namespace ThAmCo.Events.Controllers
                 if (firstAiderPresent == false && staffVM[i].FirstAider == true)
                     firstAiderPresent = true;
             }
-            EventStaffVM eventStaff = new EventStaffVM(staffVM, firstAiderPresent, id, @event.Title);
+            EventStaffVM eventStaff = new EventStaffVM(staffVM, firstAiderPresent, id, @event.Title, numGuests);
             return View(eventStaff);
         }
 

@@ -118,6 +118,14 @@ namespace ThAmCo.Events.Models.Events
 
         public int NumGuests { get; set; }
 
+        public int NumStaff { get; set; }
+
+        public bool NeedStaff { get
+            {
+                return NumGuests / 10 >= NumStaff;
+            }
+        }
+
         [DefaultValue(true)]
         public bool IsActive { get; set; }
     }

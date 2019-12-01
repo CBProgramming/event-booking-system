@@ -12,6 +12,12 @@
 {
     <h3>No first aider present.  Please allocate staff trained in first aid to event.</h3>
 }
+@if (Model.NeededStaff > 0)
+{
+    <h3>Not enough staff allocated to event.  Please add @Model.NeededStaff more staff</h3>
+}
+
+
 
 <p>
     @Html.ActionLink("Add Staff", "Create", new { eventId = Model.EventId })

@@ -1,67 +1,221 @@
-﻿@model List<ThAmCo.Events.Models.Events.EventVM>
+﻿@model ThAmCo.Events.Models.Events.EventsIndexVM
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Events</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().TypeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().NumGuests)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().VenueName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumGuests)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VenueName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
-                <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>
-            </td>
-        </tr>
+
+@{ if (Model.EventsNeedStaff != null && Model.EventsNeedStaff.Count > 0)
+    {
+        <h2>More staff needed at the following events</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Duration)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().TypeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumGuests)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().VenueName)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.EventsNeedStaff)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumGuests)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumStaff)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VenueName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    }
 }
-    </tbody>
-</table>
+
+@{ if (Model.EventsNeedFirstAid != null && Model.EventsNeedFirstAid.Count > 0)
+    {
+        <h2>First aider needed at the following events</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Duration)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().TypeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().NumGuests)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().VenueName)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.EventsNeedFirstAid)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumGuests)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumStaff)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VenueName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+}
+
+@{ if (Model.EventsOk != null && Model.EventsOk.Count > 0)
+    {
+        <h2>Staffing confirmed</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Duration)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().TypeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().NumGuests)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().VenueName)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.EventsOk)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumGuests)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumStaff)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VenueName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+}

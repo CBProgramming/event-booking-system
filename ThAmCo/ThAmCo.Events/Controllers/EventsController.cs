@@ -31,15 +31,32 @@ namespace ThAmCo.Events.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var eventsVM = new Models.Events.EventsVM(await _context.Events.ToListAsync());
-            List<EventVM> events = new List<EventVM>();
+            List<EventVM> eventsOk = new List<EventVM>();
+            List<EventVM> eventsNeedStaff = new List<EventVM>();
+            List<EventVM> eventsNeedFirstAid = new List<EventVM>();
+            var eventsVM = new Models.Events.EventsVM(await _context.Events.Where(e => e.IsActive == true).ToListAsync());
             foreach (Event e in eventsVM.Events)
             {
                 var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
+                var staffing = await _context.Staffing.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
+                var firstAidStaff = await _context.Staff.Where(s => s.IsActive == true).Where(t => staffing.Any(b => b.StaffId.Equals(t.Id))).Where(s => s.FirstAider == true).ToListAsync();
                 EventVM eventVM = new EventVM(e);
                 eventVM.NumGuests = bookings.Count();
-                events.Add(eventVM);
+                eventVM.NumStaff = staffing.Count();
+                if (!eventVM.NeedStaff && firstAidStaff != null && firstAidStaff.Count > 0)
+                {
+                    eventsOk.Add(eventVM);
+                }
+                if (eventVM.NeedStaff)
+                {
+                    eventsNeedStaff.Add(eventVM);
+                }
+                if (firstAidStaff == null || firstAidStaff.Count == 0)
+                {
+                    eventsNeedFirstAid.Add(eventVM);
+                }
             }
+            EventsIndexVM events = new EventsIndexVM(eventsOk, eventsNeedStaff, eventsNeedFirstAid);
             return View(events);
         }
 
@@ -51,7 +68,8 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
+                                .Where(e => e.IsActive == true)
+                                .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
@@ -91,7 +109,7 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
+            if (@event == null || @event.IsActive == false)
             {
                 return NotFound();
             }
@@ -227,7 +245,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var @event = await _context.Events
+            var @event = await _context.Events.Where(e => e.IsActive == true)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
@@ -244,14 +262,13 @@ namespace ThAmCo.Events.Controllers
         {
             EventVM eventVM = new EventVM(await _context.Events.FindAsync(id));
             var client = setupVenueClient();
-            string uri = "/api/Reservations";
-            string uriOldRef = uri + "/" + eventVM.OldRef;
+            string uri = "/api/Reservations/" + eventVM.getBookingRef;
             ReservationPostDto res = new ReservationPostDto(eventVM.Date, eventVM.VenueRef);
             try
             {
-                if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
+                if ((await client.GetAsync(uri)).IsSuccessStatusCode)
                 {
-                    var deleteResponse = await client.DeleteAsync(uriOldRef);
+                    var deleteResponse = await client.DeleteAsync(uri);
                     deleteResponse.EnsureSuccessStatusCode();
                 }
             }
@@ -267,23 +284,19 @@ namespace ThAmCo.Events.Controllers
             }
             foreach (StaffingVM s in staffings)
             {
-                var staffing = await _context.Staffing.FindAsync(s.StaffId);
+                var staffing = await _context.Staffing.FindAsync(s.StaffId,s.EventId);
                 _context.Staffing.Remove(staffing);
                 await _context.SaveChangesAsync();
             }
             var @event = await _context.Events.FindAsync(id);
-
-
-
-            //var @event = await _context.Events.FindAsync(id);
-            //_context.Events.Remove(@event);
-            //await _context.SaveChangesAsync();
+            @event.IsActive = false;
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EventExists(int id)
         {
-            return _context.Events.Any(e => e.Id == id);
+            return _context.Events.Where(e => e.IsActive == true).Any(e => e.Id == id);
         }
 
 
