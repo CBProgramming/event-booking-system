@@ -44,6 +44,7 @@ namespace ThAmCo.Events.Controllers
             return View(eventCustomers);
         }
 
+
         public async Task<IActionResult> CustomerBookings(int id)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
@@ -147,6 +148,7 @@ namespace ThAmCo.Events.Controllers
                     var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
                     dbGuestBooking.Attended = guestBooking.Attended;
                     await _context.SaveChangesAsync();
+                    return Ok();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -161,7 +163,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 await GuestsAtEvent(EventId);
             }
-            return View("GuestsAtEvent");
+            return Ok();
         }
 
         // GET: GuestBookings/Delete/5
