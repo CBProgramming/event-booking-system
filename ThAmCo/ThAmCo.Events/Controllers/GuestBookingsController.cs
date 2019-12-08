@@ -44,6 +44,42 @@ namespace ThAmCo.Events.Controllers
             return View(eventCustomers);
         }
 
+        // POST: GuestBookings/Save/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuestsAtEvent(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
+        {
+            //GuestBookingAttendanceVM guestBooking = new GuestBookingAttendanceVM(CustomerId, EventId, Attended);
+            if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
+                    dbGuestBooking.Attended = guestBooking.Attended;
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GuestBookingExists(guestBooking.CustomerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return Ok();
+        }
+
 
         public async Task<IActionResult> CustomerBookings(int id)
         {
@@ -130,41 +166,43 @@ namespace ThAmCo.Events.Controllers
             return View("CustomerBookings");
         }
 
-        // POST: GuestBookings/Save/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEventGuests(int CustomerId, int EventId,[Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
-        {
-            if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
-            {
-                return NotFound();
-            }
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
-                    dbGuestBooking.Attended = guestBooking.Attended;
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GuestBookingExists(guestBooking.CustomerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                await GuestsAtEvent(EventId);
-            }
-            return Ok();
-        }
+        //// POST: GuestBookings/Save/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> SaveEventGuests(int CustomerId, int EventId,[Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
+        //{
+        //    if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
+        //            dbGuestBooking.Attended = guestBooking.Attended;
+        //            await _context.SaveChangesAsync();
+        //            return Ok();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!GuestBookingExists(guestBooking.CustomerId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        await GuestsAtEvent(EventId);
+        //    }
+        //    return Ok();
+        //}
+
+
 
         // GET: GuestBookings/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? customerId)
