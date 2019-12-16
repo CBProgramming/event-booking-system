@@ -34,7 +34,7 @@
                     @Html.DisplayFor(modelItem => item.FullName)
                 </div>
                 <div class="col-md-1">
-                    <input asp-for="@item.Attended" onChange=AjaxTest2() />
+                    <input asp-for="@item.Attended" onChange=updateAttend() />
                 </div>
                 <div class="col-md-1">
                     @Html.ActionLink("Delete", "Delete", new { customerId = item.Id, eventId = Model.Event.Id })
@@ -45,10 +45,10 @@
 }
 
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     function AjaxTest2() {
         $.ajax({
-            //type: 'GET',
+            type: 'GET',
             url: "http://localhost:22263/GuestBookings/AjaxTest2",
             //url: "@Url.Action("Get","AjaxTest2")",
 
@@ -65,25 +65,25 @@
     }
 
 
-</script>
+</script>*@
 
 
-@*<script type="text/javascript">
+<script type="text/javascript">
 
-    function updateAttend(checkboxElement)
+    function updateAttend()
     {
 
 
-        var data = {};
-        data.CustomerId = 2;
-        data.EventId = 1;
-        data.Attended = true;
+        //var data = {};
+        //data.CustomerId = 2;
+        //data.EventId = 1;
+        //data.Attended = true;
 
-        var customerId = $(checkboxElement).data("customerid");
-        var eventId = $("#Event_Id").val();
-        var checked = ($(this).prop("checked"));
+        //var customerId = $(checkboxElement).data("customerid");
+        //var eventId = $("#Event_Id").val();
+        //var checked = ($(this).prop("checked"));
 
-        @*var data =
+        var data =
         {
             "CustomerId": 2,
             "EventId": 1,
@@ -92,8 +92,8 @@
 
         $.ajax({
 
-            url: 'https://localhost:22263/GuestBookings/GuestsAtEvent',
-            method: 'POST',
+            url: 'http://localhost:22263/GuestBookings/GuestsAtEvent',
+            type: 'POST',
             //crossDomain: false,
             //contentType: 'application/json;charset=utf-8',
             datatype: 'json',
@@ -112,5 +112,5 @@
     }
 
 
-</script>*@
+</script>
 
