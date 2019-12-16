@@ -44,30 +44,6 @@
 
 }
 
-
-@*<script type="text/javascript">
-    function AjaxTest2() {
-        $.ajax({
-            type: 'GET',
-            url: "http://localhost:22263/GuestBookings/AjaxTest2",
-            //url: "@Url.Action("Get","AjaxTest2")",
-
-            success: function ()
-            {
-                alert("ajax successful");
-            },
-            error: function ()
-            {
-                alert("ajax went wrong");
-            }
-        });
-        
-    }
-
-
-</script>*@
-
-
 <script type="text/javascript">
 
     function updateAttend(checkbox)
@@ -82,22 +58,6 @@
             "EventId": evId,
             "Attended": checked
         };
-        //var data = {};
-        //data.CustomerId = 2;
-        //data.EventId = 1;
-        //data.Attended = true;
-
-        //var customerId = $(checkboxElement).data("customerid");
-        //var eventId = $("#Event_Id").val();
-        //var checked = ($(this).prop("checked"));
-
-        //below works
-        //var data =
-        //{
-        //    "CustomerId": 2,
-        //    "EventId": 1,
-        //    "Attended": true
-        //};
 
         $.ajax({
 
@@ -116,9 +76,7 @@
                 alert("something went wrong");
             }
         });
-        //return false;
     }
-
 
 </script>
 
