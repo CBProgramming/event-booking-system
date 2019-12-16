@@ -13,110 +13,150 @@
         <a asp-action="Index">Back to List</a>
     </div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Event.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Event.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Event.Date)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Event.Date)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Event.Duration)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Event.Duration)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Event.TypeId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Event.TypeId)
-        </dd>
-    </dl>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Event</h2>
+                <div class="col-sm-2">
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.Title):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.Date):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.Duration):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.TypeId):
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div>
+                        @Html.DisplayFor(model => model.Event.Title)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.Date)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.Duration)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.TypeId)
+                    </div>
+                </div>
+            </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <h2>@Model.Customers.Count Guests</h2>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Surname)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Email)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Customers)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Surname)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm-6">
-            <h2>@Model.Staff.Count Staff</h2>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Surname)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Email)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Staff)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Surname)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <div class="col-sm-6">
+                <h2>Venue</h2>
+                <div class="col-sm-3">
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.VenueName):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.VenueCapacity):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.VenueCost):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.VenueDescription):
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div>
+                        @Html.DisplayFor(model => model.Event.VenueName)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.VenueCapacity)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.VenueCost)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Event.VenueDescription)
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>@Model.Customers.Count Guests</h2>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Surname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Email)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Customers)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Surname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <h2>@Model.Staff.Count Staff</h2>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Surname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Email)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Staff)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Surname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 

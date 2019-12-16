@@ -22,6 +22,9 @@ namespace ThAmCo.Events.Models.Events
             Bookings = eventData.Bookings;
             VenueRef = eventData.VenueRef;
             VenueName = eventData.VenueName;
+            VenueDescription = eventData.VenueDescription;
+            VenueCapacity = eventData.VenueCapacity;
+            VenueCost = eventData.VenueCost;
             IsActive = eventData.IsActive;
         }
 
