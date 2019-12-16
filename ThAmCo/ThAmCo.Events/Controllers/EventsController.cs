@@ -96,31 +96,31 @@ namespace ThAmCo.Events.Controllers
             return View(eventDetailsVM);
         }
 
-
-
-
-
-
-
-    // GET: Events/Create
-    public IActionResult Create(EventVM @event)
+        public IActionResult SearchVenues(VenueSearchVM searchCriteria)
         {
-            return View(@event);
+            return View(searchCriteria);
         }
 
-        // POST: Events/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Date,Duration,TypeId")] Event @event)
+        public IActionResult VenueSearchResults([Bind("StartDate,EndDate,TypeId")] VenueSearchVM searchCriteria)
         {
-            if (ModelState.IsValid)
+            List<AvailabilitiesVM> availabilities = GetAvailability(searchCriteria.TypeId, searchCriteria.StartDate, searchCriteria.EndDate).Result.ToList();
+            if (availabilities.Count == 0)
             {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                searchCriteria.Message = "No venues available on this date";
+                return View("SearchVenues", searchCriteria);
             }
+            EventVM eventVM = new EventVM();
+            eventVM.TypeId = searchCriteria.TypeId;
+            EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(eventVM, availabilities);
+            return View("SelectVenue",venueSelector);
+        }
+
+
+
+        // GET: Events/Create
+        public IActionResult Create(string typeId, string venueRef, DateTime date, string venueName, string venueDescription, int venueCapacity, int venueCost,
+            EventVM @event)
+        {
             return View(@event);
         }
 
@@ -181,22 +181,30 @@ namespace ThAmCo.Events.Controllers
 
         public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
-            if (@event.Existing)
-               @event.OldRef = @event.getBookingRef;
-            List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
-            if (availabilities.Count == 0)
+            if(@event.VenueName != null)
             {
-                @event.Message = "No venues available on this date";
-                if (@event.Existing == false)
-                    return View("Create", @event);
-                else
-                    return RedirectToAction("Edit", new { Id = @event.Id, Message = @event.Message });
+                return RedirectToAction("ConfirmReservation", @event);
             }
             else
             {
-                EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
-                return View(venueSelector);
+                if (@event.Existing)
+                    @event.OldRef = @event.getBookingRef;
+                List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
+                if (availabilities.Count == 0)
+                {
+                    @event.Message = "No venues available on this date";
+                    if (@event.Existing == false)
+                        return View("Create", @event);
+                    else
+                        return RedirectToAction("Edit", new { Id = @event.Id, Message = @event.Message });
+                }
+                else
+                {
+                    EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(@event, availabilities);
+                    return View(venueSelector);
+                }
             }
+
         }
 
         public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,

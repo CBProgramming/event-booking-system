@@ -7,11 +7,14 @@
 <h2>ConfirmReservation</h2>
 <form asp-action="BookEvent">
     <div>
-        <h4>EventVenueVM</h4>
+        <h4>EventVenue</h4>
         <hr />
         <input type="hidden" asp-for=@Model.EventVM.Id name="Id" />
         <input type="hidden" asp-for=@Model.EventVM.OldRef name="OldRef" />
         <input type="hidden" asp-for=@Model.EventVM.Existing name="Existing" />
+        <input type="hidden" asp-for=@Model.EventVM.VenueCapacity name="VenueCapacity" />
+        <input type="hidden" asp-for=@Model.EventVM.VenueCost name="VenueCost" />
+        <input type="hidden" asp-for=@Model.EventVM.VenueDescription name="VenueDescription" />
         <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(model => model.VenueRef)
