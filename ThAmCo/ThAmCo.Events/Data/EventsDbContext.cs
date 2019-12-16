@@ -65,26 +65,26 @@ namespace ThAmCo.Events.Data
             if (HostEnv != null && HostEnv.IsDevelopment())
             {
                 builder.Entity<Customer>().HasData(
-                    new Customer { Id = 1, Surname = "Robertson", FirstName = "Robert", Email = "bob@example.com" },
-                    new Customer { Id = 2, Surname = "Thornton", FirstName = "Betty", Email = "betty@example.com" },
-                    new Customer { Id = 3, Surname = "Jellybeans", FirstName = "Jin", Email = "jin@example.com" },
-                    new Customer { Id = 4, Surname = "Garethson", FirstName = "Gareth", Email = "Gareth@example.com" },
-                    new Customer { Id = 5, Surname = "Aliceson", FirstName = "Alice", Email = "Alice@example.com" },
-                    new Customer { Id = 6, Surname = "Markson", FirstName = "Mark", Email = "Mark@example.com" },
-                    new Customer { Id = 7, Surname = "Adamson", FirstName = "Adam", Email = "Adam@example.com" },
-                    new Customer { Id = 8, Surname = "Charlotteson", FirstName = "Charlotte", Email = "Charlotte@example.com" },
-                    new Customer { Id = 9, Surname = "Dianeson", FirstName = "Diane", Email = "Diane@example.com" },
-                    new Customer { Id = 10, Surname = "Alanson", FirstName = "Alan", Email = "Alan@example.com" },
-                    new Customer { Id = 11, Surname = "Sarahson", FirstName = "Sarah", Email = "Sarah@example.com" },
-                    new Customer { Id = 12, Surname = "Lukeson", FirstName = "Luke", Email = "Luke@example.com" },
-                    new Customer { Id = 13, Surname = "Camilleson", FirstName = "Camille", Email = "Camille@example.com" },
-                    new Customer { Id = 14, Surname = "Laurason", FirstName = "Laura", Email = "Laura@example.com" },
-                    new Customer { Id = 15, Surname = "Aidanson", FirstName = "Aidan", Email = "Aidan@example.com" },
-                    new Customer { Id = 16, Surname = "Laylason", FirstName = "Layla", Email = "Layla@example.com" },
-                    new Customer { Id = 17, Surname = "Philson", FirstName = "Phil", Email = "Phil@example.com" },
-                    new Customer { Id = 18, Surname = "Katson", FirstName = "Kat", Email = "Kat@example.com" },
-                    new Customer { Id = 19, Surname = "Peterson", FirstName = "Peter", Email = "Peter@example.com" },
-                    new Customer { Id = 20, Surname = "Valson", FirstName = "Val", Email = "Val@example.com" }
+                    new Customer { Id = 1, Surname = "Robertson", FirstName = "Robert", Email = "bob@example.com", Deleted = false },
+                    new Customer { Id = 2, Surname = "Thornton", FirstName = "Betty", Email = "betty@example.com", Deleted = false },
+                    new Customer { Id = 3, Surname = "Jellybeans", FirstName = "Jin", Email = "jin@example.com", Deleted = false },
+                    new Customer { Id = 4, Surname = "Garethson", FirstName = "Gareth", Email = "Gareth@example.com", Deleted = false },
+                    new Customer { Id = 5, Surname = "Aliceson", FirstName = "Alice", Email = "Alice@example.com", Deleted = false },
+                    new Customer { Id = 6, Surname = "Markson", FirstName = "Mark", Email = "Mark@example.com", Deleted = false },
+                    new Customer { Id = 7, Surname = "Adamson", FirstName = "Adam", Email = "Adam@example.com", Deleted = false },
+                    new Customer { Id = 8, Surname = "Charlotteson", FirstName = "Charlotte", Email = "Charlotte@example.com", Deleted = false },
+                    new Customer { Id = 9, Surname = "Dianeson", FirstName = "Diane", Email = "Diane@example.com", Deleted = false },
+                    new Customer { Id = 10, Surname = "Alanson", FirstName = "Alan", Email = "Alan@example.com", Deleted = false },
+                    new Customer { Id = 11, Surname = "Sarahson", FirstName = "Sarah", Email = "Sarah@example.com", Deleted = false },
+                    new Customer { Id = 12, Surname = "Lukeson", FirstName = "Luke", Email = "Luke@example.com", Deleted = false },
+                    new Customer { Id = 13, Surname = "Camilleson", FirstName = "Camille", Email = "Camille@example.com", Deleted = false },
+                    new Customer { Id = 14, Surname = "Laurason", FirstName = "Laura", Email = "Laura@example.com", Deleted = false },
+                    new Customer { Id = 15, Surname = "Aidanson", FirstName = "Aidan", Email = "Aidan@example.com", Deleted = false },
+                    new Customer { Id = 16, Surname = "Laylason", FirstName = "Layla", Email = "Layla@example.com", Deleted = false },
+                    new Customer { Id = 17, Surname = "Philson", FirstName = "Phil", Email = "Phil@example.com", Deleted = false },
+                    new Customer { Id = 18, Surname = "Katson", FirstName = "Kat", Email = "Kat@example.com", Deleted = false },
+                    new Customer { Id = 19, Surname = "Peterson", FirstName = "Peter", Email = "Peter@example.com", Deleted = false },
+                    new Customer { Id = 20, Surname = "Valson", FirstName = "Val", Email = "Val@example.com", Deleted = false }
                 );
 
                 builder.Entity<Event>().HasData(

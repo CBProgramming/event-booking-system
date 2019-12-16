@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
-
+using ThAmCo.Events.Models.Customers;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -102,7 +102,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!CustomerActive(customer.Id))
                     {
                         return NotFound();
                     }
@@ -123,13 +123,11 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            CustomerVM customerVM = new CustomerVM(await _context.Customers.FirstOrDefaultAsync(m => m.Id == id));
+            if (customerVM == null)
             {
                 return NotFound();
             }
-            var customerVM = new Models.Customers.CustomerVM(customer);
             return View(customerVM);
         }
 
@@ -138,15 +136,36 @@ namespace ThAmCo.Events.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var customer = await _context.Customers.FindAsync(id);
+                customer.Deleted = true;
+                customer.FirstName = "anonymised";
+                customer.Surname = "anonymised";
+                customer.Email = "anonymised@anonymised.com";
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomerActive(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int id)
+        private bool CustomerActive(int id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.Customers.Any(e => e.Id == id && e.Deleted != true);
         }
     }
 }
