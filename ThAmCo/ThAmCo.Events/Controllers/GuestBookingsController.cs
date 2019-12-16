@@ -23,20 +23,20 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AjaxTest1()
-        {
-            //var eventsDbContext = await _context.Events.FirstOrDefaultAsync(m => m.Id == 1);
-            return Ok();
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AjaxTest1()
+        //{
+        //    //var eventsDbContext = await _context.Events.FirstOrDefaultAsync(m => m.Id == 1);
+        //    return Ok();
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> AjaxTest2()
-        {
-            //var eventsDbContext = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
-            return Ok();
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> AjaxTest2()
+        //{
+        //    //var eventsDbContext = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
+        //    return Ok();
+        //}
 
         // GET: GuestBookings
         public async Task<IActionResult> Index()

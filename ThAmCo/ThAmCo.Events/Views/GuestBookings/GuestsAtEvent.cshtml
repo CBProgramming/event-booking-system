@@ -29,12 +29,12 @@
 
         <div class="container">
             <div class="row">
-                @*<input type="hidden" asp-for="@item.Id" name="CustomerId" />*@
+                <input type="hidden" asp-for="@item.Id" name="CustomerId" />
                 <div class="col-md-4">
                     @Html.DisplayFor(modelItem => item.FullName)
                 </div>
                 <div class="col-md-1">
-                    <input asp-for="@item.Attended" onChange=updateAttend() />
+                    <input asp-for="@item.Attended" data-customerid="@item.Id" onChange=updateAttend(this) />
                 </div>
                 <div class="col-md-1">
                     @Html.ActionLink("Delete", "Delete", new { customerId = item.Id, eventId = Model.Event.Id })
@@ -70,10 +70,18 @@
 
 <script type="text/javascript">
 
-    function updateAttend()
+    function updateAttend(checkbox)
     {
+        var cusId = $(checkbox).data("customerid");
+        var evId = $("#Event_Id").val();
+        var checked = $(checkbox).is(":checked");
 
-
+        var data =
+        {
+            "CustomerId": cusId,
+            "EventId": evId,
+            "Attended": checked
+        };
         //var data = {};
         //data.CustomerId = 2;
         //data.EventId = 1;
@@ -83,12 +91,13 @@
         //var eventId = $("#Event_Id").val();
         //var checked = ($(this).prop("checked"));
 
-        var data =
-        {
-            "CustomerId": 2,
-            "EventId": 1,
-            "Attended": true
-        };
+        //below works
+        //var data =
+        //{
+        //    "CustomerId": 2,
+        //    "EventId": 1,
+        //    "Attended": true
+        //};
 
         $.ajax({
 
@@ -101,7 +110,6 @@
             data: data,
             success: function ()
             {
-                alert("success");
             },
             error: function ()
             {
