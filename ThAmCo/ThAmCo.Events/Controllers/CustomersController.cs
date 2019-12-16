@@ -22,7 +22,7 @@ namespace ThAmCo.Events.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var customersVM = new Models.Customers.CustomersVM(await _context.Customers.ToListAsync());
+            var customersVM = new Models.Customers.CustomersVM(await _context.Customers.Where(c => c.Deleted == false).ToListAsync());
             return View(customersVM);
         }
 
@@ -33,8 +33,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers.Where(c => c.Deleted == false).FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
@@ -72,8 +71,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers.Where(c => c.Deleted == false).FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
@@ -123,7 +121,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            CustomerVM customerVM = new CustomerVM(await _context.Customers.FirstOrDefaultAsync(m => m.Id == id));
+            CustomerVM customerVM = new CustomerVM(await _context.Customers.Where(c => c.Deleted == false).FirstOrDefaultAsync(m => m.Id == id));
             if (customerVM == null)
             {
                 return NotFound();
@@ -143,11 +141,14 @@ namespace ThAmCo.Events.Controllers
             try
             {
                 var customer = await _context.Customers.FindAsync(id);
-                customer.Deleted = true;
-                customer.FirstName = "anonymised";
-                customer.Surname = "anonymised";
-                customer.Email = "anonymised@anonymised.com";
-                await _context.SaveChangesAsync();
+                if (customer.Deleted != true)
+                {
+                    customer.Deleted = true;
+                    customer.FirstName = "anonymised";
+                    customer.Surname = "anonymised";
+                    customer.Email = "anonymised@anonymised.com";
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

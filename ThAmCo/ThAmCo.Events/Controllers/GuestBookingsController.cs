@@ -33,8 +33,8 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> GuestsAtEvent(int id)
         {
             var events = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
-            var bookings = await _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id).OrderBy(e => e.CustomerId).ToListAsync();
-            var customer = await _context.Customers.Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var bookings = await _context.Guests.Include(g => g.Customer).Where(g => g.Customer.Deleted == false).Where(g => g.EventId == id).OrderBy(e => e.CustomerId).ToListAsync();
+            var customer = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             List<CustomerBookingVM> customerBookings = new List<CustomerBookingVM>();
             for (int i = 0; i < bookings.Count; i++)
             {
@@ -82,7 +82,7 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> CustomerBookings(int id)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers.Where(c => c.Deleted == false).FirstOrDefaultAsync(m => m.Id == id);
             var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == id).OrderBy(e => e.EventId).ToListAsync();
             var events = await _context.Events.Where(e => bookings.Any(b => b.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             List<EventBookingVM> eventBookings = new List<EventBookingVM>();
@@ -217,6 +217,10 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var customer = new CustomerVM(await _context.Customers.FindAsync(customerId));
+            if (customer.Deleted == true)
+            {
+                return NotFound();
+            }
             var @event = new EventVM(await _context.Events.FindAsync(eventId));
             var guestBookingVM = new GuestBookingVM(guestBooking,customer,@event);
             return View(guestBookingVM);
@@ -237,11 +241,15 @@ namespace ThAmCo.Events.Controllers
         // GET: GuestBookings/Create
         public async Task<IActionResult> Create(int customerId)
         {
+            var customer = new CustomerVM(await _context.Customers.FindAsync(customerId));
+            if (customer.Deleted == true)
+            {
+                return NotFound();
+            }
             var unavailableEvents = await _context.Guests.Include(g => g.Event).Where(g => g.CustomerId == customerId).ToListAsync();
             var unevents = await _context.Events.Where(e => unavailableEvents.Any(a => a.EventId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             var events = await _context.Events.Except(unevents).ToListAsync();
             var eventList = new SelectList(events, "Id", "Title");
-            var customer = new CustomerVM(await _context.Customers.FindAsync(customerId));
             GuestBookingCreateVM creator = new GuestBookingCreateVM(customer, eventList);
             return View(creator);
         }
@@ -250,8 +258,8 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> BookNewGuest(int eventId)
         {
             var unavailableCustomers = await _context.Guests.Include(g => g.Customer).Where(g => g.EventId == eventId).ToListAsync();
-            var unCustomers = await _context.Customers.Where(e => unavailableCustomers.Any(a => a.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
-            var customers = await _context.Customers.Except(unCustomers).ToListAsync();
+            var unCustomers = await _context.Customers.Where(c => c.Deleted == false).Where(e => unavailableCustomers.Any(a => a.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var customers = await _context.Customers.Where(c => c.Deleted == false).Except(unCustomers).ToListAsync();
             var customerList = new SelectList(customers, "Id", "FullName");
             var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
             BookNewGuestVM creator = new BookNewGuestVM(eventVM, customerList);

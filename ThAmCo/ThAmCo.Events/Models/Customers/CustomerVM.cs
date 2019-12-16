@@ -14,6 +14,7 @@ namespace ThAmCo.Events.Models.Customers
             Surname = customer.Surname;
             FirstName = customer.FirstName;
             Email = customer.Email;
+            Deleted = customer.Deleted;
             Bookings = customer.Bookings;
         }
 
@@ -31,6 +32,8 @@ namespace ThAmCo.Events.Models.Customers
         public string Email { get; set; }
 
         public List<GuestBooking> Bookings { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }
 

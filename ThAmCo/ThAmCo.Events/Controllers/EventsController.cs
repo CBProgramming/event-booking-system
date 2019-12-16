@@ -78,7 +78,7 @@ namespace ThAmCo.Events.Controllers
             }
             var eventVM = new EventVM(@event);
             var bookings = _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id);
-            var customers = await _context.Customers.Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var customers = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             List<CustomerVM> customersVM = new List<CustomerVM>();
             foreach (Customer c in customers)
             {
