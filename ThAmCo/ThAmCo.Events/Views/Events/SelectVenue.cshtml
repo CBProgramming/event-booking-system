@@ -74,10 +74,10 @@
                     {
                         @Html.ActionLink("Select Venue", "ConfirmReservation", new
                         {
-                            eventName = Model.Event.Title,
+                            Title = Model.Event.Title,
                             duration = Model.Event.Duration,
-                            type = Model.Event.TypeId,
-                            code = item.Code,
+                            typeId = Model.Event.TypeId,
+                            VenueRef = item.Code,
                             date = item.Date,
                             venueName = item.Name,
                             venueDescription = item.Description,

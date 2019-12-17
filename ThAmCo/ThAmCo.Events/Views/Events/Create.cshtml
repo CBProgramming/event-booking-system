@@ -5,6 +5,7 @@
 }
 
 <h3>@Model.Message</h3>
+<h3>@Model.Date</h3>
 
 <h2>Create</h2>
 
@@ -19,24 +20,25 @@
             <input type="hidden" asp-for=@Model.VenueCapacity name="VenueCapacity" />
             <input type="hidden" asp-for=@Model.VenueCost name="VenueCost" />
             <input type="hidden" asp-for=@Model.VenueDescription name="VenueDescription" />
+            @if (Model.VenueName != null)
+            {
+                <input type="hidden" asp-for=@Model.Date name="Date" />
+            }
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                @if (Model.VenueName == null)
-                {
-                    <input asp-for="@Model.Date" class="form-control" />
-                }
-                else
-                {
-                    <input type="hidden" asp-for=@Model.Date />
-                }
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
+
+            @if (Model.VenueName == null)
+            {
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for=@Model.Date class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
                 <input asp-for="Duration" class="form-control" />

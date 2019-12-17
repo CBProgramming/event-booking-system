@@ -179,7 +179,7 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        public IActionResult SelectVenue([Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
+        public IActionResult SelectVenue(DateTime date, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
             if(@event.VenueName != null)
             {
@@ -207,11 +207,12 @@ namespace ThAmCo.Events.Controllers
 
         }
 
-        public IActionResult ConfirmReservation(string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,
-                                                string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef, int eventId)
+        public IActionResult ConfirmReservation(EventVM eventVM)
+            //string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,
+                                                //string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef, int eventId, 
         {
-            EventVM eventVM = new EventVM(eventId, eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
-            EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, code, date, venueName);
+            //EventVM eventVM = new EventVM(eventId, eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
+            EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, eventVM.VenueRef, eventVM.Date, eventVM.VenueName);
             return View(selectedEventVenue);
         }
 
