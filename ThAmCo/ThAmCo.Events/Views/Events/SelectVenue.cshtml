@@ -60,15 +60,21 @@
                     @if (Model.Event.Title == null)
                     {
                         @Html.ActionLink("Book Event", "Create", new
-                        {
-                            typeId = Model.Event.TypeId,
-                            venueRef = item.Code,
-                            date = item.Date,
-                            venueName = item.Name,
-                            venueDescription = item.Description,
-                            venueCapacity = item.Capacity,
-                            venueCost = item.CostPerHour,
-                        })
+                   {
+                       typeId = Model.Event.TypeId,
+                       venueRef = item.Code,
+                       date = item.Date,
+                       venueName = item.Name,
+                       venueDescription = item.Description,
+                       venueCapacity = item.Capacity,
+                       venueCost = item.CostPerHour,
+                       day = item.Date.Day,
+                       motnh = item.Date.Month,
+                       year = item.Date.Year,
+                       hour = item.Date.Hour,
+                       minute = item.Date.Minute,
+                       second = item.Date.Second
+                   });
                     }
                     else
                     {

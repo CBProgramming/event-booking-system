@@ -103,6 +103,11 @@ namespace ThAmCo.Events.Controllers
 
         public IActionResult VenueSearchResults([Bind("StartDate,EndDate,TypeId")] VenueSearchVM searchCriteria)
         {
+            if (searchCriteria.TypeId == null)
+            {
+                searchCriteria.Message = "Please select an event type";
+                return View("SearchVenues", searchCriteria);
+            }
             List<AvailabilitiesVM> availabilities = GetAvailability(searchCriteria.TypeId, searchCriteria.StartDate, searchCriteria.EndDate).Result.ToList();
             if (availabilities.Count == 0)
             {
@@ -118,9 +123,14 @@ namespace ThAmCo.Events.Controllers
 
 
         // GET: Events/Create
-        public IActionResult Create(string typeId, string venueRef, DateTime date, string venueName, string venueDescription, int venueCapacity, int venueCost,
-            EventVM @event)
+        public IActionResult Create(string typeId, string venueRef, DateTime date, string venueName, string venueDescription, int venueCapacity, int venueCost, 
+            int day, int month, int year, int hour, int minute, int second, EventVM @event)
         {
+            if (day !=0 && month !=0 && year !=0 && @event.Title == null)
+            {
+                DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
+                @event.Date = fixedDate;
+            }
             return View(@event);
         }
 
@@ -179,14 +189,20 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        public IActionResult SelectVenue(DateTime date, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
+        public IActionResult SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
-            if(@event.VenueName != null)
+            if (day != 0 && month != 0 && year != 0)
+            {
+                DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
+                @event.Date = fixedDate;
+            }
+            if (@event.VenueName != null)
             {
                 return RedirectToAction("ConfirmReservation", @event);
             }
             else
             {
+
                 if (@event.Existing)
                     @event.OldRef = @event.getBookingRef;
                 List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
