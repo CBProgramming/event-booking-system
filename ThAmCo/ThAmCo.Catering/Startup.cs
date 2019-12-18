@@ -30,7 +30,7 @@ namespace ThAmCo.Catering
 
             services.AddDbContext<MenusDbContext>(options =>
             {
-                var cs = Configuration.GetConnectionString("VenuesSqlConnection");
+                var cs = Configuration.GetConnectionString("CateringSqlConnection");
                 options.UseSqlServer(cs);
             });
         }
