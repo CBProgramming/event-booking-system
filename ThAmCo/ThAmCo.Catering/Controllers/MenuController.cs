@@ -24,48 +24,54 @@ namespace ThAmCo.Catering.Controllers
 
         // GET: api/Menu
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int? menuId)
         {
-            var menus = await _context.Menus.ToListAsync();
-            List<MenuDto> menusDto = new List<MenuDto>();
-            foreach (Menu m in menus)
+            if (menuId == null)
             {
-                menusDto.Add(new MenuDto(m));
+                var menus = await _context.Menus.ToListAsync();
+                List<MenuDto> menusDto = new List<MenuDto>();
+                foreach (Menu m in menus)
+                {
+                    menusDto.Add(new MenuDto(m));
+                }
+                return Ok(menusDto);
             }
-            return Ok(menusDto);
+            else
+            {
+                var menu = await _context.Menus.FindAsync(menuId);
+                MenuDto menuDto = new MenuDto(menu);
+                return Ok(menuDto);
+            }
+
         }
 
-        //// GET: api/Menu
-        //[HttpGet]
-        //public async Task<IActionResult> Get([int menuId)
-        //{
-        //    var menu = await _context.Menus.FindAsync(menuId);
-        //    MenuDto menuDto = new MenuDto(menu);
-        //    return Ok(menuDto);
-        //}
-
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Edit([FromBody] MenuDto menuDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            try
+            var menu = await _context.Menus.FindAsync(menuDto.MenuId);
+            if (menu != null)
             {
-                var menu = await _context.Menus.FindAsync(menuDto.MenuId);
-                menu.Name = menuDto.Name;
-                menu.CostPerHead = menuDto.CostPerHead;
-                menu.Starter = menuDto.Starter;
-                menu.Main = menuDto.Main;
-                menu.Dessert = menuDto.Dessert;
-                await _context.SaveChangesAsync();
-                return Ok();
+                try
+                {
+                    menu.Name = menuDto.Name;
+                    menu.CostPerHead = menuDto.CostPerHead;
+                    menu.Starter = menuDto.Starter;
+                    menu.Main = menuDto.Main;
+                    menu.Dessert = menuDto.Dessert;
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+
+                }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
+
+            return NotFound();
         }
     }
 }

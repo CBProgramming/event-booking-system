@@ -43,7 +43,7 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> Edit(int menuId)
         {
             var client = setupClient();
-            string uri = "/api/Menu/" + menuId;
+            string uri = "/api/Menu?menuId=" + menuId;
             MenuDto menu;
             try
             {
@@ -66,10 +66,9 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            string uri = "/api/Menu/" + menu.MenuId;
+            string uri = "/api/Menu/";
             var client = setupClient();
-            var response = await client.PostAsJsonAsync(uri,menu);
-            if((await client.PostAsJsonAsync(uri, menu)).IsSuccessStatusCode)
+            if((await client.PutAsJsonAsync<MenuDto>(uri, menu)).IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }

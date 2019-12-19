@@ -8,6 +8,20 @@ namespace ThAmCo.Catering.Models
 {
     public class MenuDto
     {
+        public MenuDto()
+        {
+
+        }
+
+        public MenuDto(MenuDto menu)
+        {
+            MenuId = menu.MenuId;
+            Name = menu.Name;
+            CostPerHead = menu.CostPerHead;
+            Starter = menu.Starter;
+            Main = menu.Main;
+            Dessert = menu.Dessert;
+        }
 
         public MenuDto(Menu menu)
         {
