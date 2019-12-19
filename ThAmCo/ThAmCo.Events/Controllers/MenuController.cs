@@ -23,15 +23,11 @@ namespace ThAmCo.Events.Controllers
         }
         public async Task<IActionResult> Index()
         {
-
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration["MenusBaseURI"]);
-            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-            client.Timeout = TimeSpan.FromSeconds(5);
+            var client = setupClient();
+            string uri = "/api/Menu";
             IEnumerable<MenuDto> menus;
             try
             {
-                string uri = "/api/Menu";
                 var response = await client.GetAsync(uri);
                 response.EnsureSuccessStatusCode();
                 menus = await response.Content.ReadAsAsync<List<MenuDto>>();
@@ -42,6 +38,55 @@ namespace ThAmCo.Events.Controllers
             }
 
             return View(menus);
+        }
+
+        public async Task<IActionResult> Edit(int menuId)
+        {
+            var client = setupClient();
+            string uri = "/api/Menu/" + menuId;
+            MenuDto menu;
+            try
+            {
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                menu = await response.Content.ReadAsAsync<MenuDto>();
+            }
+            catch (HttpRequestException e)
+            {
+                return NotFound();
+            }
+            return View(menu);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("MenuId,Name,CostPerHead,Starter,Main,Dessert")] MenuDto menu)
+        {
+            if (menu.MenuId == 0 || menu == null)
+            {
+                return NotFound();
+            }
+            string uri = "/api/Menu/" + menu.MenuId;
+            var client = setupClient();
+            var response = await client.PostAsJsonAsync(uri,menu);
+            if((await client.PostAsJsonAsync(uri, menu)).IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                menu.Message = "Something went wrong, please try again.";
+                return RedirectToAction("Edit",menu);
+            }
+        }
+
+        public HttpClient setupClient()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration["MenusBaseURI"]);
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            client.Timeout = TimeSpan.FromSeconds(5);
+            return client;
         }
     }
 }

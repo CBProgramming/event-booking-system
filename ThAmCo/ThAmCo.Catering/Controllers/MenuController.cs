@@ -34,5 +34,38 @@ namespace ThAmCo.Catering.Controllers
             }
             return Ok(menusDto);
         }
+
+        //// GET: api/Menu
+        //[HttpGet]
+        //public async Task<IActionResult> Get([int menuId)
+        //{
+        //    var menu = await _context.Menus.FindAsync(menuId);
+        //    MenuDto menuDto = new MenuDto(menu);
+        //    return Ok(menuDto);
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromBody] MenuDto menuDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var menu = await _context.Menus.FindAsync(menuDto.MenuId);
+                menu.Name = menuDto.Name;
+                menu.CostPerHead = menuDto.CostPerHead;
+                menu.Starter = menuDto.Starter;
+                menu.Main = menuDto.Main;
+                menu.Dessert = menuDto.Dessert;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

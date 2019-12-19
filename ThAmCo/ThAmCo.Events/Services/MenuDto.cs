@@ -18,5 +18,7 @@ namespace ThAmCo.Events.Services
         public string Main { get; set; }
 
         public string Dessert { get; set; }
+
+        public string Message { get; set; }
     }
 }
