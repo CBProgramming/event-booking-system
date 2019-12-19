@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Models
 {
     public class MenuDto
     {
 
-        public MenuDto(MenuDto menu)
+        public MenuDto(Menu menu)
         {
             MenuId = menu.MenuId;
             Name = menu.Name;
