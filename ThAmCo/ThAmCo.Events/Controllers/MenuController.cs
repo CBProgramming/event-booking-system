@@ -40,6 +40,24 @@ namespace ThAmCo.Events.Controllers
             return View(menus);
         }
 
+        public async Task<IActionResult> Details(int menuId)
+        {
+            var client = setupClient();
+            string uri = "/api/Menu?menuId=" + menuId;
+            MenuDto menu;
+            try
+            {
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                menu = await response.Content.ReadAsAsync<MenuDto>();
+            }
+            catch (HttpRequestException e)
+            {
+                return NotFound();
+            }
+            return View(menu);
+        }
+
         public async Task<IActionResult> Edit(int menuId)
         {
             var client = setupClient();
