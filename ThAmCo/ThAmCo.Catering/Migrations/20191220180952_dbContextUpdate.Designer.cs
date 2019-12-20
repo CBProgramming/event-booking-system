@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Migrations
 {
     [DbContext(typeof(MenusDbContext))]
-    partial class MenusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191220180952_dbContextUpdate")]
+    partial class dbContextUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,7 @@ namespace ThAmCo.Catering.Migrations
 
             modelBuilder.Entity("ThAmCo.Catering.Data.Menu", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("MenuId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -53,14 +55,14 @@ namespace ThAmCo.Catering.Migrations
 
                     b.Property<string>("Starter");
 
-                    b.HasKey("Id");
+                    b.HasKey("MenuId");
 
                     b.ToTable("Menus");
 
                     b.HasData(
-                        new { Id = 1, CostPerHead = 10.5, Dessert = "Forest fruit gateaux", Main = "Ham hock and seasonal vegetables", Name = "The Banquet Menu", Starter = "Butternut Squash Soup" },
-                        new { Id = 2, CostPerHead = 15.25, Dessert = "New York Cheesecake", Main = "The Megaburger", Name = "The Budget Bonanza", Starter = "Salt and Pepper Chips" },
-                        new { Id = 3, CostPerHead = 20.0, Dessert = "Jelly", Main = "Mashed potato and beans", Name = "The Overpiced Special", Starter = "Dry toast" }
+                        new { MenuId = 1, CostPerHead = 10.5, Dessert = "Forest fruit gateaux", Main = "Ham hock and seasonal vegetables", Name = "The Banquet Menu", Starter = "Butternut Squash Soup" },
+                        new { MenuId = 2, CostPerHead = 15.25, Dessert = "New York Cheesecake", Main = "The Megaburger", Name = "The Budget Bonanza", Starter = "Salt and Pepper Chips" },
+                        new { MenuId = 3, CostPerHead = 20.0, Dessert = "Jelly", Main = "Mashed potato and beans", Name = "The Overpiced Special", Starter = "Dry toast" }
                     );
                 });
 

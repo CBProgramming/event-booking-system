@@ -29,7 +29,7 @@ namespace ThAmCo.Catering.Data
         {
             base.OnModelCreating(builder);
 
-            builder.HasDefaultSchema("thamco.venues");
+            builder.HasDefaultSchema("thamco.menus");
 
             builder.Entity<FoodBooking>()
                    .HasKey(b => new { b.MenuId, b.EventId });
@@ -45,9 +45,9 @@ namespace ThAmCo.Catering.Data
             {
                 builder.Entity<Menu>()
                        .HasData(
-                            new Menu { MenuId = 1, Name = "The Banquet Menu", CostPerHead = 10.50, Starter = "Butternut Squash Soup", Main = "Ham hock and seasonal vegetables", Dessert = "Forest fruit gateaux" },
-                            new Menu { MenuId = 2, Name = "The Budget Bonanza", CostPerHead = 15.25, Starter = "Salt and Pepper Chips", Main = "The Megaburger", Dessert = "New York Cheesecake" },
-                            new Menu { MenuId = 3, Name = "The Overpiced Special", CostPerHead = 20.00, Starter = "Dry toast", Main = "Mashed potato and beans", Dessert = "Jelly" }
+                            new Menu { Id = 1, Name = "The Banquet Menu", CostPerHead = 10.50, Starter = "Butternut Squash Soup", Main = "Ham hock and seasonal vegetables", Dessert = "Forest fruit gateaux" },
+                            new Menu { Id = 2, Name = "The Budget Bonanza", CostPerHead = 15.25, Starter = "Salt and Pepper Chips", Main = "The Megaburger", Dessert = "New York Cheesecake" },
+                            new Menu { Id = 3, Name = "The Overpiced Special", CostPerHead = 20.00, Starter = "Dry toast", Main = "Mashed potato and beans", Dessert = "Jelly" }
                         );
 
                 builder.Entity<FoodBooking>()

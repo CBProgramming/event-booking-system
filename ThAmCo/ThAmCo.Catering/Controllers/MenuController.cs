@@ -73,5 +73,31 @@ namespace ThAmCo.Catering.Controllers
 
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] MenuDto menuDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+            Menu menu = new Menu();
+            menu.Name = menuDto.Name;
+            menu.CostPerHead = menuDto.CostPerHead;
+            menu.Starter = menuDto.Starter;
+            menu.Main = menuDto.Main;
+            menu.Dessert = menuDto.Dessert;
+            _context.Add(menu);
+            await _context.SaveChangesAsync();
+            return Ok();
+            }
+            catch (Exception e)
+            {
+
+            }
+            return NotFound();
+        }
     }
 }

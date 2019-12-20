@@ -87,5 +87,30 @@ namespace ThAmCo.Events.Controllers
             client.Timeout = TimeSpan.FromSeconds(5);
             return client;
         }
+        public IActionResult Create(MenuDto menu)
+        {
+            return View(menu);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePost([Bind("Name,CostPerHead,Starter,Main,Dessert")] MenuDto menu)
+        {
+            if (menu == null)
+            {
+                return NotFound();
+            }
+            string uri = "/api/Menu/";
+            var client = setupClient();
+            if ((await client.PostAsJsonAsync<MenuDto>(uri, menu)).IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                menu.Message = "Something went wrong, please try again.";
+                return RedirectToAction("Create", menu);
+            }
+        }
     }
 }

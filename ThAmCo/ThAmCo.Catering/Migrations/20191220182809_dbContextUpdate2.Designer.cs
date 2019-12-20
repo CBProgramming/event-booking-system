@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Migrations
 {
     [DbContext(typeof(MenusDbContext))]
-    partial class MenusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191220182809_dbContextUpdate2")]
+    partial class dbContextUpdate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
