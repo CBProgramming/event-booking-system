@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ThAmCo.Catering.Data;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Availability;
 using ThAmCo.Events.Models.Customers;
@@ -33,6 +34,7 @@ namespace ThAmCo.Events.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
+            var menus = await getMenus();
             List<EventVM> eventsOk = new List<EventVM>();
             List<EventVM> eventsNeedStaff = new List<EventVM>();
             List<EventVM> eventsNeedFirstAid = new List<EventVM>();
@@ -45,6 +47,11 @@ namespace ThAmCo.Events.Controllers
                 EventVM eventVM = new EventVM(e);
                 eventVM.NumGuests = bookings.Count();
                 eventVM.NumStaff = staffing.Count();
+                if (eventVM.MenuId != 0)
+                {
+                    MenuDto menu = menus.Where(m => m.MenuId == eventVM.MenuId).FirstOrDefault();
+                    eventVM.MenuName = menu.Name;
+                }
                 if (!eventVM.NeedStaff && firstAidStaff != null && firstAidStaff.Count > 0)
                 {
                     eventsOk.Add(eventVM);
@@ -396,6 +403,96 @@ namespace ThAmCo.Events.Controllers
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
             return client;
+        }
+
+        public HttpClient setupCateringClient()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration["MenusBaseURI"]);
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            client.Timeout = TimeSpan.FromSeconds(5);
+            return client;
+        }
+
+        public async Task<IEnumerable<MenuDto>> getMenus()
+        {
+            var client = setupCateringClient();
+            string uri = "/api/Menu";
+            List<MenuDto> menus = null;
+            try
+            {
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                menus = await response.Content.ReadAsAsync<List<MenuDto>>();
+            }
+            catch (HttpRequestException e)
+            {
+            }
+            return menus;
+        }
+
+        public async Task<IActionResult> menuBrancher (int id)
+        {
+            var @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(m => m.Id == id);
+            if (@event == null)
+            {
+                RedirectToAction("Index");
+            }
+            EventVM @eventVM = new EventVM(@event);
+            if (eventVM.MenuId == 0)
+            {
+                return RedirectToAction("BookMenu", new
+                {
+                    eventId = id,
+                    message = ""
+                });
+            }
+            else
+            {
+                return RedirectToAction("ViewMenu", new
+                {
+                    eventId = id,
+                });
+            }
+        }
+
+        public async Task<IActionResult> BookMenu(int eventId, string message)
+        {
+            IEnumerable<MenuDto> menus = await getMenus();
+            EventMenusVM menuChoices = new EventMenusVM(eventId, menus, message);
+            return View(menuChoices);
+        }
+
+        public async Task<IActionResult> SelectMenu(int menuId, int eventId)
+        {
+            FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
+            string uri = "/api/FoodBooking/";
+            var client = setupCateringClient();
+            if ((await client.PostAsJsonAsync<FoodBookingDto>(uri, booking)).IsSuccessStatusCode)
+            {
+                Event @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId);
+                try
+                {
+                    @event.menuId = menuId;
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception e)
+                {
+
+                }
+            }
+            return RedirectToAction("BookMenu", new
+            {
+                eventId,
+                message = "Something went wrong, please try again"
+            });
+            
+        }
+
+        public async Task<IActionResult> ViewMenu(int eventId)
+        {
+            return RedirectToAction("Index");
         }
 
         public string stringDate(DateTime date)

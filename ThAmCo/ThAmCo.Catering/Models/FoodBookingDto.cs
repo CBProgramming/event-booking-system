@@ -7,6 +7,10 @@ namespace ThAmCo.Catering.Data
 {
     public class FoodBookingDto
     {
+        public FoodBookingDto()
+        {
+
+        }
 
         public FoodBookingDto(FoodBooking booking)
         {

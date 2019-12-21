@@ -33,6 +33,8 @@ namespace ThAmCo.Events.Data
 
         public double VenueCost { get; set; }
 
+        public int menuId { get; set; }
+
         [DefaultValue(true)]
         public bool IsActive { get; set; } = true;
     }

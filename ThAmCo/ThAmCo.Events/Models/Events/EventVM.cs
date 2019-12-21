@@ -26,6 +26,7 @@ namespace ThAmCo.Events.Models.Events
             VenueCapacity = eventData.VenueCapacity;
             VenueCost = eventData.VenueCost;
             IsActive = eventData.IsActive;
+            MenuId = eventData.menuId;
         }
 
         public EventVM(int id, string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
@@ -58,6 +59,7 @@ namespace ThAmCo.Events.Models.Events
             VenueCapacity = eventData.VenueCapacity;
             VenueCost = eventData.VenueCost;
             Existing = existing;
+            MenuId = eventData.menuId;
             IsActive = eventData.IsActive;
         }
 
@@ -104,6 +106,10 @@ namespace ThAmCo.Events.Models.Events
         public int VenueCapacity { get; set; }
 
         public double VenueCost { get; set; }
+
+        public int MenuId { get; set; }
+
+        public string MenuName { get; set; }
 
         public string Message { get; set; }
 

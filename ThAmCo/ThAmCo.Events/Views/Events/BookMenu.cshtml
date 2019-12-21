@@ -1,0 +1,56 @@
+﻿@model ThAmCo.Events.Models.Events.EventMenusVM
+
+@{
+    ViewData["Title"] = "BookMenu";
+}
+
+<h2>BookMenu</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Starter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Main)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Dessert)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().CostPerHead)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Menus)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            <td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Starter)
+            <td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Main)
+            <td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dessert)
+            <td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CostPerHead)
+            <td>
+                @Html.ActionLink("Select Menu", "SelectMenu", new { item.MenuId, Model.EventId })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

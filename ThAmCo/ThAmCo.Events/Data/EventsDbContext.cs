@@ -89,17 +89,23 @@ namespace ThAmCo.Events.Data
 
                 builder.Entity<Event>().HasData(
                     new Event { Id = 1, Title = "Bob's Big 50", Date = new DateTime(2016, 4, 12), Duration = new TimeSpan(6, 0, 0), TypeId = "PTY",
-                                VenueRef = "",VenueName = "Crackling Hall", VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueCapacity = 150, VenueCost = 100.00 },
+                                VenueRef = "",VenueName = "Crackling Hall", VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", 
+                                VenueCapacity = 150, VenueCost = 100.00, menuId = 1 },
                     new Event { Id = 2, Title = "Best Wedding Yet", Date = new DateTime(2018, 11, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "WED", 
-                                VenueRef = "", VenueName = "Crackling Hall", VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueCapacity = 150, VenueCost = 100.00 },
+                                VenueRef = "", VenueName = "Crackling Hall", VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.",
+                                VenueCapacity = 150, VenueCost = 100.00, menuId = 2},
                     new Event { Id = 3, Title = "Billie's Birthday Bonanza", Date = new DateTime(2018, 10, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "PTY", 
-                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueCapacity = 150, VenueCost = 100.00 },
+                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", 
+                                VenueCapacity = 150, VenueCost = 100.00, menuId = 3 },
                     new Event { Id = 4, Title = "Stevie's Stag", Date = new DateTime(2019, 12, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "PYT", 
-                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueCapacity = 150, VenueCost = 100.00 },
+                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", 
+                                VenueCapacity = 150, VenueCost = 100.00, menuId = 1 },
                     new Event { Id = 5, Title = "Cheryl and Fleur get hitched", Date = new DateTime(2019, 11, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "WED", 
-                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueCapacity = 150, VenueCost = 100.00 },
+                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", 
+                                VenueCapacity = 150, VenueCost = 100.00 },
                     new Event { Id = 6, Title = "George's Divorce Party", Date = new DateTime(2019, 8, 1), Duration = new TimeSpan(12, 0, 0), TypeId = "PTY", 
-                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueCapacity = 150, VenueCost = 100.00 }
+                                VenueRef = "", VenueName = "Tinder Manor", VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", 
+                                 VenueCapacity = 150, VenueCost = 100.00 }
                 );
 
                 builder.Entity<GuestBooking>().HasData(

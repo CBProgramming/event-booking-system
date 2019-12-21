@@ -7,7 +7,16 @@ namespace ThAmCo.Catering.Data
 {
     public class FoodBooking
     {
-        private FoodBookingDto bookingDto;
+        public FoodBooking()
+        {
+
+        }
+
+        public FoodBooking(int eventId, int menuId)
+        {
+            MenuId = menuId;
+            EventId = eventId;
+        }
 
         public FoodBooking(FoodBookingDto bookingDto)
         {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Data.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    partial class EventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191221134033_menuIdToEvent")]
+    partial class menuIdToEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,10 +104,10 @@ namespace ThAmCo.Events.Data.Migrations
                     b.ToTable("Events");
 
                     b.HasData(
-                        new { Id = 1, Date = new DateTime(2016, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 6, 0, 0, 0), IsActive = true, Title = "Bob's Big 50", TypeId = "PTY", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueName = "Crackling Hall", VenueRef = "", menuId = 1 },
-                        new { Id = 2, Date = new DateTime(2018, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Best Wedding Yet", TypeId = "WED", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueName = "Crackling Hall", VenueRef = "", menuId = 2 },
-                        new { Id = 3, Date = new DateTime(2018, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Billie's Birthday Bonanza", TypeId = "PTY", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 3 },
-                        new { Id = 4, Date = new DateTime(2019, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Stevie's Stag", TypeId = "PYT", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 1 },
+                        new { Id = 1, Date = new DateTime(2016, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 6, 0, 0, 0), IsActive = true, Title = "Bob's Big 50", TypeId = "PTY", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueName = "Crackling Hall", VenueRef = "", menuId = 0 },
+                        new { Id = 2, Date = new DateTime(2018, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Best Wedding Yet", TypeId = "WED", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Once the residence of Lord and Lady Crackling, this lavish dwelling remains a prime example of 18th century fine living.", VenueName = "Crackling Hall", VenueRef = "", menuId = 0 },
+                        new { Id = 3, Date = new DateTime(2018, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Billie's Birthday Bonanza", TypeId = "PTY", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 0 },
+                        new { Id = 4, Date = new DateTime(2019, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Stevie's Stag", TypeId = "PYT", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 0 },
                         new { Id = 5, Date = new DateTime(2019, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "Cheryl and Fleur get hitched", TypeId = "WED", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 0 },
                         new { Id = 6, Date = new DateTime(2019, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), Duration = new TimeSpan(0, 12, 0, 0, 0), IsActive = true, Title = "George's Divorce Party", TypeId = "PTY", VenueCapacity = 150, VenueCost = 100.0, VenueDescription = "Refurbished manor house with fully equipped facilities ready to help you have a good time in business or pleasure.", VenueName = "Tinder Manor", VenueRef = "", menuId = 0 }
                     );
