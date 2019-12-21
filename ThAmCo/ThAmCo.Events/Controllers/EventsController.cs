@@ -431,6 +431,22 @@ namespace ThAmCo.Events.Controllers
             return menus;
         }
 
+        public async Task<MenuDto> getMenu(int menuId)
+        {
+            var client = setupCateringClient();
+            string uri = "/api/Menu?menuId=" + menuId;
+            try
+            {
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsAsync<MenuDto>();
+            }
+            catch (HttpRequestException e)
+            {
+            }
+            return new MenuDto("Something went wrong, please try again");
+        }
+
         public async Task<IActionResult> menuBrancher (int id)
         {
             var @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(m => m.Id == id);
@@ -452,7 +468,8 @@ namespace ThAmCo.Events.Controllers
                 return RedirectToAction("ViewMenu", new
                 {
                     eventId = id,
-                });
+                    menuId = eventVM.MenuId
+                }) ;
             }
         }
 
@@ -466,9 +483,20 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> SelectMenu(int menuId, int eventId)
         {
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
-            string uri = "/api/FoodBooking/";
+            //string uri = "/api/FoodBooking/";
+            string uri = "/api/FoodBooking";
             var client = setupCateringClient();
-            if ((await client.PostAsJsonAsync<FoodBookingDto>(uri, booking)).IsSuccessStatusCode)
+            HttpResponseMessage existingBooking = await client.GetAsync(uri + "?eventId=" + eventId);
+            HttpResponseMessage response;
+            if(existingBooking.IsSuccessStatusCode)
+            {
+                response = await client.PutAsJsonAsync<FoodBookingDto>(uri, booking);
+            }
+            else
+            {
+                response = await client.PostAsJsonAsync<FoodBookingDto>(uri, booking);
+            }
+            if (response.IsSuccessStatusCode)
             {
                 Event @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId);
                 try
@@ -477,7 +505,7 @@ namespace ThAmCo.Events.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
 
                 }
@@ -487,13 +515,16 @@ namespace ThAmCo.Events.Controllers
                 eventId,
                 message = "Something went wrong, please try again"
             });
-            
         }
 
-        public async Task<IActionResult> ViewMenu(int eventId)
+        public async Task<IActionResult> ViewMenu(int eventId, int menuId)
         {
-            return RedirectToAction("Index");
+            EventVM @event = new EventVM(await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId));
+            MenuDto menu = await getMenu(menuId);
+            EventNameAndMenuVM eventMenu = new EventNameAndMenuVM(@event, menu);
+            return View(eventMenu);
         }
+
 
         public string stringDate(DateTime date)
         {

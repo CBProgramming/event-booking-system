@@ -7,6 +7,16 @@ namespace ThAmCo.Events.Services
 {
     public class MenuDto
     {
+        public MenuDto()
+        {
+
+        }
+
+        public MenuDto(string message)
+        {
+            Message = message;
+        }
+
         public int MenuId { get; set; }
 
         public string Name { get; set; }
