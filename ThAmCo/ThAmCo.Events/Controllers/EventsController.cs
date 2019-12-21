@@ -483,7 +483,6 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> SelectMenu(int menuId, int eventId)
         {
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
-            //string uri = "/api/FoodBooking/";
             string uri = "/api/FoodBooking";
             var client = setupCateringClient();
             HttpResponseMessage existingBooking = await client.GetAsync(uri + "?eventId=" + eventId);
@@ -517,14 +516,63 @@ namespace ThAmCo.Events.Controllers
             });
         }
 
+        public async Task<IActionResult> ConfirmMenuCancellation(int eventId, int menuId)
+        {
+            //var client = setupCateringClient();
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration["MenusBaseURI"]);
+            //client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            //client.Timeout = TimeSpan.FromSeconds(5);
+            string uri = "/api/FoodBooking?eventId=" + eventId;
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await client.DeleteAsync(uri);
+            }
+            catch(Exception e)
+            {
+
+            }
+            if (response.IsSuccessStatusCode)
+            {
+                Event @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId);
+                try
+                {
+                    @event.menuId = 0;
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            return RedirectToAction("CancelMenu", new
+            {
+                eventId,
+                menuId,
+                message = "Something went wrong, please try again"
+            });
+        }
+
+        public async Task<IActionResult> CancelMenu(int eventId, int menuId, string message)
+        {
+            return View(await getEventMenuVM(eventId, menuId,message));
+        }
+
         public async Task<IActionResult> ViewMenu(int eventId, int menuId)
+        {
+            return View(await getEventMenuVM(eventId, menuId,""));
+        }
+
+        public async Task<EventNameAndMenuVM> getEventMenuVM(int eventId, int menuId, string message)
         {
             EventVM @event = new EventVM(await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId));
             MenuDto menu = await getMenu(menuId);
             EventNameAndMenuVM eventMenu = new EventNameAndMenuVM(@event, menu);
-            return View(eventMenu);
+            return eventMenu;
         }
-
 
         public string stringDate(DateTime date)
         {

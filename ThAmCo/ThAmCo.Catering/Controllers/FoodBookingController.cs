@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Controllers
@@ -78,14 +79,14 @@ namespace ThAmCo.Catering.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteReservation([FromBody] int eventId)
+        public async Task<IActionResult> DeleteReservation(int eventId)
         {
-            var booking = await _context.FoodBookings.FindAsync(eventId);
+            var booking = await _context.FoodBookings.Where(b => b.EventId == eventId).ToListAsync();
             if (booking != null)
             {
                 try
                 {
-                    _context.FoodBookings.Remove(booking);
+                    _context.FoodBookings.Remove(booking.FirstOrDefault());
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
