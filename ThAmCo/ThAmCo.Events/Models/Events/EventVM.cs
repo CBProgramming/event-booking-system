@@ -54,26 +54,33 @@ namespace ThAmCo.Events.Models.Events
 
         public string Title { get; set; }
 
+        
         public DateTime Date { get; set; }
 
         public TimeSpan? Duration { get; set; }
 
+        [DisplayName("Event type")]
         public string TypeId { get; set; }
 
         public List<GuestBooking> Bookings { get; set; }
 
         public string VenueRef { get; set; }
 
+        [DisplayName("Venue Name")]
         public string VenueName { get; set; }
 
+        [DisplayName("Venue Description")]
         public string VenueDescription { get; set; }
 
+        [DisplayName("Venue Capacity")]
         public int VenueCapacity { get; set; }
 
+        [DisplayName("Venue Cost")]
         public double VenueCost { get; set; }
 
         public int MenuId { get; set; }
 
+        [DisplayName("Menu Name")]
         public string MenuName { get; set; }
 
         public string Message { get; set; }
@@ -90,8 +97,10 @@ namespace ThAmCo.Events.Models.Events
             }
         }
 
+        [DisplayName("Number of Guests")]
         public int NumGuests { get; set; }
 
+        [DisplayName("Number of Staff")]
         public int NumStaff { get; set; }
 
         public bool NeedStaff { get
@@ -103,6 +112,7 @@ namespace ThAmCo.Events.Models.Events
         [DefaultValue(true)]
         public bool IsActive { get; set; }
 
+        [DisplayName("Event type")]
         public string Type { get; set; }
 
         public SelectList TypeList { get; set; }

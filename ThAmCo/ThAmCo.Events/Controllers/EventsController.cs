@@ -225,16 +225,17 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
-            if (@event.Type == null)
-            {
-                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-                @event.Type = eventTypes.First(e => e.Id == @event.TypeId).Title;
-            }
             if (day != 0 && month != 0 && year != 0)
             {
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
                 @event.Date = fixedDate;
             }
+            if (@event.Type == null)
+            {
+                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                @event.Type = eventTypes.First(e => e.Id == @event.TypeId).Title;
+            }
+
             if (@event.VenueName != null && @event.Existing == false)
             {
                 return RedirectToAction("ConfirmReservation", @event);

@@ -21,38 +21,44 @@
                 @Html.DisplayNameFor(model => model.VenueRef)
             </dt>
             <dd>
-                <input asp-for=@Model.VenueRef class="form-control" readonly />
+                @Html.DisplayFor(model =>model.VenueRef)
+                <input type="hidden" asp-for=@Model.VenueRef class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Date)
             </dt>
             <dd>
-                <input asp-for=@Model.EventVM.Date name="Date" class="form-control" readonly />
+                @Html.DisplayFor(model => model.Date)
+                <input type="hidden" asp-for=@Model.EventVM.Date name="Date" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.VenueName)
             </dt>
             <dd>
-                <input asp-for=@Model.VenueName name="VenueName" class="form-control" readonly />
+                @Html.DisplayFor(model => model.VenueName)
+                <input type="hidden" asp-for=@Model.VenueName name="VenueName" class="form-control" readonly />
             </dd>
 
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Title)
             </dt>
             <dd>
-                <input asp-for=@Model.EventVM.Title name="Title" class="form-control" readonly />
+                @Html.DisplayFor(model => model.EventVM.Title)
+                <input type="hidden" asp-for=@Model.EventVM.Title name="Title" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Duration)
             </dt>
             <dd>
-                <input asp-for=@Model.EventVM.Duration name="Duration" class="form-control" readonly />
+                @Html.DisplayFor(model => model.EventVM.Duration)
+                <input type="hidden" asp-for=@Model.EventVM.Duration name="Duration" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Type)
             </dt>
             <dd>
-                <input asp-for=@Model.EventVM.Type name="Type" class="form-control" readonly />
+                @Html.DisplayFor(model => model.EventVM.Type)
+                <input type="hidden" asp-for=@Model.EventVM.Type name="Type" class="form-control" readonly />
             </dd>
 
         </dl>
