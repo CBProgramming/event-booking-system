@@ -27,6 +27,7 @@ namespace ThAmCo.Events.Models.Events
             VenueCost = eventData.VenueCost;
             IsActive = eventData.IsActive;
             MenuId = eventData.menuId;
+            Type = eventData.Type;
         }
 
         public EventVM(Event eventData, bool existing)
@@ -45,6 +46,7 @@ namespace ThAmCo.Events.Models.Events
             Existing = existing;
             MenuId = eventData.menuId;
             IsActive = eventData.IsActive;
+            Type = eventData.Type;
         }
 
         public int Id { get; set; }
@@ -99,5 +101,7 @@ namespace ThAmCo.Events.Models.Events
 
         [DefaultValue(true)]
         public bool IsActive { get; set; }
+
+        public string Type { get; set; }
     }
 }
