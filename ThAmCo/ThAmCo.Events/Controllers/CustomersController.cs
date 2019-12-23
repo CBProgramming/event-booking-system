@@ -22,7 +22,13 @@ namespace ThAmCo.Events.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var customersVM = new Models.Customers.CustomersVM(await _context.Customers.Where(c => c.Deleted == false).ToListAsync());
+            var customers = await _context.Customers.Where(c => c.Deleted == false).ToListAsync();
+            List<CustomerVM> customersVM = new List<CustomerVM>();
+            foreach (Customer c in customers)
+            {
+                customersVM.Add(new CustomerVM(c));
+            }
+            
             return View(customersVM);
         }
 

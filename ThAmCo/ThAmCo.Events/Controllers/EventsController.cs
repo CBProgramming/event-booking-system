@@ -38,8 +38,8 @@ namespace ThAmCo.Events.Controllers
             List<EventVM> eventsOk = new List<EventVM>();
             List<EventVM> eventsNeedStaff = new List<EventVM>();
             List<EventVM> eventsNeedFirstAid = new List<EventVM>();
-            var eventsVM = new Models.Events.EventsVM(await _context.Events.Where(e => e.IsActive == true).ToListAsync());
-            foreach (Event e in eventsVM.Events)
+            var events = await _context.Events.Where(e => e.IsActive == true).ToListAsync();
+            foreach (Event e in events)
             {
                 var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
                 var staffing = await _context.Staffing.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
@@ -65,8 +65,8 @@ namespace ThAmCo.Events.Controllers
                     eventsNeedFirstAid.Add(eventVM);
                 }
             }
-            EventsIndexVM events = new EventsIndexVM(eventsOk, eventsNeedStaff, eventsNeedFirstAid);
-            return View(events);
+            EventsIndexVM eventLists = new EventsIndexVM(eventsOk, eventsNeedStaff, eventsNeedFirstAid);
+            return View(eventLists);
         }
 
         // GET: Events/Details/5
@@ -231,10 +231,7 @@ namespace ThAmCo.Events.Controllers
         }
 
         public IActionResult ConfirmReservation(EventVM eventVM)
-            //string eventName, TimeSpan duration, string type, string code, DateTime date, string venueName,
-                                                //string venueDescription, int venueCapacity, double venueCost, bool existing, string oldRef, int eventId, 
         {
-            //EventVM eventVM = new EventVM(eventId, eventName, date, duration, type,venueName,venueDescription,venueCapacity,venueCost,existing, code, oldRef);
             EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, eventVM.VenueRef, eventVM.Date, eventVM.VenueName);
             return View(selectedEventVenue);
         }
@@ -359,8 +356,6 @@ namespace ThAmCo.Events.Controllers
         //IEnumerable<AvailabilityGetDto>
         private async Task<IEnumerable<AvailabilitiesVM>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
         {
-            //DateTime endDateTest = new DateTime(2021, 01, 01);
-
             var client = new HttpClient();
             client.BaseAddress = new Uri(_configuration["VenuesBaseURI"]);
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
@@ -374,7 +369,6 @@ namespace ThAmCo.Events.Controllers
                 string uriEventType = "?eventType=" + eventType;
                 string uriBeginDate = "&beginDate=" + startDate;
                 string uriEndDate = "&endDate=" + finishDate;
-                //string uriEndDate = "&endDate=" + endDateTest;
                 var response = await client.GetAsync(uri + uriEventType + uriBeginDate + uriEndDate);
                 response.EnsureSuccessStatusCode();
                 availabilities =  await response.Content.ReadAsAsync<IEnumerable<AvailabilitiesVM>>();
@@ -519,11 +513,7 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> ConfirmMenuCancellation(int eventId, int menuId)
         {
-            //var client = setupCateringClient();
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration["MenusBaseURI"]);
-            //client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-            //client.Timeout = TimeSpan.FromSeconds(5);
+            var client = setupCateringClient();
             string uri = "/api/FoodBooking?eventId=" + eventId;
 
             HttpResponseMessage response = null;

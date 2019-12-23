@@ -29,22 +29,6 @@ namespace ThAmCo.Events.Models.Events
             MenuId = eventData.menuId;
         }
 
-        public EventVM(int id, string title, DateTime date, TimeSpan duration, string typeId, string venueName, string venueDescription, int venueCapacity, double venueCost, bool existing, string venueRef, string oldRef)
-        {
-            Id = id;
-            Title = title;
-            Date = date;
-            Duration = duration;
-            TypeId = typeId;
-            VenueName = venueName;
-            VenueDescription = venueDescription;
-            VenueCapacity = venueCapacity;
-            VenueCost = venueCost;
-            Existing = existing;
-            VenueRef = venueRef;
-            OldRef = oldRef;
-        }
-
         public EventVM(Event eventData, bool existing)
         {
             Id = eventData.Id;
@@ -61,28 +45,6 @@ namespace ThAmCo.Events.Models.Events
             Existing = existing;
             MenuId = eventData.menuId;
             IsActive = eventData.IsActive;
-        }
-
-        public EventVM(string title, DateTime date, TimeSpan duration, string typeId)
-        {
-            Title = title;
-            Date = date;
-            Duration = duration;
-            TypeId = typeId;
-            VenueRef = "No venue allocated";
-        }
-
-        public EventVM(FinalBookingVM booking)
-        {
-            Title = booking.Title;
-            Date = booking.Date;
-            Duration = booking.Duration;
-            TypeId = booking.TypeId;
-            VenueRef = booking.VenueRef;
-            VenueName = booking.VenueName;
-            VenueDescription = booking.VenueDescription;
-            VenueCapacity = booking.VenueCapacity;
-            VenueCost = booking.VenueCost;
         }
 
         public int Id { get; set; }
