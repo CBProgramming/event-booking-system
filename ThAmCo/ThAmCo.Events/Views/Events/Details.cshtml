@@ -57,9 +57,6 @@
                         @Html.DisplayNameFor(model => model.Event.VenueCapacity):
                     </div>
                     <div>
-                        @Html.DisplayNameFor(model => model.Event.VenueCost):
-                    </div>
-                    <div>
                         @Html.DisplayNameFor(model => model.Event.VenueDescription):
                     </div>
                 </div>
@@ -71,10 +68,76 @@
                         @Html.DisplayFor(model => model.Event.VenueCapacity)
                     </div>
                     <div>
-                        @Html.DisplayFor(model => model.Event.VenueCost)
+                        @Html.DisplayFor(model => model.Event.VenueDescription)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Menu</h2>
+                <div class="col-sm-2">
+                    <div>
+                        @Html.DisplayNameFor(model => model.Menu.Name):
                     </div>
                     <div>
-                        @Html.DisplayFor(model => model.Event.VenueDescription)
+                        @Html.DisplayNameFor(model => model.Menu.Starter):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Menu.Main):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Menu.Dessert):
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div>
+                        @Html.DisplayFor(model => model.Menu.Name)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Menu.Starter)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Menu.Main)
+                    </div>
+                    <div>
+                        @Html.DisplayFor(model => model.Menu.Dessert)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <h2>Costing</h2>
+                <div class="col-sm-3">
+                    <div>
+                        @Html.DisplayNameFor(model => model.Menu.CostPerHead):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.MenuCost):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.Event.VenueCost):
+                    </div>
+                    <div>
+                        @Html.DisplayNameFor(model => model.TotalCost):
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div>
+                        £@Html.DisplayFor(model => model.Menu.CostPerHead)
+                    </div>
+                    <div>
+                        £@Html.DisplayFor(model => model.MenuCost)
+                    </div>
+                    <div>
+                        £@Html.DisplayFor(model => model.Event.VenueCost)
+                    </div>
+
+                    <div>
+                        £@Html.DisplayFor(model => model.TotalCost)
                     </div>
                 </div>
             </div>

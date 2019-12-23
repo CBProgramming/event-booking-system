@@ -98,8 +98,8 @@ namespace ThAmCo.Events.Controllers
             {
                 staffVM.Add(new StaffVM(s));
             }
-
-            EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM);
+            MenuDto menuDto = await getMenu(eventVM.MenuId);
+            EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM, menuDto);
             return View(eventDetailsVM);
         }
 

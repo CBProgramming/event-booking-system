@@ -56,9 +56,7 @@ namespace ThAmCo.Catering.Data
                             new FoodBooking { EventId = 1, MenuNumber = 1 },
                             new FoodBooking { EventId = 2, MenuNumber = 2 },
                             new FoodBooking { EventId = 3, MenuNumber = 3 },
-                            new FoodBooking { EventId = 4, MenuNumber = 1 },
-                            new FoodBooking { EventId = 5, MenuNumber = 2 },
-                            new FoodBooking { EventId = 6, MenuNumber = 3 }
+                            new FoodBooking { EventId = 4, MenuNumber = 1 }
                        );
             }
         }
