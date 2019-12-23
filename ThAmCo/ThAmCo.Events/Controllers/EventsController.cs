@@ -104,13 +104,20 @@ namespace ThAmCo.Events.Controllers
             return View(eventDetailsVM);
         }
 
-        public IActionResult SearchVenues(VenueSearchVM searchCriteria)
+        public async Task<IActionResult> SearchVenues(VenueSearchVM searchCriteria)
         {
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
             return View(searchCriteria);
         }
 
-        public IActionResult VenueSearchResults([Bind("StartDate,EndDate,TypeId")] VenueSearchVM searchCriteria)
+        public async Task<IActionResult> VenueSearchResults([Bind("StartDate,EndDate,TypeId,Type")] VenueSearchVM searchCriteria)
         {
+            if (searchCriteria.Type == null)
+            {
+                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                searchCriteria.Type = eventTypes.First(e => e.Id == searchCriteria.TypeId).Title;
+            }
             if (searchCriteria.TypeId == null)
             {
                 searchCriteria.Message = "Please select an event type";
@@ -153,8 +160,11 @@ namespace ThAmCo.Events.Controllers
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
                 @event.Date = fixedDate;
             }
-            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-            @event.TypeList = new SelectList(eventTypes, "Id", "Title");
+            if (@event.Type == null)
+            {
+                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                @event.TypeList = new SelectList(eventTypes, "Id", "Title");
+            }
             return View(@event);
         }
 
@@ -215,8 +225,11 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
-            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-            @event.Type = eventTypes.First(e => e.Id == @event.TypeId).Title;
+            if (@event.Type == null)
+            {
+                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                @event.Type = eventTypes.First(e => e.Id == @event.TypeId).Title;
+            }
             if (day != 0 && month != 0 && year != 0)
             {
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);

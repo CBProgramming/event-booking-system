@@ -30,14 +30,14 @@
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div>
-                <label asp-for="TypeId" class="control-label"></label>
-                <input asp-for="TypeId" class="form-control" readonly />
+                <label asp-for="Type" class="control-label"></label>
+                <input asp-for="Type" class="form-control" readonly />
             </div>
             <div>
                 <label asp-for="VenueName" class="control-label"></label>
                 <input asp-for="VenueName" class="form-control" readonly />                   
                 @Html.ActionLink("Change Venue", "selectVenue", new { Id = Model.Id, Title = Model.Title, Date = Model.Date, 
-                                                                      Duration = Model.Duration, TypeId = Model.TypeId, 
+                                                                      Duration = Model.Duration, TypeId = Model.TypeId, Type = Model.Type, 
                                                                       VenueRef = Model.VenueRef, Existing = Model.Existing,
                                                                       venueName = Model.VenueName, venueDescription = Model.VenueDescription,
                                                                       venueCapacity = Model.VenueCapacity, venueCost = Model.VenueCost,
