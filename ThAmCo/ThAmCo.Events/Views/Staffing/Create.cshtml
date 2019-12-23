@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Add staff for @Html.DisplayFor(model => model.Event.Title)</h2>
+<h2>Add staff for @Html.DisplayFor(model => model.EventTitle)</h2>
 
 <br>
 
@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
+<input type="hidden" asp-for="@Model.EventId" name="EventId" />
 
 @foreach (var item in Model.Staff)
 {
@@ -44,13 +44,16 @@
     </div>
 
 }
+<div>
+    <a asp-action="Index">Back to Events</a> |
+    <a asp-action="StaffAtEvent" asp-route-id="@Model.EventId">Back to staff allocation for @Html.DisplayFor(model => model.EventTitle)</a>
+</div>
 
 <script type="text/javascript">
 
-    function updateAttend(checkbox)
-    {
+    function updateAttend(checkbox) {
         var staffId = $(checkbox).data("staffid");
-        var evId = $("#Event_Id").val();
+        var evId = $("#EventId").val();
         var checked = $(checkbox).is(":checked");
 
         var data =
@@ -66,11 +69,9 @@
             type: 'POST',
             datatype: 'json',
             data: data,
-            success: function ()
-            {
+            success: function () {
             },
-            error: function ()
-            {
+            error: function () {
                 alert("something went wrong");
             }
         });

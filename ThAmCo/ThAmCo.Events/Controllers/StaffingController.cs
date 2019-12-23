@@ -44,22 +44,32 @@ namespace ThAmCo.Events.Controllers
                 if (firstAiderPresent == false && staffVM[i].FirstAider == true)
                     firstAiderPresent = true;
             }
-            EventStaffVM eventStaff = new EventStaffVM(staffVM, firstAiderPresent, id, @event.Title, numGuests);
+            BookNewStaffVM eventStaff = new BookNewStaffVM(staffVM, firstAiderPresent, id, @event.Title, numGuests);
             return View(eventStaff);
         }
 
         public async Task<IActionResult> Create(int eventId)
         {
+            int numGuests = (await _context.Guests.Include(g => g.Event).Where(g => g.EventId == eventId).ToListAsync()).Count();
             var unavailableStaff = await _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == eventId).ToListAsync();
             var unStaff = await _context.Staff.Where(e => unavailableStaff.Any(a => a.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             var staff = await _context.Staff.Except(unStaff).ToListAsync();
+            bool firstAiderPresent = false;
+            foreach (Staff s in unStaff)
+            {
+                if (firstAiderPresent == false && s.FirstAider == true)
+                {
+                    firstAiderPresent = true;
+                }
+             }
             List <StaffAttendanceVM> staffVM = new List<StaffAttendanceVM>();
+            EventVM @event = new EventVM(await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId));
             foreach (Staff s in staff)
             {
                 staffVM.Add(new StaffAttendanceVM(s));
             }
             var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
-            BookNewStaffVM creator = new BookNewStaffVM(eventVM, staffVM);
+            BookNewStaffVM creator = new BookNewStaffVM(staffVM, firstAiderPresent, eventVM.Id, eventVM.Title,numGuests);
             return View(creator);
         }
 

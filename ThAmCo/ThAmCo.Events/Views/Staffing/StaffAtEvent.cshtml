@@ -1,4 +1,4 @@
-﻿@model ThAmCo.Events.Models.Events.EventStaffVM
+﻿@model ThAmCo.Events.Models.Staffing.BookNewStaffVM
 
 @{
     ViewData["Title"] = "Index";
@@ -17,37 +17,81 @@
     <h3>Not enough staff allocated to event.  Please add @Model.NeededStaff more staff</h3>
 }
 
-
-
 <p>
     @Html.ActionLink("Add Staff", "Create", new { eventId = Model.EventId })
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(Model => Model.Staff.FirstOrDefault().FullName)
-            </th>
-            <th>
+
+@if (@Model.Staff.Count() != 0)
+{
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FullName)
+            </div>
+            <div class="col-sm-1">
                 @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstAider)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Staff)
+            </div>
+            <div class="col-sm-1">
+                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Attending)
+            </div>
+        </div>
+    </div>
+}
+
+
+<input type="hidden" asp-for="@Model.EventId" name="EventId" />
+
+@foreach (var item in Model.Staff)
+{
+
+
+    <div class="container">
+        <div class="row">
+            <input type="hidden" asp-for="@item.Id" name="CustomerId" />
+            <div class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.FullName)
+            </div>
+            <div class="col-sm-1">
+                @Html.DisplayFor(modelItem => item.FirstAider)
+            </div>
+            <div class="col-sm-1">
+                <input asp-for="@item.Attending" data-staffid="@item.Id" onChange=updateAttend(this) />
+            </div>
+        </div>
+    </div>
+
+}
+<div>
+    <a asp-action="Index">Back to Events</a>
+</div>
+
+<script type="text/javascript">
+
+    function updateAttend(checkbox) {
+        var staffId = $(checkbox).data("staffid");
+        var evId = $("#EventId").val();
+        var checked = $(checkbox).is(":checked");
+
+        var data =
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstAider)
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "Delete", new { EventId = Model.EventId, StaffId = item.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            "StaffId": staffId,
+            "EventId": evId,
+            "Attended": checked
+        };
+
+        $.ajax({
+
+            url: 'http://localhost:22263/Staffing/Create',
+            type: 'POST',
+            datatype: 'json',
+            data: data,
+            success: function () {
+            },
+            error: function () {
+                alert("something went wrong");
+            }
+        });
+    }
+
+</script>
