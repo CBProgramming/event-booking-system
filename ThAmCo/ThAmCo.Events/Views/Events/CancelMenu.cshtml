@@ -7,7 +7,6 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Are you sure you want to cancel the below food booking?</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -47,6 +46,7 @@
             @Html.DisplayFor(model => model.Dessert)
         </dd>
     </dl>
+    <h4>Are you sure you want to cancel the below food booking?</h4>
 </div>
 <div>
     @Html.ActionLink("Confirm cancellation", "ConfirmMenuCancellation", new { Model.EventId, Model.MenuId}) |

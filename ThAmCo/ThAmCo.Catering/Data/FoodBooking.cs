@@ -14,21 +14,22 @@ namespace ThAmCo.Catering.Data
 
         public FoodBooking(int eventId, int menuId)
         {
-            MenuId = menuId;
+            MenuNumber = menuId;
             EventId = eventId;
         }
 
         public FoodBooking(FoodBookingDto bookingDto)
         {
-            MenuId = bookingDto.MenuId;
+            MenuNumber = bookingDto.MenuId;
             EventId = bookingDto.EventId;
         }
+        public int EventId { get; set; }
 
-        public int MenuId { get; set; }
+        public int MenuNumber { get; set; }
 
         public Menu Menu { get; set; }
 
-        public int EventId { get; set; }
+
 
     }
 }

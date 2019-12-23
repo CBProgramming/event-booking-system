@@ -5,6 +5,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20191218201657_foodInit.cs" />
+    <Compile Remove="Migrations\20191218201657_foodInit.Designer.cs" />
+    <Compile Remove="Migrations\20191220180952_dbContextUpdate.cs" />
+    <Compile Remove="Migrations\20191220180952_dbContextUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20191220182809_dbContextUpdate2.cs" />
+    <Compile Remove="Migrations\20191220182809_dbContextUpdate2.Designer.cs" />
+    <Compile Remove="Migrations\20191223102948_FoodBookingEventIdPK.cs" />
+    <Compile Remove="Migrations\20191223102948_FoodBookingEventIdPK.Designer.cs" />
+    <Compile Remove="Migrations\20191223104055_ReMigrateCatering.cs" />
+    <Compile Remove="Migrations\20191223104055_ReMigrateCatering.Designer.cs" />
+    <Compile Remove="Migrations\20191223110405_FoodMigrationFix.cs" />
+    <Compile Remove="Migrations\20191223110405_FoodMigrationFix.Designer.cs" />
+    <Compile Remove="Migrations\20191223111335_FoodMigrationFix2.cs" />
+    <Compile Remove="Migrations\20191223111335_FoodMigrationFix2.Designer.cs" />
+    <Compile Remove="Migrations\20191223111842_FoodMigrationFix3.cs" />
+    <Compile Remove="Migrations\20191223111842_FoodMigrationFix3.Designer.cs" />
+    <Compile Remove="Migrations\20191223112241_Add-Migration newCatering -Project ThAmCo.Catering.cs" />
+    <Compile Remove="Migrations\20191223112241_Add-Migration newCatering -Project ThAmCo.Catering.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Migrations
 {
     [DbContext(typeof(MenusDbContext))]
-    partial class MenusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191223111335_FoodMigrationFix2")]
+    partial class FoodMigrationFix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,9 @@ namespace ThAmCo.Catering.Migrations
 
             modelBuilder.Entity("ThAmCo.Catering.Data.FoodBooking", b =>
                 {
-                    b.Property<int>("EventId");
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("MenuId");
 
@@ -38,9 +42,7 @@ namespace ThAmCo.Catering.Migrations
                         new { EventId = 1, MenuNumber = 1 },
                         new { EventId = 2, MenuNumber = 2 },
                         new { EventId = 3, MenuNumber = 3 },
-                        new { EventId = 4, MenuNumber = 1 },
-                        new { EventId = 5, MenuNumber = 2 },
-                        new { EventId = 6, MenuNumber = 3 }
+                        new { EventId = 4, MenuNumber = 1 }
                     );
                 });
 

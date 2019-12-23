@@ -21,7 +21,7 @@ namespace ThAmCo.Catering.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetReservation([FromBody] int eventId)
+        public async Task<IActionResult> GetReservation(int eventId)
         {
             var booking = await _context.FoodBookings.FindAsync(eventId);
             if (booking == null)
@@ -44,7 +44,7 @@ namespace ThAmCo.Catering.Controllers
             {
                 try
                 {
-                    booking.MenuId = bookingDto.MenuId;
+                    booking.MenuNumber = bookingDto.MenuId;
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -81,12 +81,12 @@ namespace ThAmCo.Catering.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteReservation(int eventId)
         {
-            var booking = await _context.FoodBookings.Where(b => b.EventId == eventId).ToListAsync();
+            var booking = await _context.FoodBookings.FindAsync(eventId);
             if (booking != null)
             {
                 try
                 {
-                    _context.FoodBookings.Remove(booking.FirstOrDefault());
+                    _context.FoodBookings.Remove(booking);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }

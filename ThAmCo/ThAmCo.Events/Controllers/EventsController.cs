@@ -485,7 +485,8 @@ namespace ThAmCo.Events.Controllers
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
             string uri = "/api/FoodBooking";
             var client = setupCateringClient();
-            HttpResponseMessage existingBooking = await client.GetAsync(uri + "?eventId=" + eventId);
+            string getUri = uri + "?eventId=" + eventId;
+            HttpResponseMessage existingBooking = await client.GetAsync(getUri);
             HttpResponseMessage response;
             if(existingBooking.IsSuccessStatusCode)
             {

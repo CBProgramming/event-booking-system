@@ -25,7 +25,7 @@ namespace ThAmCo.Catering.Models
 
         public MenuDto(Menu menu)
         {
-            MenuId = menu.Id;
+            MenuId = menu.MenuId;
             Name = menu.Name;
             CostPerHead = menu.CostPerHead;
             Starter = menu.Starter;

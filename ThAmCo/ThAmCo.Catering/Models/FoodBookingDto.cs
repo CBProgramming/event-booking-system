@@ -14,7 +14,7 @@ namespace ThAmCo.Catering.Data
 
         public FoodBookingDto(FoodBooking booking)
         {
-            MenuId = booking.MenuId;
+            MenuId = booking.MenuNumber;
             EventId = booking.EventId;
         }
 
