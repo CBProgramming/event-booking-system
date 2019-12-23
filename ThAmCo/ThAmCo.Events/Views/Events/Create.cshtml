@@ -53,7 +53,7 @@
                 <label asp-for="TypeId" class="control-label"></label>
                 @if (Model.VenueName == null)
                 {
-                    <input asp-for="TypeId" class="form-control" />
+                    @Html.DropDownList("TypeId", Model.TypeList)
                 }
                 else
                 {

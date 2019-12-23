@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -103,5 +104,7 @@ namespace ThAmCo.Events.Models.Events
         public bool IsActive { get; set; }
 
         public string Type { get; set; }
+
+        public SelectList TypeList { get; set; }
     }
 }

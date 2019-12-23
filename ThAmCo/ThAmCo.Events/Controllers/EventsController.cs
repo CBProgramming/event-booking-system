@@ -16,6 +16,7 @@ using ThAmCo.Events.Models.Staff;
 using ThAmCo.Events.Models.Staffing;
 using ThAmCo.Events.Models.Venues;
 using ThAmCo.Events.Services;
+using ThAmCo.Venues.Data;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -32,7 +33,7 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string message)
         {
             var menus = await getMenus();
             List<EventVM> eventsOk = new List<EventVM>();
@@ -124,20 +125,36 @@ namespace ThAmCo.Events.Controllers
             EventVM eventVM = new EventVM();
             eventVM.TypeId = searchCriteria.TypeId;
             EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(eventVM, availabilities);
-            return View("SelectVenue",venueSelector);
+            return View("SelectVenue", venueSelector);
+        }
+
+        public async Task<IEnumerable<EventTypeDto>> GetEventTypes()
+        {
+            try
+            {
+                var client = setupVenueClient();
+                string uri = "/api/EventTypes";
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsAsync<List<EventTypeDto>>();
+            }
+            catch (Exception e)
+            {
+            }
+            return new List<EventTypeDto>();
         }
 
 
-
         // GET: Events/Create
-        public IActionResult Create(string typeId, string venueRef, DateTime date, string venueName, string venueDescription, int venueCapacity, int venueCost, 
-            int day, int month, int year, int hour, int minute, int second, EventVM @event)
+        public async Task<IActionResult> Create (int day, int month, int year, int hour, int minute, int second, EventVM @event)
         {
             if (day !=0 && month !=0 && year !=0 && @event.Title == null)
             {
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
                 @event.Date = fixedDate;
             }
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            @event.TypeList = new SelectList(eventTypes, "Id", "Title");
             return View(@event);
         }
 
@@ -196,14 +213,16 @@ namespace ThAmCo.Events.Controllers
         }
 
 
-        public IActionResult SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
+        public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            @event.Type = eventTypes.First(e => e.Id == @event.TypeId).Title;
             if (day != 0 && month != 0 && year != 0)
             {
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
                 @event.Date = fixedDate;
             }
-            if (@event.VenueName != null)
+            if (@event.VenueName != null && @event.Existing == false)
             {
                 return RedirectToAction("ConfirmReservation", @event);
             }
@@ -237,7 +256,7 @@ namespace ThAmCo.Events.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BookEvent([Bind("Id,VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Existing,OldRef")] EventVM booking)
+        public async Task<IActionResult> BookEvent([Bind("Id,VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Type,Existing,OldRef")] EventVM booking)
         {
             var client = setupVenueClient();
             string uri = "/api/Reservations";
@@ -272,6 +291,7 @@ namespace ThAmCo.Events.Controllers
                     @event.Title = booking.Title;
                     @event.Duration = booking.Duration;
                     @event.TypeId = booking.TypeId;
+                    @event.Type = booking.Type;
                     @event.VenueRef = booking.VenueRef;
                     @event.VenueName = booking.VenueName;
                     @event.VenueDescription = booking.VenueDescription;
@@ -356,10 +376,7 @@ namespace ThAmCo.Events.Controllers
         //IEnumerable<AvailabilityGetDto>
         private async Task<IEnumerable<AvailabilitiesVM>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration["VenuesBaseURI"]);
-            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-            client.Timeout = TimeSpan.FromSeconds(5);
+            var client = setupVenueClient();
             string startDate = stringDate(beginDate);
             string finishDate = stringDate(endDate);
             IEnumerable<AvailabilitiesVM> availabilities;
@@ -408,22 +425,6 @@ namespace ThAmCo.Events.Controllers
             return client;
         }
 
-        public async Task<IEnumerable<MenuDto>> getMenus()
-        {
-            var client = setupCateringClient();
-            string uri = "/api/Menu";
-            List<MenuDto> menus = null;
-            try
-            {
-                var response = await client.GetAsync(uri);
-                response.EnsureSuccessStatusCode();
-                menus = await response.Content.ReadAsAsync<List<MenuDto>>();
-            }
-            catch (HttpRequestException e)
-            {
-            }
-            return menus;
-        }
 
         public async Task<MenuDto> getMenu(int menuId)
         {
@@ -465,6 +466,23 @@ namespace ThAmCo.Events.Controllers
                     menuId = eventVM.MenuId
                 }) ;
             }
+        }
+
+        public async Task<IEnumerable<MenuDto>> getMenus()
+        {
+            var client = setupCateringClient();
+            string uri = "/api/Menu";
+            List<MenuDto> menus = null;
+            try
+            {
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                menus = await response.Content.ReadAsAsync<List<MenuDto>>();
+            }
+            catch (HttpRequestException e)
+            {
+            }
+            return menus;
         }
 
         public async Task<IActionResult> BookMenu(int eventId, string message)

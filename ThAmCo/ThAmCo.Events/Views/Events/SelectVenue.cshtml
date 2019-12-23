@@ -62,6 +62,7 @@
                         @Html.ActionLink("Book Event", "Create", new
                    {
                        typeId = Model.Event.TypeId,
+                       type = Model.Event.Type,
                        venueRef = item.Code,
                        date = item.Date,
                        venueName = item.Name,
@@ -83,6 +84,7 @@
                             Title = Model.Event.Title,
                             duration = Model.Event.Duration,
                             typeId = Model.Event.TypeId,
+                            type = Model.Event.Type,
                             VenueRef = item.Code,
                             date = item.Date,
                             venueName = item.Name,
@@ -91,7 +93,7 @@
                             venueCost = item.CostPerHour,
                             existing = Model.Event.Existing,
                             oldRef = Model.Event.OldRef,
-                            eventId = Model.Event.Id
+                            Id = Model.Event.Id
                         })
                     }
 
