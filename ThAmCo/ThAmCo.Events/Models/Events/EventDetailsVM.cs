@@ -31,9 +31,14 @@ namespace ThAmCo.Events.Models.Events
             get { return Menu.CostPerHead * Customers.Count; }
         }
 
+        public double VenueCost
+        {
+            get { return Event.VenueCost * ((TimeSpan)Event.Duration).TotalHours; }
+        }
+
         public double TotalCost         
         {
-            get { return MenuCost + Event.VenueCost; }
+            get { return MenuCost + VenueCost; }
         }
     }
 }
