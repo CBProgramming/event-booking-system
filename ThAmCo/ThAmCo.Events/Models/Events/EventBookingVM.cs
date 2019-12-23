@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
@@ -19,6 +20,8 @@ namespace ThAmCo.Events.Models.Events
         }
 
         public int EventId { get; set; }
+
+        [DisplayName("Event Name")]
         public string Title { get; set; }
 
         public DateTime Date { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
@@ -20,6 +21,7 @@ namespace ThAmCo.Events.Models.Customers
 
         public int Id { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName
         {
             get { return FirstName + " " + Surname; }
@@ -27,6 +29,7 @@ namespace ThAmCo.Events.Models.Customers
 
         public string Surname { get; set; }
 
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
 
         public string Email { get; set; }

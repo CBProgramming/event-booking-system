@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Models.Customers;
@@ -26,16 +27,19 @@ namespace ThAmCo.Events.Models.Events
 
         public MenuDto Menu { get; set; }
 
+        [DisplayName("Menu Cost")]
         public double MenuCost
         {
             get { return Menu.CostPerHead * Customers.Count; }
         }
 
+        [DisplayName("Venue Cost")]
         public double VenueCost
         {
             get { return Event.VenueCost * ((TimeSpan)Event.Duration).TotalHours; }
         }
 
+        [DisplayName("Total Cost")]
         public double TotalCost         
         {
             get { return MenuCost + VenueCost; }

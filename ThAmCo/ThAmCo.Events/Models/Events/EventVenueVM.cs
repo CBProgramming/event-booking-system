@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,10 +21,12 @@ namespace ThAmCo.Events.Models.Events
 
         public EventVM EventVM { get; set; }
 
+        [DisplayName("Venue Reference")]
         public string VenueRef { get; set; }
 
         public DateTime Date { get; set; }
 
+        [DisplayName("Venue Name")]
         public string VenueName { get; set; }
 
         public string EventRef

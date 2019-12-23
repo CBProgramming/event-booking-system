@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace ThAmCo.Events.Models.Staff
 
         public int Id { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName
         {
             get { return FirstName + " " + Surname; }
@@ -31,10 +33,12 @@ namespace ThAmCo.Events.Models.Staff
 
         public string Surname { get; set; }
 
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
 
         public string Email { get; set; }
 
+        [DisplayName("First Aider")]
         public bool FirstAider { get; set; }
 
         public bool IsActive { get; set; }

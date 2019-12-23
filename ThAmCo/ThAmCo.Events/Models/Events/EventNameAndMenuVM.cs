@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Services;
@@ -29,8 +30,10 @@ namespace ThAmCo.Events.Models.Events
 
         public int MenuId { get; set; }
 
+        [DisplayName("Event name")]
         public string EventName { get; set; }
 
+        [DisplayName("Menu Name")]
         public string MenuName { get; set; }
 
         public string Starter { get; set; }
@@ -39,6 +42,7 @@ namespace ThAmCo.Events.Models.Events
 
         public string Dessert { get; set; }
 
+        [DisplayName("Menu Cost Per Guest")]
         public double CostPerHead { get; set; }
     }
 }
