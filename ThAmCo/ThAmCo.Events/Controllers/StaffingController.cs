@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Models.Events;
+using ThAmCo.Events.Models.GuestBookings;
 using ThAmCo.Events.Models.Staff;
 using ThAmCo.Events.Models.Staffing;
 
@@ -35,11 +36,11 @@ namespace ThAmCo.Events.Controllers
             int numGuests = (await _context.Guests.Include(g => g.Event).Where(g => g.EventId == id).ToListAsync()).Count();
             var staffing = await _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id).OrderBy(e => e.StaffId).ToListAsync();
             var staff = await _context.Staff.Where(s => s.IsActive == true).Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
-            List<StaffVM> staffVM = new List<StaffVM>();
+            List<StaffAttendanceVM> staffVM = new List<StaffAttendanceVM>();
             bool firstAiderPresent = false;
             for (int i = 0; i < staffing.Count; i++)
             {
-                staffVM.Add(new StaffVM(staff[i]));
+                staffVM.Add(new StaffAttendanceVM(staff[i],true));
                 if (firstAiderPresent == false && staffVM[i].FirstAider == true)
                     firstAiderPresent = true;
             }
@@ -52,9 +53,13 @@ namespace ThAmCo.Events.Controllers
             var unavailableStaff = await _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == eventId).ToListAsync();
             var unStaff = await _context.Staff.Where(e => unavailableStaff.Any(a => a.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
             var staff = await _context.Staff.Except(unStaff).ToListAsync();
-            var staffList = new SelectList(staff, "Id", "FullName");
+            List <StaffAttendanceVM> staffVM = new List<StaffAttendanceVM>();
+            foreach (Staff s in staff)
+            {
+                staffVM.Add(new StaffAttendanceVM(s));
+            }
             var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
-            BookNewStaffVM creator = new BookNewStaffVM(eventVM, staffList);
+            BookNewStaffVM creator = new BookNewStaffVM(eventVM, staffVM);
             return View(creator);
         }
 
@@ -74,22 +79,33 @@ namespace ThAmCo.Events.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StaffId,EventId")] Staffing staffing)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("StaffId,EventId,Attended")] StaffBookingVM staffAttendance)
         {
             if (ModelState.IsValid)
             {
-                var existingStaff = _context.Staffing.Where(g => g.StaffId == staffing.StaffId && g.EventId == staffing.EventId).ToList();
-                if (existingStaff == null || existingStaff.Count == 0)
+                try
                 {
-                    _context.Add(staffing);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("StaffAtEvent", new { id = staffing.EventId });
+                    Staffing staff = await _context.Staffing.FindAsync(staffAttendance.StaffId, staffAttendance.EventId);
+                    if (staff != null && staffAttendance.Attended == false)
+                    {
+                        _context.Remove(staff);
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
+                    if (staff == null && staffAttendance.Attended == true)
+                    {
+                        _context.Add(new Staffing(staffAttendance.EventId, staffAttendance.StaffId));
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
                 }
-                ViewData["CreateMessage"] = "Booking already exists.";
-            }
+                catch (DbUpdateConcurrencyException)
+                {
 
-            return RedirectToAction("StaffAtEvent", new { id = staffing.EventId });
+                }
+            }
+            return NotFound();
         }
 
         // POST: Staffing/Create

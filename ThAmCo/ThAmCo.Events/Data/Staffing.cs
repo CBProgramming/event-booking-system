@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 namespace ThAmCo.Events.Data
 {
     public class Staffing
+
     {
+        public Staffing()
+        {
+
+        }
+
+        public Staffing(int eventId, int staffId)
+        {
+            EventId = eventId;
+            StaffId = staffId;
+        }
         public int StaffId { get; set; }
 
         public Staff Staff { get; set; }

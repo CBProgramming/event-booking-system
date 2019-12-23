@@ -9,7 +9,7 @@ namespace ThAmCo.Events.Models.Events
 {
     public class EventStaffVM
     {
-        public EventStaffVM(List<StaffVM> staff, bool firstAiderPresent, int eventId, string eventTitle, int numGuests)
+        public EventStaffVM(List<StaffAttendanceVM> staff, bool firstAiderPresent, int eventId, string eventTitle, int numGuests)
         {
             Staff = staff;
             FirstAiderPresent = firstAiderPresent;
@@ -22,7 +22,7 @@ namespace ThAmCo.Events.Models.Events
 
         public string EventTitle { get; set; }
 
-        public List<StaffVM> Staff { get; set; }
+        public List<StaffAttendanceVM> Staff { get; set; }
 
         public bool FirstAiderPresent { get; set; }
 
