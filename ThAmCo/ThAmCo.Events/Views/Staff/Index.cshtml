@@ -24,9 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstAider)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -43,10 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstAider)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
+                @(item.FirstAider ? "Yes" : "No")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
