@@ -1,17 +1,16 @@
 ﻿@model ThAmCo.Events.Models.Events.EventVM
 
+<h2>Edit Event</h2>
 
-<h3>@Model.Message</h3>
+<h3><font color="red">@Model.Message</font></h3>
 
-<h2>Edit</h2>
-
-<h4>Event</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <h4>Event</h4>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -32,7 +31,40 @@
                 <input asp-for="Type" class="form-control" readonly />
             </div>
             <br>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
             <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+            <br>
+            <h4>Venue</h4>
+            <div>
+                <label asp-for="VenueName" class="control-label"></label>
+                <input type="hidden" asp-for="VenueName" class="form-control" readonly />
+                @Model.VenueName
+                <br>
+            </div>
+            <div>
+                <label asp-for="VenueCapacity" class="control-label"></label>
+                <input type="hidden" asp-for="VenueCapacity" class="form-control" readonly />
+                @Model.VenueCapacity
+                <br>
+            </div>
+            <div>
+                <label asp-for="VenueCost" class="control-label"></label>
+                <input type="hidden" asp-for="VenueCost" class="form-control" readonly />
+                £@((Model.VenueCost).ToString("0.00"))
+                <br>
+            </div>
+            <div>
+                <label asp-for="VenueDescription" class="control-label"></label>
+                <input type="hidden" asp-for="VenueDescription" class="form-control" readonly />
+                @Model.VenueDescription
+                <br>
+            </div>
+            <div>
+                <br />
                 @Html.ActionLink("Change Venue", "selectVenue", new
                 {
                     Id = Model.Id,
@@ -49,41 +81,12 @@
                     venueCost = Model.VenueCost,
                     oldRef = Model.OldRef
                 })
-                <br>
-                <label asp-for="VenueName" class="control-label"></label>
-                <input type="hidden" asp-for="VenueName" class="form-control" readonly />
-                @Model.VenueName
-                <br>
             </div>
-          
-            <div>
-                <label asp-for="VenueDescription" class="control-label"></label>
-                <input type="hidden" asp-for="VenueDescription" class="form-control" readonly />
-                @Model.VenueDescription
-                <br>
-            </div>
-            <div>
-                <label asp-for="VenueCapacity" class="control-label"></label>
-                <input type="hidden" asp-for="VenueCapacity" class="form-control" readonly />
-                @Model.VenueCapacity
-                <br>
-            </div>
-            <div>
-                <label asp-for="VenueCost" class="control-label"></label>
-                <input type="hidden" asp-for="VenueCost" class="form-control" readonly />
-                @Model.VenueCost
-                <br>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
