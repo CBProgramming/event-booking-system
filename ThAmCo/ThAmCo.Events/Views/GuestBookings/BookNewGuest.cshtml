@@ -1,79 +1,75 @@
 ﻿@model ThAmCo.Events.Models.GuestBookings.BookNewGuestVM
 
 
-<h2>Create</h2>
-
-<h4>GuestBooking</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <label asp-for="Event" class="control-label"></label>:
-        @Model.Event.Title
-    </div>
-</div>
-
-<input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FullName)
-        </div>
-        <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Booked)
-    </div>
-</div>
-
-@foreach (var item in Model.Customers)
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                @Html.DisplayFor(modelItem => item.FullName)
-            </div>
-            <div class="col-md-1">
-                <input asp-for="@item.Booked" data-customerid="@item.Id" onChange=updateAttend(this) />
-            </div>
-        </div>
-    </div>
-}
-
-<script type="text/javascript">
-
-    function updateAttend(checkbox) {
-        var customerId = $(checkbox).data("customerid");
-        var eventId = $("#Event_Id").val();
-        var checked = $(checkbox).is(":checked");
-
-        var data =
-        {
-            "CustomerId": customerId,
-            "EventId": eventId,
-            "Attended": checked
-        };
-
-        $.ajax({
-
-            url: 'http://localhost:22263/GuestBookings/Create',
-            type: 'POST',
-            //crossDomain: false,
-            //contentType: 'application/json;charset=utf-8',
-            datatype: 'json',
-            //data: JSON.stringify(data),
-            data: data,
-            success: function () {
-            },
-            error: function () {
-                alert("something went wrong");
-            }
-        });
-    }
-</script>
+<h2>Book additional guests for</h2>
+<h3>@Model.Event.Title</h3>
 
 <div>
     <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@Model.Event.Id">Back to bookings for @Model.Event.Title</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<br />
+<input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
+
+
+<div class="row">
+    <div class="col-md-2">
+        <strong>@Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FullName)</strong>
+    </div>
+    <div class="col-md-1">
+        <strong><center>@Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Booked)</center></strong>
+    </div>
+    <br />
+
+
+    @foreach (var item in Model.Customers)
+    {
+
+        <div class="row">
+            <div class="col-md-2">
+                @Html.DisplayFor(modelItem => item.FullName)
+            </div>
+            <div class="col-md-1">
+                <center><input asp-for="@item.Booked" data-customerid="@item.Id" onChange=updateAttend(this) /></center>
+            </div>
+        </div>
+
+    }
+
+    <script type="text/javascript">
+
+        function updateAttend(checkbox) {
+            var customerId = $(checkbox).data("customerid");
+            var eventId = $("#Event_Id").val();
+            var checked = $(checkbox).is(":checked");
+
+            var data =
+            {
+                "CustomerId": customerId,
+                "EventId": eventId,
+                "Attended": checked
+            };
+
+            $.ajax({
+
+                url: 'http://localhost:22263/GuestBookings/Create',
+                type: 'POST',
+                //crossDomain: false,
+                //contentType: 'application/json;charset=utf-8',
+                datatype: 'json',
+                //data: JSON.stringify(data),
+                data: data,
+                success: function () {
+                },
+                error: function () {
+                    alert("something went wrong");
+                }
+            });
+        }
+    </script>
+
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

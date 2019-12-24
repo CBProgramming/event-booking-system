@@ -8,13 +8,13 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FullName)
+            <strong>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FullName)</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong><center>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstAider)</center></strong>
         </div>
         <div class="col-sm-1">
-            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstAider)
-        </div>
-        <div class="col-sm-1">
-            @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Attending)
+            <strong><center>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Attending)</center></strong>
         </div>
     </div>
 </div>
@@ -31,16 +31,18 @@
             <div class="col-sm-2">
                 @Html.DisplayFor(modelItem => item.FullName)
             </div>
-            <div class="col-sm-1">
-                @Html.DisplayFor(modelItem => item.FirstAider)
+            <div class="col-sm-2">
+                <center>@(item.FirstAider ? "Yes" : "No")</center>
             </div>
             <div class="col-sm-1">
-                <input asp-for="@item.Attending" data-staffid="@item.Id" onChange=updateAttend(this) />
+                <center><input asp-for="@item.Attending" data-staffid="@item.Id" onChange=updateAttend(this) /></center>
             </div>
         </div>
     </div>
 
 }
+
+</br>
 <div>
     <a asp-action="Index">Back to Events</a> |
     <a asp-action="StaffAtEvent" asp-route-id="@Model.EventId">Back to staff allocation for @Html.DisplayFor(model => model.EventTitle)</a>

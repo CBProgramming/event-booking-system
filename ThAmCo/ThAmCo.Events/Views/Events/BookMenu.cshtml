@@ -1,54 +1,51 @@
 ﻿@model ThAmCo.Events.Models.Events.EventMenusVM
 
+<h2>Book Menu</h2>
 
 
-<h2>BookMenu</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2">
+            <strong>@Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Name)</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong>@Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Starter)</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong>@Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Main)</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong>@Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Dessert)</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong><center>@Html.DisplayNameFor(model => model.Menus.FirstOrDefault().CostPerHead)</center></strong>
+        </div>
+    </div>
+</div>
+<br />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Starter)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Main)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().Dessert)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menus.FirstOrDefault().CostPerHead)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Menus)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            <td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Starter)
-            <td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Main)
-            <td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dessert)
-            <td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostPerHead)
-            <td>
-                @Html.ActionLink("Select Menu", "SelectMenu", new { item.MenuId, Model.EventId })
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+@foreach (var item in Model.Menus)
+{
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayFor(modelItem => item.Name)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(modelItem => item.Starter)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(modelItem => item.Main)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(modelItem => item.Dessert)
+        </div>
+        <div class="col-sm-2">
+            <center>£@((item.CostPerHead).ToString("0.00"))</center>
+        </div>
+        <div class="col-sm-2">
+            @Html.ActionLink("Select Menu", "SelectMenu", new { item.MenuId, Model.EventId })
+        </div>
+
+    </div>
+    <br />
+}

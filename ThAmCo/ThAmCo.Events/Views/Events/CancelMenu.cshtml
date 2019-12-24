@@ -1,7 +1,8 @@
 ﻿@model ThAmCo.Events.Models.Events.EventNameAndMenuVM
 
+<h2>Cancel Menu</h2>
 
-<h2>Details</h2>
+<h4>Are you sure?</h4>
 
 <div>
     <hr />
@@ -22,7 +23,7 @@
             @Html.DisplayNameFor(model => model.CostPerHead)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CostPerHead)
+            £@((Model.CostPerHead).ToString("0.00"))
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Starter)
@@ -43,9 +44,10 @@
             @Html.DisplayFor(model => model.Dessert)
         </dd>
     </dl>
-    <h4>Are you sure you want to cancel the above food booking?</h4>
+
 </div>
 <div>
-    @Html.ActionLink("Confirm cancellation", "ConfirmMenuCancellation", new { Model.EventId, Model.MenuId}) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Confirm cancellation", "ConfirmMenuCancellation", new { Model.EventId, Model.MenuId }) |
+    @Html.ActionLink("Back to Menu Details", "ViewMenu", new { Model.EventId, Model.MenuId }) |
+    <a asp-controller="Events" asp-action="Index">Back to Events List</a>
 </div>

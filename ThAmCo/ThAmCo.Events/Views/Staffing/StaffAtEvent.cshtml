@@ -1,16 +1,16 @@
 ﻿@model ThAmCo.Events.Models.Staffing.BookNewStaffVM
 
 
-<h1>Staffing for '@Html.DisplayFor(model => model.EventTitle)'</h1>
-<h2>Total staff: @Model.Staff.Count()</h2>
+<h2>Staffing for @Html.DisplayFor(model => model.EventTitle)</h2>
+<h4>Total staff: @Model.Staff.Count()</h4>
 
 @if (Model.FirstAiderPresent == false)
 {
-    <h3>No first aider present.  Please allocate staff trained in first aid to event.</h3>
+    <h4><font color="red">No first aider present.  Please allocate staff trained in first aid to event</font></h4>
 }
 @if (Model.NeededStaff > 0)
 {
-    <h3>Not enough staff allocated to event.  Please add @Model.NeededStaff more staff</h3>
+    <h4><font color="red">Not enough staff allocated to event.  Please add @Model.NeededStaff more staff</font></h4>
 }
 
 <p>
@@ -23,13 +23,13 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FullName)
+                <strong>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FullName)</strong>
+            </div>
+            <div class="col-sm-2">
+                <strong><center>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstAider)</center></strong>
             </div>
             <div class="col-sm-1">
-                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().FirstAider)
-            </div>
-            <div class="col-sm-1">
-                @Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Attending)
+                <strong><center>@Html.DisplayNameFor(model => model.Staff.FirstOrDefault().Attending)</center></strong>
             </div>
         </div>
     </div>
@@ -48,18 +48,19 @@
             <div class="col-sm-2">
                 @Html.DisplayFor(modelItem => item.FullName)
             </div>
-            <div class="col-sm-1">
-                @Html.DisplayFor(modelItem => item.FirstAider)
+            <div class="col-sm-2">
+                <center>@(item.FirstAider ? "Yes" : "No")</center>
             </div>
             <div class="col-sm-1">
-                <input asp-for="@item.Attending" data-staffid="@item.Id" onChange=updateAttend(this) />
+                <center><input asp-for="@item.Attending" data-staffid="@item.Id" onChange=updateAttend(this) /></center>
             </div>
         </div>
     </div>
 
 }
+<br />
 <div>
-    <a asp-action="Index">Back to Events</a>
+    <a asp-controller="Events" asp-action="Index">Back to Events</a>
 </div>
 
 <script type="text/javascript">
