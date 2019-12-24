@@ -116,5 +116,7 @@ namespace ThAmCo.Events.Models.Events
         public string Type { get; set; }
 
         public SelectList TypeList { get; set; }
+
+        public bool StaffAllocated { get; set; }
     }
 }

@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThAmCo.Events.Models.Events;
 using ThAmCo.Events.Models.Staff;
 
 namespace ThAmCo.Events.Models.Staffing
 {
     public class AllocateNewEventVM
     {
-        public AllocateNewEventVM(StaffVM staff, SelectList venues)
+        public AllocateNewEventVM(StaffVM staff, List<EventVM> venues)
         {
             Staff = staff;
             Venues = venues;
@@ -17,7 +18,7 @@ namespace ThAmCo.Events.Models.Staffing
 
         public StaffVM Staff { get; set; }
 
-        public SelectList Venues { get; set; }
+        public List<EventVM> Venues { get; set; }
 
         public bool Allocated { get; set; }
     }
