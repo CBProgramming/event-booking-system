@@ -17,6 +17,7 @@ namespace ThAmCo.Events.Models.Events
             Duration = e.Duration;
             TypeId = e.TypeId;
             Attended = b.Attended;
+            Type = e.Type;
         }
 
         public int EventId { get; set; }
@@ -29,6 +30,8 @@ namespace ThAmCo.Events.Models.Events
         public TimeSpan? Duration { get; set; }
 
         public string TypeId { get; set; }
+
+        public string Type { get; set; }
 
         public bool Attended { get; set; }
     }
