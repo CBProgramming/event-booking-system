@@ -4,33 +4,97 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Available events to book on to</h2>
 
 <h4>GuestBooking</h4>
 <h5>@ViewData["GuestBookingMessage"]</h5>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <input type="hidden" asp-for="@Model.Customer.Id" name="CustomerId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Customer" class="control-label"></label>
-                <input asp-for="Customer.FullName" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Venues" class="control-label"></label>
-                @Html.DropDownList("EventId", Model.Venues)
-            </div>
-            <div class="form-group">
-                <input type="submit" value="BookNewGuest" class="btn btn-default" />
-            </div>
-        </form>
+        <label asp-for="Customer" class="control-label"></label>:
+        @Model.Customer.FullName
     </div>
 </div>
 
+<input type="hidden" asp-for="@Model.Customer.Id" name="CustomerId" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Title)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Date)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Duration)
+        </div>
+        <div class="col-md-1">
+            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Type)
+        </div>
+        <div class="col-md-1">
+            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Allocated)
+        </div>
+    </div>
+</div>
+
+@foreach (var item in Model.Venues)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DisplayFor(modelItem => item.Title)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(modelItem => item.Date)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(modelItem => item.Duration)
+            </div>
+            <div class="col-md-1">
+                @Html.DisplayFor(modelItem => item.Type)
+            </div>
+            <div class="col-md-1">
+                <input asp-for="@item.Allocated" data-eventid="@item.Id" onChange=updateAttend(this) />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    function updateAttend(checkbox) {
+        var eventId = $(checkbox).data("eventid");
+        var customerId = $("#Customer_Id").val();
+        var checked = $(checkbox).is(":checked");
+
+        var data =
+        {
+            "CustomerId": customerId,
+            "EventId": eventId,
+            "Attended": checked
+        };
+
+        $.ajax({
+
+            url: 'http://localhost:22263/GuestBookings/Create',
+            type: 'POST',
+            //crossDomain: false,
+            //contentType: 'application/json;charset=utf-8',
+            datatype: 'json',
+            //data: JSON.stringify(data),
+            data: data,
+            success: function () {
+            },
+            error: function () {
+                alert("something went wrong");
+            }
+        });
+    }
+</script>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="GuestBookings" asp-action="CustomerBookings" asp-route-id="@Model.Customer.Id">Back to @Model.Customer.FullName's bookings</a>
 </div>
 
 @section Scripts {

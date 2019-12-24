@@ -32,9 +32,18 @@
     </dl>
     
     <form asp-action="Delete">
+        <input type="hidden" asp-for="Origin" />
         <input type="hidden" asp-for="CustomerId" />
         <input type="hidden" asp-for="EventId" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        @if (Model.Origin == "CustomerBookings")
+        {
+            <a asp-action="@Model.Origin" asp-route-id=@Model.CustomerId>Back to List</a>
+        }
+        else
+        {
+            <a asp-action="@Model.Origin" asp-route-id=@Model.EventId>Back to List</a>
+        }
+
     </form>
 </div>

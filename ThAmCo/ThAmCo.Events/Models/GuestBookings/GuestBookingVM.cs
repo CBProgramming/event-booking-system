@@ -28,5 +28,7 @@ namespace ThAmCo.Events.Models.GuestBookings
         public EventVM Event { get; set; }
 
         public bool Attended { get; set; }
+
+        public string Origin { get; set; }
     }
 }

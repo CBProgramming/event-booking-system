@@ -43,6 +43,8 @@ namespace ThAmCo.Events.Models.Customers
         public bool Deleted { get; set; }
 
         public string Message { get; set; }
+
+        public bool Booked { get; set; }
     }
 }
 

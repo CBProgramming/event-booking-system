@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<input type="hidden" asp-for="@Model.Customer.Id" name="EventId" />
+<input type="hidden" asp-for="@Model.Customer.Id" name="Customer" />
 
 @foreach (var item in Model.Events)
 {
@@ -53,11 +53,14 @@
                 <input asp-for="@item.Attended" data-eventid="@item.EventId" onChange=updateAttend(this) />
             </div>
             <div class="col-md-1">
-                @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id })
+                @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id, origin = "CustomerBookings" })
             </div>
         </div>
     </div>
 }
+
+<a asp-controller="Customers" asp-action="Index">Customer list</a> |
+<a asp-controller="Events" asp-action="Index">Event list</a>
 
 <script type="text/javascript">
 

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThAmCo.Events.Models.Customers;
+using ThAmCo.Events.Models.Events;
 
 namespace ThAmCo.Events.Models.GuestBookings
 {
     public class GuestBookingCreateVM
     {
-        public GuestBookingCreateVM (CustomerVM customer, SelectList venues)
+        public GuestBookingCreateVM (CustomerVM customer, List<EventVM> venues)
         {
             Customer = customer;
             Venues = venues;
@@ -17,6 +18,7 @@ namespace ThAmCo.Events.Models.GuestBookings
 
         public CustomerVM Customer { get; set; }
 
-        public SelectList Venues { get; set; }
+        public List<EventVM> Venues { get; set; }
+
     }
 }

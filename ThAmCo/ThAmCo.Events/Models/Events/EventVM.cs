@@ -117,6 +117,8 @@ namespace ThAmCo.Events.Models.Events
 
         public SelectList TypeList { get; set; }
 
-        public bool StaffAllocated { get; set; }
+        [DisplayName("Booked")]
+        public bool Allocated { get; set; }
+
     }
 }

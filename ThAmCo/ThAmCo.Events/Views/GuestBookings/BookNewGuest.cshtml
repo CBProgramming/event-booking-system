@@ -10,26 +10,71 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="BookNewGuest">
-            <input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Event" class="control-label"></label>
-                <input asp-for="Event.Title" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Customers" class="control-label"></label>
-                @Html.DropDownList("CustomerId", Model.Customers)
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+        <label asp-for="Event" class="control-label"></label>:
+        @Model.Event.Title
     </div>
 </div>
 
+<input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().FullName)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Customers.FirstOrDefault().Booked)
+    </div>
+</div>
+
+@foreach (var item in Model.Customers)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DisplayFor(modelItem => item.FullName)
+            </div>
+            <div class="col-md-1">
+                <input asp-for="@item.Booked" data-customerid="@item.Id" onChange=updateAttend(this) />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    function updateAttend(checkbox) {
+        var customerId = $(checkbox).data("customerid");
+        var eventId = $("#Event_Id").val();
+        var checked = $(checkbox).is(":checked");
+
+        var data =
+        {
+            "CustomerId": customerId,
+            "EventId": eventId,
+            "Attended": checked
+        };
+
+        $.ajax({
+
+            url: 'http://localhost:22263/GuestBookings/Create',
+            type: 'POST',
+            //crossDomain: false,
+            //contentType: 'application/json;charset=utf-8',
+            datatype: 'json',
+            //data: JSON.stringify(data),
+            data: data,
+            success: function () {
+            },
+            error: function () {
+                alert("something went wrong");
+            }
+        });
+    }
+</script>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@Model.Event.Id">Back to bookings for @Model.Event.Title</a>
 </div>
 
 @section Scripts {
