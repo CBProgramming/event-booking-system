@@ -1,12 +1,8 @@
 ﻿@model ThAmCo.Events.Models.Staffing.BookNewStaffVM
 
-@{
-    ViewData["Title"] = "Index";
-}
 
 <h1>Staffing for '@Html.DisplayFor(model => model.EventTitle)'</h1>
 <h2>Total staff: @Model.Staff.Count()</h2>
-<h3>@ViewData["ErrorMessage"]</h3>
 
 @if (Model.FirstAiderPresent == false)
 {

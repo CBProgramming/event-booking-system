@@ -1,39 +1,28 @@
 ﻿@model ThAmCo.Events.Models.GuestBookings.GuestBookingCreateVM
 
-@{
-    ViewData["Title"] = "Create";
-}
 
-<h2>Available events to book on to</h2>
+<h2>Available events for @Model.Customer.FullName</h2>
 
-<h4>GuestBooking</h4>
-<h5>@ViewData["GuestBookingMessage"]</h5>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <label asp-for="Customer" class="control-label"></label>:
-        @Model.Customer.FullName
-    </div>
-</div>
+<h4><a asp-controller="GuestBookings" asp-action="CustomerBookings" asp-route-id="@Model.Customer.Id">Back to @Model.Customer.FullName's bookings</a></h4>
 
 <input type="hidden" asp-for="@Model.Customer.Id" name="CustomerId" />
 
 <div class="container">
     <div class="row">
-        <div class="col-md-4">
-            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Title)
+        <div class="col-md-3">
+            <strong>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Title)</strong>
         </div>
         <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Date)
+            <strong>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Date)</strong>
         </div>
         <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Duration)
+            <strong>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Duration)</strong>
+        </div>
+        <div class="col-md-2">
+            <strong>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Type)</strong>
         </div>
         <div class="col-md-1">
-            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Type)
-        </div>
-        <div class="col-md-1">
-            @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Allocated)
+            <strong>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Allocated)</strong>
         </div>
     </div>
 </div>
@@ -42,7 +31,7 @@
 {
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.DisplayFor(modelItem => item.Title)
             </div>
             <div class="col-md-2">
@@ -51,11 +40,13 @@
             <div class="col-md-2">
                 @Html.DisplayFor(modelItem => item.Duration)
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 @Html.DisplayFor(modelItem => item.Type)
             </div>
             <div class="col-md-1">
-                <input asp-for="@item.Allocated" data-eventid="@item.Id" onChange=updateAttend(this) />
+                <center>
+                    <input asp-for="@item.Allocated" data-eventid="@item.Id" onChange=updateAttend(this) />
+                </center>
             </div>
         </div>
     </div>
@@ -93,9 +84,7 @@
     }
 </script>
 
-<div>
-    <a asp-controller="GuestBookings" asp-action="CustomerBookings" asp-route-id="@Model.Customer.Id">Back to @Model.Customer.FullName's bookings</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

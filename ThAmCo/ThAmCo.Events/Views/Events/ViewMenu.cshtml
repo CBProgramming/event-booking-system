@@ -1,9 +1,5 @@
 ﻿@model ThAmCo.Events.Models.Events.EventNameAndMenuVM
 
-@{
-    ViewData["Title"] = "Details";
-}
-
 <h2>Details</h2>
 
 <div>
@@ -53,6 +49,3 @@
     @Html.ActionLink("Cancel Menu", "CancelMenu", new { Model.MenuId, Model.EventId }) |
     <a asp-action="Index">Back to List</a>
 </div>
-@{
-    ViewData["Title"] = "ViewMenu";
-}

@@ -123,8 +123,6 @@ namespace ThAmCo.Events.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
             return View("CustomerBookings");
         }
 
@@ -290,7 +288,6 @@ namespace ThAmCo.Events.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });
                 }
-                ViewData["GuestsAtEventMessage"] = "Booking already exists.";
             }
 
             return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });

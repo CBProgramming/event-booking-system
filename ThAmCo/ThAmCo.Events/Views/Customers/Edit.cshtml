@@ -1,14 +1,10 @@
 ﻿@model ThAmCo.Events.Models.Customers.CustomerVM
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h2>Edit Customer</h2>
+<h4>
+    <font color="red">@Model.Message</font>
+</h4>
 
-<h2>Edit</h2>
-
-<h4>@Model.Message</h4>
-<h4>Customer</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">

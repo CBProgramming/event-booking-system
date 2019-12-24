@@ -1,8 +1,5 @@
 ﻿@model ThAmCo.Events.Models.CustomerEvents.CustomerEventsVM
 
-@{
-    ViewData["Title"] = "CustomerBookings";
-}
 
 <h2>@Html.DisplayFor(model => model.Customer.FirstName) @Html.DisplayFor(model => model.Customer.Surname)'s Bookings</h2>
 <h4>@Html.DisplayNameFor(model => model.Customer.Email): @Html.DisplayFor(model => model.Customer.Email)</h4>
@@ -13,20 +10,20 @@
 </p>
 <div class="container">
     <div class="row">
-        <div class="col-md-4">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
+        <div class="col-md-2">
+            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)</strong>
         </div>
         <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
+            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)</strong>
         </div>
         <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
+            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)</strong>
         </div>
         <div class="col-md-1">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)
+            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)</strong>
         </div>
         <div class="col-md-1">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Attended)
+            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Attended)</strong>
         </div>
     </div>
 </div>
@@ -37,7 +34,7 @@
 {
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 @Html.DisplayFor(modelItem => item.Title)
             </div>
             <div class="col-md-2">
@@ -50,7 +47,9 @@
                 @Html.DisplayFor(modelItem => item.Type)
             </div>
             <div class="col-md-1">
-                <input asp-for="@item.Attended" data-eventid="@item.EventId" onChange=updateAttend(this) />
+                <center>
+                    <input asp-for="@item.Attended" data-eventid="@item.EventId" onChange=updateAttend(this) />    
+                </center>
             </div>
             <div class="col-md-1">
                 @Html.ActionLink("Delete", "Delete", new { eventId = item.EventId, customerId = Model.Customer.Id, origin = "CustomerBookings" })

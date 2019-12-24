@@ -1,21 +1,18 @@
 ﻿@model ThAmCo.Events.Models.Events.EventsIndexVM
 
-@{
-    ViewData["Title"] = "Index";
-}
-
 <h2>Events</h2>
 
-<p>
+<h4>
     <a asp-action="Create">Create New</a>
-</p>
-<p>
+</h4>
+<h4>
     <a asp-action="SearchVenues">Search Venues</a>
-</p>
+</h4>
+</br>
 
 @{ if (Model.EventsNeedStaff != null && Model.EventsNeedStaff.Count > 0)
     {
-        <h2>More staff needed at the following events</h2>
+        <h3>More staff needed at the following events</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -23,25 +20,25 @@
                         @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Title)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Date)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Date)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Duration)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Duration)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Type)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().Type)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumGuests)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumGuests)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().VenueName)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().VenueName)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)</center>
                     </th>
                     <th></th>
                 </tr>
@@ -49,40 +46,40 @@
             <tbody>
                 @foreach (var item in Model.EventsNeedStaff)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumGuests)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumStaff)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VenueName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MenuName)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
-                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a> |
-                        <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Date)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Duration)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Type)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumGuests)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumStaff)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.VenueName)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.MenuName)</center>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                            <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                            <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a> | 
+                            <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -92,7 +89,7 @@
 
 @{ if (Model.EventsNeedFirstAid != null && Model.EventsNeedFirstAid.Count > 0)
     {
-        <h2>First aider needed at the following events</h2>
+        <h3>First aider needed at the following events</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -100,25 +97,25 @@
                         @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Title)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Date)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Date)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Duration)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Duration)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Type)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().Type)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().NumGuests)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().NumGuests)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().VenueName)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedFirstAid.FirstOrDefault().VenueName)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)</center>
                     </th>
                     <th></th>
                 </tr>
@@ -126,40 +123,40 @@
             <tbody>
                 @foreach (var item in Model.EventsNeedFirstAid)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumGuests)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumStaff)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VenueName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MenuName)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
-                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>|
-                        <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Date)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Duration)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Type)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumGuests)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumStaff)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.VenueName)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.MenuName)</center>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                            <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                            <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a>| 
+                            <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -169,7 +166,7 @@
 
 @{ if (Model.EventsOk != null && Model.EventsOk.Count > 0)
     {
-        <h2>Staffing confirmed</h2>
+        <h3>Staffing confirmed</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -177,25 +174,25 @@
                         @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Title)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Date)
+                        <center>@Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Date)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Duration)
+                        <center>@Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Duration)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Type)
+                        <center>@Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().Type)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().NumGuests)
+                        <center>@Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().NumGuests)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().NumStaff)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().VenueName)
+                        <center>@Html.DisplayNameFor(model => model.EventsOk.FirstOrDefault().VenueName)</center>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)
+                        <center>@Html.DisplayNameFor(model => model.EventsNeedStaff.FirstOrDefault().MenuName)</center>
                     </th>
                     <th></th>
                 </tr>
@@ -203,40 +200,40 @@
             <tbody>
                 @foreach (var item in Model.EventsOk)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumGuests)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumStaff)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VenueName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MenuName)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
-                        <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a> |
-                        <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+</td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Date)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Duration)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.Type)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumGuests)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.NumStaff)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.VenueName)</center>
+                        </td>
+                        <td>
+                            <center>@Html.DisplayFor(modelItem => item.MenuName)</center>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                            <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@item.Id">Guests</a> |
+                            <a asp-controller="Staffing" asp-action="StaffAtEvent" asp-route-id="@item.Id">Staff</a> | 
+                            <a asp-action="MenuBrancher" asp-route-id="@item.Id">Menu</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

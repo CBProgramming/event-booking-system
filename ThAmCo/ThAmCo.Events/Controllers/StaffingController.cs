@@ -147,7 +147,6 @@ namespace ThAmCo.Events.Controllers
         // GET: Staffing/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? staffId)
         {
-            ViewData["ErrorMessage"] = "";
             if (eventId == null || staffId == null)
             {
                 return NotFound();

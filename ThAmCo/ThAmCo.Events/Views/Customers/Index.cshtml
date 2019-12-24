@@ -1,10 +1,6 @@
 ﻿@model List<ThAmCo.Events.Models.Customers.CustomerVM>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h2>Index</h2>
+<h2>Customers</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -34,7 +30,7 @@
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                <a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -225,6 +225,11 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
+            if(@event == null)
+            {
+                @event.Message = "Something went wrong.  Please ensure all fields are completed and try again.";
+                return RedirectToAction("SelectVenue", @event);
+            }
             if (day != 0 && month != 0 && year != 0)
             {
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
@@ -242,7 +247,6 @@ namespace ThAmCo.Events.Controllers
             }
             else
             {
-
                 if (@event.Existing)
                     @event.OldRef = @event.getBookingRef;
                 List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
