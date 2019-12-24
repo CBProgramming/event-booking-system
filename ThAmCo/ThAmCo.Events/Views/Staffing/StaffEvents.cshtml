@@ -14,22 +14,29 @@
 <p>
     @Html.ActionLink("Allocate to new event", "AllocateNewEvent", new { staffId = Model.Staff.Id })
 </p>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
-        </div>
-        <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
-        </div>
-        <div class="col-md-2">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
-        </div>
-        <div class="col-md-1">
-            @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)
+@if (@Model.Events.Count() != 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)
+            </div>
+            <div class="col-md-1">
+                @Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)
+            </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <h2>No events allocated currently</h2>
+}
 
 @foreach (var item in Model.Events)
 {

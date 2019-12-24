@@ -18,5 +18,7 @@ namespace ThAmCo.Events.Models.Staffing
         public StaffVM Staff { get; set; }
 
         public SelectList Venues { get; set; }
+
+        public bool Allocated { get; set; }
     }
 }
