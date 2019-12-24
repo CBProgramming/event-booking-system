@@ -9,7 +9,11 @@ namespace ThAmCo.Events.Models.Customers
 {
     public class CustomerVM
     {
-        public CustomerVM(Data.Customer customer)
+        public CustomerVM()
+        {
+
+        }
+        public CustomerVM(Customer customer)
         {
             Id = customer.Id;
             Surname = customer.Surname;
@@ -37,6 +41,8 @@ namespace ThAmCo.Events.Models.Customers
         public List<GuestBooking> Bookings { get; set; }
 
         public bool Deleted { get; set; }
+
+        public string Message { get; set; }
     }
 }
 

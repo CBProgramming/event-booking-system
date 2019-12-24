@@ -59,15 +59,19 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email")] CustomerVM customerVM)
         {
             if (ModelState.IsValid)
             {
+                var customer = new Customer();
+                customer.FirstName = customerVM.FirstName;
+                customer.Surname = customerVM.Surname;
+                customer.Email = customerVM.Email;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerVM);
         }
 
         // GET: Customers/Edit/5
@@ -83,7 +87,7 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
             var customerVM = new Models.Customers.CustomerVM(customer);
-            return View(customer);
+            return View(customerVM);
         }
 
         // POST: Customers/Edit/5
@@ -91,33 +95,34 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email")] CustomerVM customerVM)
         {
-            if (id != customer.Id)
+            if (id != customerVM.Id)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
+                if (!CustomerActive(customerVM.Id))
+                {
+                    return NotFound();
+                }
                 try
                 {
-                    _context.Update(customer);
+                    var customer = await _context.Customers.Where(c => c.Deleted == false).FirstOrDefaultAsync(m => m.Id == id);
+                    customer.FirstName = customerVM.FirstName;
+                    customer.Surname = customerVM.Surname;
+                    customer.Email = customerVM.Email;
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!CustomerActive(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    customerVM.Message = "Something went wrong, ensure all fields are completed and try again";
+                    return View(customerVM);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerVM);
         }
 
         // GET: Customers/Delete/5
