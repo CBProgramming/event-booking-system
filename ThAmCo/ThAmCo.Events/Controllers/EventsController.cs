@@ -160,7 +160,7 @@ namespace ThAmCo.Events.Controllers
                 DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
                 @event.Date = fixedDate;
             }
-            if (@event.Type == null)
+            if (@event.Type == null || @event.TypeList == null)
             {
                 IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
                 @event.TypeList = new SelectList(eventTypes, "Id", "Title");
@@ -254,7 +254,7 @@ namespace ThAmCo.Events.Controllers
                 {
                     @event.Message = "No venues available on this date";
                     if (@event.Existing == false)
-                        return View("Create", @event);
+                        return RedirectToAction("Create", @event);
                     else
                         return RedirectToAction("Edit", new { Id = @event.Id, Message = @event.Message });
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace ThAmCo.Events.Services
 
         public string Name { get; set; }
 
+        [DisplayName("Cost per guest")]
         public double CostPerHead { get; set; }
 
         public string Starter { get; set; }

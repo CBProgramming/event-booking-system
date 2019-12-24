@@ -1,18 +1,11 @@
 ﻿@model ThAmCo.Events.Models.Venues.EventVenueAvailabilityVM
 
 
-<h2>SelectVenue</h2>
+<h2>Select Venue</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Code)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Name)
             </th>
@@ -35,9 +28,6 @@
         @foreach (var item in Model.Venues)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Code)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>

@@ -1,19 +1,17 @@
 ﻿@model ThAmCo.Events.Models.Events.EventDetailsVM
 
 
-<h2>Details</h2>
+<h2>Event Details</h2>
 
-<div>
-    <h4>Event</h4>
+
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Event.Id">Edit</a> |
         <a asp-action="Index">Back to List</a>
     </div>
-    <hr />
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Event</h2>
+                <h3>Event</h3>
                 <div class="col-sm-2">
                     <div>
                         @Html.DisplayNameFor(model => model.Event.Title):
@@ -45,7 +43,7 @@
             </div>
 
             <div class="col-sm-6">
-                <h2>Venue</h2>
+                <h3>Venue</h3>
                 <div class="col-sm-3">
                     <div>
                         @Html.DisplayNameFor(model => model.Event.VenueName):
@@ -75,7 +73,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Menu</h2>
+                <h3>Menu</h3>
                 <div class="col-sm-2">
                     <div>
                         @Html.DisplayNameFor(model => model.Menu.Name):
@@ -107,7 +105,7 @@
             </div>
 
             <div class="col-sm-6">
-                <h2>Costing</h2>
+                <h3>Costing</h3>
                 <div class="col-sm-3">
                     <div>
                         @Html.DisplayNameFor(model => model.Menu.CostPerHead):
@@ -124,17 +122,17 @@
                 </div>
                 <div class="col-sm-9">
                     <div>
-                        £@Html.DisplayFor(model => model.Menu.CostPerHead)
+                        £@((Model.Menu.CostPerHead).ToString("0.00"))
                     </div>
                     <div>
-                        £@Html.DisplayFor(model => model.MenuCost)
+                        £@((Model.MenuCost).ToString("0.00"))
                     </div>
                     <div>
-                        £@Html.DisplayFor(model => model.VenueCost)
+                        £@((Model.VenueCost).ToString("0.00"))
                     </div>
 
                     <div>
-                        £@Html.DisplayFor(model => model.TotalCost)
+                        £@((Model.TotalCost).ToString("0.00"))
                     </div>
                 </div>
             </div>
@@ -144,7 +142,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <h2>@Model.Customers.Count Guests</h2>
+                <h3>@Model.Customers.Count Guests</h3>
 
                 <table class="table">
                     <thead>
@@ -180,7 +178,7 @@
                 </table>
             </div>
             <div class="col-sm-6">
-                <h2>@Model.Staff.Count Staff</h2>
+                <h3>@Model.Staff.Count Staff</h3>
 
                 <table class="table">
                     <thead>
