@@ -113,9 +113,13 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> VenueSearchResults([Bind("StartDate,EndDate,TypeId,Type")] VenueSearchVM searchCriteria)
         {
-            if (searchCriteria.Type == null)
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            if (searchCriteria.TypeList == null)
             {
-                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
+            }
+            if (searchCriteria.Type == null || searchCriteria.TypeList == null)
+            {
                 searchCriteria.Type = eventTypes.First(e => e.Id == searchCriteria.TypeId).Title;
             }
             if (searchCriteria.TypeId == null)

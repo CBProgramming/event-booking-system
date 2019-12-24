@@ -1,10 +1,9 @@
 ﻿@model ThAmCo.Events.Models.Events.EventVenueVM
 
 
-<h2>ConfirmReservation</h2>
+<h2>Confirm Reservation</h2>
 <form asp-action="BookEvent">
     <div>
-        <h4>EventVenue</h4>
         <hr />
         <input type="hidden" asp-for=@Model.EventVM.Id name="Id" />
         <input type="hidden" asp-for=@Model.EventVM.OldRef name="OldRef" />
@@ -13,13 +12,14 @@
         <input type="hidden" asp-for=@Model.EventVM.VenueCost name="VenueCost" />
         <input type="hidden" asp-for=@Model.EventVM.VenueDescription name="VenueDescription" />
         <input type="hidden" asp-for=@Model.EventVM.TypeId name="TypeId" />
+        <input type="hidden" asp-for=@Model.VenueRef class="form-control" readonly />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.VenueRef)
+                @Html.DisplayNameFor(model => model.EventVM.Title)
             </dt>
             <dd>
-                @Html.DisplayFor(model =>model.VenueRef)
-                <input type="hidden" asp-for=@Model.VenueRef class="form-control" readonly />
+                @Html.DisplayFor(model => model.EventVM.Title)
+                <input type="hidden" asp-for=@Model.EventVM.Title name="Title" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Date)
@@ -34,14 +34,6 @@
             <dd>
                 @Html.DisplayFor(model => model.VenueName)
                 <input type="hidden" asp-for=@Model.VenueName name="VenueName" class="form-control" readonly />
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.EventVM.Title)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.EventVM.Title)
-                <input type="hidden" asp-for=@Model.EventVM.Title name="Title" class="form-control" readonly />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.EventVM.Duration)

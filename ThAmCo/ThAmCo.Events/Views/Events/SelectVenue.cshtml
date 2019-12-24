@@ -13,13 +13,13 @@
                 @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Capacity)
+                <center>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Capacity)</center>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Date)
+                <center>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().Date)</center>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Venues.FirstOrDefault().CostPerHour)
+                <center>@Html.DisplayNameFor(model => model.Venues.FirstOrDefault().CostPerHour)</center>
             </th>
             <th></th>
         </tr>
@@ -35,13 +35,13 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
+                    <center>@Html.DisplayFor(modelItem => item.Capacity)</center>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    <center>@Html.DisplayFor(modelItem => item.Date)</center>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CostPerHour)
+                    <center>@Html.DisplayFor(modelItem => item.CostPerHour)</center>
                 </td>
                 <td>
                     @if (Model.Event.Title == null)
