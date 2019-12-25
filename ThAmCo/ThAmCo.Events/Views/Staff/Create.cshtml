@@ -1,23 +1,26 @@
-﻿@model ThAmCo.Events.Data.Staff
+﻿@model ThAmCo.Events.Models.Staff.StaffVM
 
 
-<h2>Create</h2>
+<h2>Create staff</h2>
+@if (Model != null)
+{
+    <h3><font color="red">@Model.Message</font></h3>
+}
 
-<h4>Staff</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Surname" class="control-label"></label>
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surname" class="control-label"></label>
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -28,13 +31,6 @@
                 <div class="checkbox">
                     <label>
                         <input asp-for="FirstAider" /> @Html.DisplayNameFor(model => model.FirstAider)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                     </label>
                 </div>
             </div>

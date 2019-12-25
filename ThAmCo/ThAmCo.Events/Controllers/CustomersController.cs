@@ -63,13 +63,20 @@ namespace ThAmCo.Events.Controllers
         {
             if (ModelState.IsValid)
             {
-                var customer = new Customer();
-                customer.FirstName = customerVM.FirstName;
-                customer.Surname = customerVM.Surname;
-                customer.Email = customerVM.Email;
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var customer = new Customer();
+                    customer.FirstName = customerVM.FirstName;
+                    customer.Surname = customerVM.Surname;
+                    customer.Email = customerVM.Email;
+                    _context.Add(customer);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    customerVM.Message = "Something went wrong.  Please ensure all fields are complete and try again";
+                }
             }
             return View(customerVM);
         }

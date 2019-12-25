@@ -1,11 +1,13 @@
 ﻿@model ThAmCo.Events.Services.MenuDto
 
+@if (Model != null)
+{
+    <h3>@Model.Message</h3>
+}
 
-<h3>@Model.Message</h3>
 
-<h2>Create</h2>
+<h2>Create Menu</h2>
 
-<h4>Event</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -36,7 +38,7 @@
                 <span asp-validation-for="Dessert" class="text-danger"></span>
             </div>
             <div class="form-group">
-                    <input type="submit" value="Create Menu" class="btn btn-default" />
+                <input type="submit" value="Create Menu" class="btn btn-default" />
             </div>
         </form>
     </div>

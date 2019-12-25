@@ -1,11 +1,10 @@
 ﻿@model ThAmCo.Events.Services.MenuDto
 
 
-<h2>Details</h2>
+<h2>Menu Details</h2>
 
 <div>
-    <h4>Customer</h4>
-    <hr />
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -17,7 +16,7 @@
             @Html.DisplayNameFor(model => model.CostPerHead)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CostPerHead)
+            £@((Model.CostPerHead).ToString("0.00"))
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Starter)

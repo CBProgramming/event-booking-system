@@ -1,11 +1,9 @@
 ﻿@model ThAmCo.Events.Models.Staff.StaffEventsVM
 
 
-<h2>StaffEvents</h2>
-
-<h2>@Html.DisplayFor(model => model.Staff.FirstName) @Html.DisplayFor(model => model.Staff.Surname)'s Staffings</h2>
-<h4>@Html.DisplayNameFor(model => model.Staff.Email): @Html.DisplayFor(model => model.Staff.Email)</h4>
-<h4>@Html.DisplayNameFor(model => model.Staff.FirstAider): @Html.DisplayFor(model => model.Staff.FirstAider)</h4>
+<h2>@Html.DisplayFor(model => model.Staff.FirstName) @Html.DisplayFor(model => model.Staff.Surname)'s Event Schedule</h2>
+<h5>:<strong>@Html.DisplayNameFor(model => model.Staff.Email):</strong> @Html.DisplayFor(model => model.Staff.Email)</h5>
+<h5>:<strong>@Html.DisplayNameFor(model => model.Staff.FirstAider)::</strong> @(Model.Staff.FirstAider?"Yes":"No")</h5>
 
 <br>
 <p>
@@ -32,7 +30,7 @@
 }
 else
 {
-    <h2>No events allocated currently</h2>
+    <h4>No events allocated currently</h4>
 }
 
 @foreach (var item in Model.Events)

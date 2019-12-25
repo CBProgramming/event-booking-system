@@ -105,9 +105,9 @@ namespace ThAmCo.Events.Controllers
             client.Timeout = TimeSpan.FromSeconds(5);
             return client;
         }
-        public IActionResult Create(MenuDto menu)
+        public IActionResult Create()
         {
-            return View(menu);
+            return View();
         }
 
         [HttpPost]
@@ -127,7 +127,7 @@ namespace ThAmCo.Events.Controllers
             else
             {
                 menu.Message = "Something went wrong, please try again.";
-                return RedirectToAction("Create", menu);
+                return View(menu);
             }
         }
     }

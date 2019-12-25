@@ -61,15 +61,23 @@ namespace ThAmCo.Events.Controllers
         {
             if (ModelState.IsValid)
             {
-                Staff staff = new Staff();
-                staff.Surname = staffVM.Surname;
-                staff.FirstName = staffVM.FirstName;
-                staff.Email = staffVM.Email;
-                staff.FirstAider = staffVM.FirstAider;
-                staff.IsActive = staffVM.IsActive;
-                _context.Add(staff);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    Staff staff = new Staff();
+                    staff.Surname = staffVM.Surname;
+                    staff.FirstName = staffVM.FirstName;
+                    staff.Email = staffVM.Email;
+                    staff.FirstAider = staffVM.FirstAider;
+                    staff.IsActive = true;
+                    _context.Add(staff);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    staffVM.Message = "Something went wrong.  Please ensure all fields are completed and try again";
+                    return View(staffVM);
+                }
             }
             return View(staffVM);
         }
@@ -81,12 +89,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-
             StaffVM staff = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));
-            if (staff == null)
-            {
-                return NotFound();
-            }
             return View(staff);
         }
 
@@ -95,9 +98,9 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
+        public async Task<IActionResult> Edit([Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
         {
-            if (id != staffVM.Id)
+            if (staffVM == null)
             {
                 return NotFound();
             }
@@ -105,7 +108,7 @@ namespace ThAmCo.Events.Controllers
             {
                 try
                 {
-                    Staff staff = await _context.Staff.FirstOrDefaultAsync(m => m.Id == id);
+                    Staff staff = await _context.Staff.FirstOrDefaultAsync(m => m.Id == staffVM.Id);
                     staff.Surname = staffVM.Surname;
                     staff.FirstName = staffVM.FirstName;
                     staff.Email = staffVM.Email;
@@ -122,7 +125,8 @@ namespace ThAmCo.Events.Controllers
                     }
                     else
                     {
-                        throw;
+                        staffVM.Message = "Something went wrong.  Please ensure all fields are completed and try again";
+                        return View(staffVM);
                     }
                 }
                 return RedirectToAction(nameof(Index));

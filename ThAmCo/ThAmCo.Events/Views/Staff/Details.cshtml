@@ -1,23 +1,16 @@
 ﻿@model ThAmCo.Events.Models.Staff.StaffVM
 
 
-<h2>Details</h2>
+<h2>Staff Details</h2>
 
 <div>
-    <h4>Staff</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Surname)
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Email)

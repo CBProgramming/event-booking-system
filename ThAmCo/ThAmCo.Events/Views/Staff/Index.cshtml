@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ThAmCo.Events.Models.Staff.StaffVM>
 
 
-<h2>Index</h2>
+<h2>Staff List</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstAider)
+                <center>@Html.DisplayNameFor(model => model.FirstAider)</center>
             </th>
             <th></th>
         </tr>
@@ -34,10 +34,10 @@
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
             </td>
             <td>
-                @(item.FirstAider ? "Yes" : "No")
+                <center>@(item.FirstAider ? "Yes" : "No")</center>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

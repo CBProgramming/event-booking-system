@@ -1,9 +1,9 @@
 ﻿@model ThAmCo.Events.Models.Staff.StaffVM
 
 
-<h2>Edit</h2>
+<h2>Edit staff</h2>
 
-<h4>Staff</h4>
+<h3><font color="red">@Model.Message</font></h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,11 +33,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                    </label>
-                </div>
+                <input type="hidden" asp-for="IsActive" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

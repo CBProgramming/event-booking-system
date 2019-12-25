@@ -1,6 +1,6 @@
 ﻿@model List<ThAmCo.Events.Models.Customers.CustomerVM>
 
-<h2>Customers</h2>
+<h2>Customer List</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -30,7 +30,7 @@
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                <a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a>
+                <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

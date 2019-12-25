@@ -1,42 +1,44 @@
 ﻿@model ThAmCo.Events.Models.Staffing.AllocateNewEventVM
 
 
-<h2>AllocateNewEvent</h2>
+<h2>Allocate Events to @Model.Staff.FullName</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-            <input type="hidden" asp-for="@Model.Staff.Id" name="StaffId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Staff" class="control-label"></label>
-                <input asp-for="Staff.FullName" class="form-control" readonly />
-            </div>
-    </div>
-</div>
+<input type="hidden" asp-for="@Model.Staff.Id" name="StaffId" />
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="Staff.FullName" class="form-control" readonly />
 
 <input type="hidden" asp-for="@Model.Staff.Id" name="StaffId" />
 
+
+<div class="row">
+    <div class="col-sm-2">
+        <strong>@Html.DisplayNameFor(modelItem => Model.Venues.FirstOrDefault().Title)</strong>
+    </div>
+    <div class="col-sm-2">
+        <center><strong>@Html.DisplayNameFor(modelItem => Model.Venues.FirstOrDefault().Date)</strong></center>
+    </div>
+    <div class="col-sm-1">
+        <center><strong>@Html.DisplayNameFor(modelItem => Model.Venues.FirstOrDefault().Allocated)</strong></center>
+    </div>
+</div>
 @foreach (var item in Model.Venues)
 {
-    <div class="container">
-        <div class="row">
-            <input type="hidden" asp-for="@item.Id" name="EventId" />
-            <div class="col-sm-2">
-                @Html.DisplayFor(modelItem => item.Title)
-            </div>
-            <div class="col-sm-1">
-                @Html.DisplayFor(modelItem => item.Date)
-            </div>
-            <div class="col-sm-1">
-                <input asp-for="@item.Allocated" data-eventid="@item.Id" onChange=updateAttend(this) />
-            </div>
+    <div class="row">
+        <input type="hidden" asp-for="@item.Id" name="EventId" />
+        <div class="col-sm-2">
+            @Html.DisplayFor(modelItem => item.Title)
+        </div>
+        <div class="col-sm-2">
+            <center>@Html.DisplayFor(modelItem => item.Date)</center>
+        </div>
+        <div class="col-sm-1">
+            <center><input asp-for="@item.Allocated" data-eventid="@item.Id" onChange=updateAttend(this) /></center>
         </div>
     </div>
-
-}
+}</br>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="StaffEvents" asp-route-id="@Model.Staff.Id">Back to event allocation for @Html.DisplayFor(model => model.Staff.FullName)</a>
 </div>
 
 @section Scripts {

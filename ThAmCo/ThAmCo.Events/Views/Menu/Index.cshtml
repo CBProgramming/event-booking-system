@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ThAmCo.Events.Services.MenuDto>
 
 
-<h2>Index</h2>
+<h2>Menu List</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,7 +12,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,8 +21,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             <td>
                 @Html.ActionLink("Edit", "Edit", new { item.MenuId }) |
-                @Html.ActionLink("Details", "Details", new { item.MenuId }) |
-                @Html.ActionLink("Delete", "Delete", new { item.MenuId })
+                @Html.ActionLink("Details", "Details", new { item.MenuId })
             </td>
         </tr>
 }
