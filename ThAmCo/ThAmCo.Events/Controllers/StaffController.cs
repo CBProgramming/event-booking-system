@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
-using ThAmCo.Events.Models.Events;
 using ThAmCo.Events.Models.Staff;
-using ThAmCo.Events.Models.Staffing;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -24,7 +20,13 @@ namespace ThAmCo.Events.Controllers
         // GET: Staff
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Staff.ToListAsync());
+            var staff = await _context.Staff.ToListAsync();
+            List<StaffVM> staffVM = new List<StaffVM>();
+            foreach (Staff s in staff)
+            {
+                staffVM.Add(new StaffVM(s));
+            }
+            return View(staffVM);
         }
 
         // GET: Staff/Details/5
@@ -35,8 +37,7 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.Staff
-                .FirstOrDefaultAsync(m => m.Id == id);
+            StaffVM staff = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));
             if (staff == null)
             {
                 return NotFound();
@@ -81,7 +82,7 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.Staff.FindAsync(id);
+            StaffVM staff = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));
             if (staff == null)
             {
                 return NotFound();
@@ -94,23 +95,28 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] Staff staff)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
         {
-            if (id != staff.Id)
+            if (id != staffVM.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    Staff staff = await _context.Staff.FirstOrDefaultAsync(m => m.Id == id);
+                    staff.Surname = staffVM.Surname;
+                    staff.FirstName = staffVM.FirstName;
+                    staff.Email = staffVM.Email;
+                    staff.FirstAider = staffVM.FirstAider;
+                    staff.IsActive = staffVM.IsActive;
                     _context.Update(staff);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StaffExists(staff.Id))
+                    if (!StaffExists(staffVM.Id))
                     {
                         return NotFound();
                     }
@@ -121,7 +127,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(staff);
+            return View(staffVM);
         }
 
         // GET: Staff/Delete/5
@@ -132,8 +138,7 @@ namespace ThAmCo.Events.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.Staff
-                .FirstOrDefaultAsync(m => m.Id == id);
+            StaffVM staff = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));
             if (staff == null)
             {
                 return NotFound();

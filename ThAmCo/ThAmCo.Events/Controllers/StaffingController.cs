@@ -122,28 +122,6 @@ namespace ThAmCo.Events.Controllers
             return NotFound();
         }
 
-        //// POST: Staffing/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AllocateNewEvent([Bind("StaffId,EventId")] Staffing staffing)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var existingStaff = _context.Staffing.Where(g => g.StaffId == staffing.StaffId && g.EventId == staffing.EventId).ToList();
-        //        if (existingStaff == null || existingStaff.Count == 0)
-        //        {
-        //            _context.Add(staffing);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction("StaffEvents", new { id = staffing.StaffId });
-        //        }
-        //        ViewData["CreateMessage"] = "Staff allocation already exists.";
-        //    }
-
-        //    return RedirectToAction("StaffEvents", new { id = staffing.StaffId });
-        //}
-
         // GET: Staffing/Delete/5
         public async Task<IActionResult> Delete(int? eventId, int? staffId)
         {
