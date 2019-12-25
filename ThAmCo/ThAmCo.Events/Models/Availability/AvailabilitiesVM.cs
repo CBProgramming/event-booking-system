@@ -8,7 +8,6 @@ namespace ThAmCo.Events.Models.Availability
 {
     public class AvailabilitiesVM
     {
-        
         public string Code { get; set; }
 
         [DisplayName("Venue Name")]
