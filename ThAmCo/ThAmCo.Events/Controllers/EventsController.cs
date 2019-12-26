@@ -20,6 +20,8 @@ using ThAmCo.Venues.Data;
 
 namespace ThAmCo.Events.Controllers
 {
+    //Events controller to manage event CRUD
+    //View models used throughout to separate processes from backend database
     public class EventsController : Controller
     {
         private readonly EventsDbContext _context;
@@ -33,6 +35,9 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: Events
+        // Loaded as main screen for best user experience
+        // Creates three lists of events, those requiring more staff, those requiring a first aider 
+        //and those with enough staff
         public async Task<IActionResult> Index(string message)
         {
             var menus = await getMenus();
@@ -70,109 +75,9 @@ namespace ThAmCo.Events.Controllers
             return View(eventLists);
         }
 
-        // GET: Events/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var @event = await _context.Events
-                                .Where(e => e.IsActive == true)
-                                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            var eventVM = new EventVM(@event);
-            var bookings = _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id);
-            var customers = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
-            List<CustomerVM> customersVM = new List<CustomerVM>();
-            foreach (Customer c in customers)
-            {
-                customersVM.Add(new CustomerVM(c));
-            }
-            var staffing = _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id);
-            var staff = await _context.Staff.Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
-            List<StaffVM> staffVM = new List<StaffVM>();
-            foreach (Staff s in staff)
-            {
-                staffVM.Add(new StaffVM(s));
-            }
-            MenuDto menuDto = await getMenu(eventVM.MenuId);
-            EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM, menuDto);
-            return View(eventDetailsVM);
-        }
-
-        public async Task<IActionResult> SearchVenues(VenueSearchVM searchCriteria)
-        {
-            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-            searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
-            return View(searchCriteria);
-        }
-
-        public async Task<IActionResult> VenueSearchResults([Bind("StartDate,EndDate,TypeId,Type")] VenueSearchVM searchCriteria)
-        {
-            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-            if (searchCriteria.TypeList == null)
-            {
-                searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
-            }
-            if (searchCriteria.Type == null || searchCriteria.TypeList == null)
-            {
-                searchCriteria.Type = eventTypes.First(e => e.Id == searchCriteria.TypeId).Title;
-            }
-            if (searchCriteria.TypeId == null)
-            {
-                searchCriteria.Message = "Please select an event type";
-                return View("SearchVenues", searchCriteria);
-            }
-            List<AvailabilitiesVM> availabilities = GetAvailability(searchCriteria.TypeId, searchCriteria.StartDate, searchCriteria.EndDate).Result.ToList();
-            if (availabilities.Count == 0)
-            {
-                searchCriteria.Message = "No venues available on this date";
-                return View("SearchVenues", searchCriteria);
-            }
-            EventVM eventVM = new EventVM();
-            eventVM.TypeId = searchCriteria.TypeId;
-            EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(eventVM, availabilities);
-            return View("SelectVenue", venueSelector);
-        }
-
-        public async Task<IEnumerable<EventTypeDto>> GetEventTypes()
-        {
-            try
-            {
-                var client = setupVenueClient();
-                string uri = "/api/EventTypes";
-                var response = await client.GetAsync(uri);
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsAsync<List<EventTypeDto>>();
-            }
-            catch (Exception e)
-            {
-            }
-            return new List<EventTypeDto>();
-        }
-
-
-        // GET: Events/Create
-        public async Task<IActionResult> Create (int day, int month, int year, int hour, int minute, int second, EventVM @event)
-        {
-            if (day !=0 && month !=0 && year !=0 && @event.Title == null)
-            {
-                DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
-                @event.Date = fixedDate;
-            }
-            if (@event.Type == null || @event.TypeList == null)
-            {
-                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
-                @event.TypeList = new SelectList(eventTypes, "Id", "Title");
-            }
-            return View(@event);
-        }
-
         // GET: Events/Edit/5
+        // Loads event data based on Id and allows title and duration to be edited
+        // Also shows venue details with a link to edit to increase usability
         public async Task<IActionResult> Edit(int? id, string message)
         {
             if (id == null)
@@ -191,8 +96,7 @@ namespace ThAmCo.Events.Controllers
         }
 
         // POST: Events/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Updates event details in database based on user input
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
@@ -226,10 +130,66 @@ namespace ThAmCo.Events.Controllers
             return View(@event);
         }
 
+        // GET: Events/Details/5
+        // Loads event details based on event id with full breakdown of event, venue, menu
+        // costing and all guests and staff
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var @event = await _context.Events
+                                .Where(e => e.IsActive == true)
+                                .FirstOrDefaultAsync(m => m.Id == id);
+            if (@event == null)
+            {
+                return NotFound();
+            }
+            var eventVM = new EventVM(@event);
+            var bookings = _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id);
+            var customers = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<CustomerVM> customersVM = new List<CustomerVM>();
+            foreach (Customer c in customers)
+            {
+                customersVM.Add(new CustomerVM(c));
+            }
+            var staffing = _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id);
+            var staff = await _context.Staff.Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            List<StaffVM> staffVM = new List<StaffVM>();
+            foreach (Staff s in staff)
+            {
+                staffVM.Add(new StaffVM(s));
+            }
+            MenuDto menuDto = await getMenu(eventVM.MenuId);
+            EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM, menuDto);
+            return View(eventDetailsVM);
+        }
 
+        // GET: Events/Create
+        // Initiates process for creating a new event, part of a multi route process allowing users
+        // to set up an event then select venue, or filter venues and then create event
+        // Date fix implemented as days and months are switched incorrectly in parts of this multi route process
+        public async Task<IActionResult> Create(int day, int month, int year, int hour, int minute, int second, EventVM @event)
+        {
+            if (day != 0 && month != 0 && year != 0 && @event.Title == null)
+            {
+                DateTime fixedDate = new DateTime(year, month, day, hour, minute, second);
+                @event.Date = fixedDate;
+            }
+            if (@event.Type == null || @event.TypeList == null)
+            {
+                IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+                @event.TypeList = new SelectList(eventTypes, "Id", "Title");
+            }
+            return View(@event);
+        }
+
+        // GET: Events/Select Venue
+        //Second stage of create event process, displaying events available on date provided 
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
-            if(@event == null)
+            if (@event == null)
             {
                 @event.Message = "Something went wrong.  Please ensure all fields are completed and try again.";
                 return RedirectToAction("SelectVenue", @event);
@@ -268,15 +228,17 @@ namespace ThAmCo.Events.Controllers
                     return View(venueSelector);
                 }
             }
-
         }
 
+
+        //Confirmation page allowing user to review event/venue information before confirming booking
         public IActionResult ConfirmReservation(EventVM eventVM)
         {
             EventVenueVM selectedEventVenue = new EventVenueVM(eventVM, eventVM.VenueRef, eventVM.Date, eventVM.VenueName);
             return View(selectedEventVenue);
         }
 
+        //Posts selected event and venue information to local database and creates booking in Venues API
         [HttpPost]
         public async Task<IActionResult> BookEvent([Bind("Id,VenueRef,Date,VenueName,VenueDescription,VenueCapacity,VenueCost,Title,Duration,TypeId,Type,Existing,OldRef")] EventVM booking)
         {
@@ -294,7 +256,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 var postResponse = await client.PostAsJsonAsync(uri, res);
                 postResponse.EnsureSuccessStatusCode();
-                if(booking.Existing)  // need the ID!
+                if (booking.Existing)  // need the ID!
                 {
                     var @event = await _context.Events.FindAsync(booking.Id);
                     @event.Title = booking.Title;
@@ -331,8 +293,63 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Secondary event creation process initiator, allowing users so search venues
+        //using date range before creating event
+        public async Task<IActionResult> SearchVenues(VenueSearchVM searchCriteria)
+        {
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
+            return View(searchCriteria);
+        }
 
-        // GET: Events/Delete/5
+        //Search results for events in selected date range in secondary event creation route
+        public async Task<IActionResult> VenueSearchResults([Bind("StartDate,EndDate,TypeId,Type")] VenueSearchVM searchCriteria)
+        {
+            IEnumerable<EventTypeDto> eventTypes = await GetEventTypes();
+            if (searchCriteria.TypeList == null)
+            {
+                searchCriteria.TypeList = new SelectList(eventTypes, "Id", "Title");
+            }
+            if (searchCriteria.Type == null || searchCriteria.TypeList == null)
+            {
+                searchCriteria.Type = eventTypes.First(e => e.Id == searchCriteria.TypeId).Title;
+            }
+            if (searchCriteria.TypeId == null)
+            {
+                searchCriteria.Message = "Please select an event type";
+                return View("SearchVenues", searchCriteria);
+            }
+            List<AvailabilitiesVM> availabilities = GetAvailability(searchCriteria.TypeId, searchCriteria.StartDate, searchCriteria.EndDate).Result.ToList();
+            if (availabilities.Count == 0)
+            {
+                searchCriteria.Message = "No venues available on this date";
+                return View("SearchVenues", searchCriteria);
+            }
+            EventVM eventVM = new EventVM();
+            eventVM.TypeId = searchCriteria.TypeId;
+            EventVenueAvailabilityVM venueSelector = new EventVenueAvailabilityVM(eventVM, availabilities);
+            return View("SelectVenue", venueSelector);
+        }
+
+        //Accesses venues API to get a list of all event types to be used in select lists in event creation processes
+        //Ensures event type lists are always up to date
+        public async Task<IEnumerable<EventTypeDto>> GetEventTypes()
+        {
+            try
+            {
+                var client = setupVenueClient();
+                string uri = "/api/EventTypes";
+                var response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsAsync<List<EventTypeDto>>();
+            }
+            catch (Exception e)
+            {
+            }
+            return new List<EventTypeDto>();
+        }
+
+        // Initiates event deletion process, based on event id
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -349,6 +366,9 @@ namespace ThAmCo.Events.Controllers
             return View(eventVM);
         }
 
+        // Posts to Venues API to cancel venue booking, allowing it to be booked to another event
+        // Removes all staff allocated to the event
+        // Sets event.active flag to false in local db to act as soft delete, keeping all bookings if needed
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -392,10 +412,8 @@ namespace ThAmCo.Events.Controllers
         {
             return _context.Events.Where(e => e.IsActive == true).Any(e => e.Id == id);
         }
-
-
-
-        //IEnumerable<AvailabilityGetDto>
+    
+        //Reusable method to get all available venues from Venues API, based on date range and event type
         private async Task<IEnumerable<AvailabilitiesVM>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
         {
             var client = setupVenueClient();
@@ -414,21 +432,21 @@ namespace ThAmCo.Events.Controllers
             }
             catch (HttpRequestException e)
             {
-                //_logger.LogError("Bad response from Availabilities");
                 availabilities = Array.Empty<AvailabilitiesVM>();
             }
             return availabilities;
         }
 
-        private string geenerateReservationRef(string code, DateTime date)
-        {
-            string day = date.Day.ToString("00");
-            string month = date.Month.ToString("00");
-            string year = date.Year.ToString("0000");
-            string reference = code + year + month + day;
-            return reference;
-        }
+        //private string geenerateReservationRef(string code, DateTime date)
+        //{
+        //    string day = date.Day.ToString("00");
+        //    string month = date.Month.ToString("00");
+        //    string year = date.Year.ToString("0000");
+        //    string reference = code + year + month + day;
+        //    return reference;
+        //}
 
+        //Reusable method to set up Http client for venues API
         private HttpClient setupVenueClient()
         {
             var client = new HttpClient();
@@ -438,6 +456,7 @@ namespace ThAmCo.Events.Controllers
             return client;
         }
 
+        //Reusable method to set up Http client for catering API
         public HttpClient setupCateringClient()
         {
             var client = new HttpClient();
@@ -447,7 +466,7 @@ namespace ThAmCo.Events.Controllers
             return client;
         }
 
-
+        //Accesses catering API and gets menu based on menu id
         public async Task<MenuDto> getMenu(int menuId)
         {
             var client = setupCateringClient();
@@ -464,6 +483,8 @@ namespace ThAmCo.Events.Controllers
             return new MenuDto("Something went wrong, please try again");
         }
 
+        //Method used to determine which route to take when accessing menu link via events
+        //dependant on if a menu is already booked to the event
         public async Task<IActionResult> menuBrancher (int id)
         {
             var @event = await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(m => m.Id == id);
@@ -490,6 +511,7 @@ namespace ThAmCo.Events.Controllers
             }
         }
 
+        //Reusable method which gets all available menus from catering API
         public async Task<IEnumerable<MenuDto>> getMenus()
         {
             var client = setupCateringClient();
@@ -507,6 +529,7 @@ namespace ThAmCo.Events.Controllers
             return menus;
         }
 
+        //Displays a list of menus to the user to select which to book to event
         public async Task<IActionResult> BookMenu(int eventId, string message)
         {
             IEnumerable<MenuDto> menus = await getMenus();
@@ -514,6 +537,7 @@ namespace ThAmCo.Events.Controllers
             return View(menuChoices);
         }
 
+        //Posts chosen menu to catering API and saves an event id to local database for reference
         public async Task<IActionResult> SelectMenu(int menuId, int eventId)
         {
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
@@ -551,6 +575,13 @@ namespace ThAmCo.Events.Controllers
             });
         }
 
+        //Cancel menu screen to enusure user wishes to cancel menu
+        public async Task<IActionResult> CancelMenu(int eventId, int menuId, string message)
+        {
+            return View(await getEventMenuVM(eventId, menuId, message));
+        }
+
+        //Accesses catering API to cancel menu booking and also removes local reference
         public async Task<IActionResult> ConfirmMenuCancellation(int eventId, int menuId)
         {
             var client = setupCateringClient();
@@ -587,16 +618,13 @@ namespace ThAmCo.Events.Controllers
             });
         }
 
-        public async Task<IActionResult> CancelMenu(int eventId, int menuId, string message)
-        {
-            return View(await getEventMenuVM(eventId, menuId,message));
-        }
-
+        //Displays currently booked menu for specific event to user
         public async Task<IActionResult> ViewMenu(int eventId, int menuId)
         {
             return View(await getEventMenuVM(eventId, menuId,""));
         }
 
+        //Reusable method which accesses catering API and returns menu details
         public async Task<EventNameAndMenuVM> getEventMenuVM(int eventId, int menuId, string message)
         {
             EventVM @event = new EventVM(await _context.Events.Where(e => e.IsActive == true).FirstOrDefaultAsync(e => e.Id == eventId));
@@ -605,6 +633,8 @@ namespace ThAmCo.Events.Controllers
             return eventMenu;
         }
 
+        //Method used for date fixing due to bug which flips the day and month
+        //Source of bug to be investigated, time allowing
         public string stringDate(DateTime date)
         {
             string stringDate = date.Month.ToString("00") + "/" + date.Day.ToString("00") + "/" + date.Year.ToString("0000") + " "

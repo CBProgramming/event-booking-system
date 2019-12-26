@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
 using ThAmCo.Catering.Models;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ThAmCo.Catering.Controllers
 {
+    //Resful catering API used for managing menus
     [Route("api/[controller]")]
     [ApiController]
     public class MenuController : ControllerBase
@@ -22,7 +22,7 @@ namespace ThAmCo.Catering.Controllers
             _context = context;
         }
 
-        // GET: api/Menu
+        //Returnss existing menu based on menu id provided 
         [HttpGet]
         public async Task<IActionResult> Get(int? menuId)
         {
@@ -45,6 +45,7 @@ namespace ThAmCo.Catering.Controllers
 
         }
 
+        //Edits existing menu details based on menuDto provided
         [HttpPut]
         public async Task<IActionResult> Edit([FromBody] MenuDto menuDto)
         {
@@ -74,6 +75,7 @@ namespace ThAmCo.Catering.Controllers
             return NotFound();
         }
 
+        //Creates new menu based on menuDto provided
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MenuDto menuDto)
         {

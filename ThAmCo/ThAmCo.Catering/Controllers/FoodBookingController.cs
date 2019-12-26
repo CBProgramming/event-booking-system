@@ -8,7 +8,7 @@ using ThAmCo.Catering.Data;
 
 namespace ThAmCo.Catering.Controllers
 {
-
+    //Resful catering API used for managing menu bookings
     [Route("api/[controller]")]
     [ApiController]
     public class FoodBookingController : ControllerBase
@@ -20,6 +20,7 @@ namespace ThAmCo.Catering.Controllers
             _context = context;
         }
 
+        //Get bookingDto based on provided event id
         [HttpGet]
         public async Task<IActionResult> GetReservation(int eventId)
         {
@@ -32,6 +33,7 @@ namespace ThAmCo.Catering.Controllers
             return Ok(bookingDto);
         }
 
+        //Edit existing menu booking using provided bookingDto containing event id and menu id
         [HttpPut]
         public async Task<IActionResult> EditReservation([FromBody] FoodBookingDto bookingDto)
         {
@@ -57,6 +59,7 @@ namespace ThAmCo.Catering.Controllers
             return NotFound();
         }
 
+        //Create new menu booking using provided bookingDto containing event id and menu id
         [HttpPost]
         public async Task<IActionResult> CreateReservation([FromBody] FoodBookingDto bookingDto)
         {
@@ -78,6 +81,7 @@ namespace ThAmCo.Catering.Controllers
             return NotFound();
         }
 
+        //Cancel existing food booking based on provided eventId
         [HttpDelete]
         public async Task<IActionResult> DeleteReservation(int eventId)
         {
