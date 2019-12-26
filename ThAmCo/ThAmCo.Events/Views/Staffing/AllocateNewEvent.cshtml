@@ -38,7 +38,8 @@
     </div>
 }</br>
 <div>
-    <a asp-action="StaffEvents" asp-route-id="@Model.Staff.Id">Back to event allocation for @Html.DisplayFor(model => model.Staff.FullName)</a>
+    <a asp-action="StaffEvents" asp-route-id="@Model.Staff.Id">Back to event allocation for @Html.DisplayFor(model => model.Staff.FullName)</a> |
+    <a asp-controller="Staff" asp-action="Index">Back to Staff List</a>
 </div>
 
 @section Scripts {
