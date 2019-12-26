@@ -181,6 +181,12 @@ namespace ThAmCo.Events.Controllers
                 var existingGuest = _context.Guests.Where(g => g.CustomerId == guestBooking.CustomerId && g.EventId == guestBooking.EventId).ToList();
                 if ((existingGuest == null || existingGuest.Count == 0) && guestBooking.Attended == true)
                 {
+                    var allGuests = _context.Guests.Where(g => g.EventId == guestBooking.EventId).ToList();
+                    EventVM eventVM = new EventVM(await _context.Events.FindAsync(guestBooking.EventId));
+                    if (allGuests.Count >= eventVM.VenueCapacity)
+                    {
+                        return BadRequest();
+                    }
                     guestBooking.Attended = false;
                     _context.Add(guestBooking);
                     await _context.SaveChangesAsync();
