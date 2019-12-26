@@ -101,6 +101,11 @@ namespace ThAmCo.Events.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
+            if(@event.Duration.HasValue && (@event.Duration).Value.TotalDays >= 1)
+            {
+                @event.Message = "Duration must be less than 24 hours.  Please enter as HH:MM or HH:MM:SS";
+                return View(@event);
+            }
             if (id != @event.Id)
             {
                 return NotFound();
@@ -193,6 +198,11 @@ namespace ThAmCo.Events.Controllers
             {
                 @event.Message = "Something went wrong.  Please ensure all fields are completed and try again.";
                 return RedirectToAction("SelectVenue", @event);
+            }
+            if (@event.Duration.HasValue && (@event.Duration).Value.TotalDays >= 1)
+            {
+                @event.Message = "Duration must be less than 24 hours.  Please enter as HH:MM or HH:MM:SS";
+                return RedirectToAction("Create", @event);
             }
             if (day != 0 && month != 0 && year != 0)
             {
