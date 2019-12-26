@@ -11,6 +11,8 @@ using ThAmCo.Events.Models.Staffing;
 
 namespace ThAmCo.Events.Controllers
 {
+    //Staffing controller to manage staffing CRUD
+    //View models used throughout to separate processes from backend database
     public class StaffingController : Controller
 
     {
@@ -21,13 +23,16 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        // GET: GuestBookings
-        public async Task<IActionResult> Index()
-        {
-            var eventsDbContext = _context.Staffing.Include(s => s.Event).Include(s => s.Staff);
-            return View(await eventsDbContext.ToListAsync());
-        }
+        //// GET: GuestBookings
+        //public async Task<IActionResult> Index()
+        //{
+        //    var eventsDbContext = _context.Staffing.Include(s => s.Event).Include(s => s.Staff);
+        //    return View(await eventsDbContext.ToListAsync());
+        //}
 
+        //Returns list of staff at event, based on staff id
+        //Provides warning messages regarding needing more staff or first aider
+        //Staff can be removed or re-added in bulk in this view via ajax
         public async Task<IActionResult> StaffAtEvent(int id)
         {
             var @event = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
@@ -46,6 +51,8 @@ namespace ThAmCo.Events.Controllers
             return View(eventStaff);
         }
 
+        //Display list of staff currently not allocated to event, based on event id provided
+        //Staff can be added or removed in bulk in this view via ajax
         public async Task<IActionResult> Create(int eventId)
         {
             int numGuests = (await _context.Guests.Include(g => g.Event).Where(g => g.EventId == eventId).ToListAsync()).Count();
@@ -71,7 +78,8 @@ namespace ThAmCo.Events.Controllers
             return View(creator);
         }
 
-        // GET: GuestBookings/Create
+        //Display list of events that staff member is currently not allocated to, based on staff id provided
+        //Staff member can be added or removed to/from events in bulk in this view via ajax
         public async Task<IActionResult> AllocateNewEvent(int staffId)
         {
             var unavailableEvents = await _context.Staffing.Include(g => g.Event).Where(g => g.StaffId == staffId).ToListAsync();
@@ -87,9 +95,8 @@ namespace ThAmCo.Events.Controllers
             return View(creator);
         }
 
-        // POST: Staffing/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Creates or removes new staffing record based on user input
+        //Called via ajax to prevent page reloading and to allow bulk staffing allocation
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StaffId,EventId,Attended")] StaffBookingVM staffAttendance)
@@ -120,7 +127,7 @@ namespace ThAmCo.Events.Controllers
             return NotFound();
         }
 
-        // GET: Staffing/Delete/5
+        // Returns confirmation page to delete staff from event
         public async Task<IActionResult> Delete(int? eventId, int? staffId)
         {
             if (eventId == null || staffId == null)
@@ -139,7 +146,7 @@ namespace ThAmCo.Events.Controllers
             return View(staffingVM);
         }
 
-        // POST: Staffing/Delete/5
+        //Removes staffing allocation of staff to event based on staff and event ids
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int eventId, int staffId)
@@ -150,6 +157,7 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("StaffAtEvent", new { id = eventId });
         }
 
+        //Returns a view listing all events a staff member is currently allocated to, based on staff id
         public async Task<IActionResult> StaffEvents(int id)
         {
             StaffVM staffVM = new StaffVM(await _context.Staff.FirstOrDefaultAsync(m => m.Id == id));

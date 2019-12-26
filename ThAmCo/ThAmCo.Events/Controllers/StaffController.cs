@@ -8,6 +8,9 @@ using ThAmCo.Events.Models.Staff;
 
 namespace ThAmCo.Events.Controllers
 {
+
+    //Staff controller to manage staff CRUD
+    //View models used throughout to separate processes from backend database
     public class StaffController : Controller
     {
         private readonly EventsDbContext _context;
@@ -17,7 +20,7 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        // GET: Staff
+        //Returns view of list of staff
         public async Task<IActionResult> Index()
         {
             var staff = await _context.Staff.ToListAsync();
@@ -29,7 +32,7 @@ namespace ThAmCo.Events.Controllers
             return View(staffVM);
         }
 
-        // GET: Staff/Details/5
+        //Returns view of staff details, based on staffid provided
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,15 +49,13 @@ namespace ThAmCo.Events.Controllers
             return View(staff);
         }
 
-        // GET: Staff/Create
+        //Returns view used to create new staff record
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        // POST: Staff/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Creates new staff record, based on staff view model provided
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
@@ -82,7 +83,7 @@ namespace ThAmCo.Events.Controllers
             return View(staffVM);
         }
 
-        // GET: Staff/Edit/5
+        //Returns view of staff record which can be edited, based on staff id provided
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,9 +94,7 @@ namespace ThAmCo.Events.Controllers
             return View(staff);
         }
 
-        // POST: Staff/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Updates existing staff record, based on staff view model provided
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind("Id,Surname,FirstName,Email,FirstAider,IsActive")] StaffVM staffVM)
@@ -134,7 +133,7 @@ namespace ThAmCo.Events.Controllers
             return View(staffVM);
         }
 
-        // GET: Staff/Delete/5
+        //Returns confirmation view of deleting staff record, based on staff id provided
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -151,7 +150,7 @@ namespace ThAmCo.Events.Controllers
             return View(staff);
         }
 
-        // POST: Staff/Delete/5
+        //Deletes staff record, based on staff id provided
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -162,6 +161,7 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Reusable method to check if staff record exists
         private bool StaffExists(int id)
         {
             return _context.Staff.Any(e => e.Id == id);

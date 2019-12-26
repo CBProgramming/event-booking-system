@@ -1,6 +1,6 @@
 ﻿@model ThAmCo.Events.Models.Events.EventVM
 
-    <h2>Create Event</h2>
+<h2>Create Event</h2>
 
 <h3><font color="red">@Model.Message</font></h3>
 
@@ -33,11 +33,11 @@
 
             @if (Model.VenueName == null)
             {
-        <div class="form-group">
-            <label asp-for="Date" class="control-label"></label>
-            <input asp-for=@Model.Date class="form-control" />
-            <span asp-validation-for="Date" class="text-danger"></span>
-        </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for=@Model.Date class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
             }
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>

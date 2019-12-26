@@ -3,7 +3,7 @@
 
 <h2>@Html.DisplayFor(model => model.Staff.FirstName) @Html.DisplayFor(model => model.Staff.Surname)'s Event Schedule</h2>
 <h5>:<strong>@Html.DisplayNameFor(model => model.Staff.Email):</strong> @Html.DisplayFor(model => model.Staff.Email)</h5>
-<h5>:<strong>@Html.DisplayNameFor(model => model.Staff.FirstAider)::</strong> @(Model.Staff.FirstAider?"Yes":"No")</h5>
+<h5>:<strong>@Html.DisplayNameFor(model => model.Staff.FirstAider)::</strong> @(Model.Staff.FirstAider ? "Yes" : "No")</h5>
 
 <br>
 <p>
