@@ -23,13 +23,6 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        //// GET: GuestBookings
-        //public async Task<IActionResult> Index()
-        //{
-        //    var eventsDbContext = _context.Staffing.Include(s => s.Event).Include(s => s.Staff);
-        //    return View(await eventsDbContext.ToListAsync());
-        //}
-
         //Returns list of staff at event, based on staff id
         //Provides warning messages regarding needing more staff or first aider
         //Staff can be removed or re-added in bulk in this view via ajax

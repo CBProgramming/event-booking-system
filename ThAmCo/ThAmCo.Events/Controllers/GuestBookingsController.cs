@@ -23,13 +23,6 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        //// GET: GuestBookings
-        //public async Task<IActionResult> Index()
-        //{
-        //    var eventsDbContext = _context.Guests.Include(g => g.Customer).Include(g => g.Event);
-        //    return View(await eventsDbContext.ToListAsync());
-        //}
-
         //Returns view of all guests at an event, based on event id provided
         public async Task<IActionResult> GuestsAtEvent(int id)
         {
@@ -92,72 +85,6 @@ namespace ThAmCo.Events.Controllers
             CustomerEventsVM customerEvents = new CustomerEventsVM(customer, eventBookings);
             return View(customerEvents);
         }
-
-        //Creates a new guest booking based on customer and event id
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> CustomerBookings(int EventId, int CustomerId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
-        //{
-        //    if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(guestBooking);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!GuestBookingExists(guestBooking.CustomerId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //    }
-        //    return View("CustomerBookings");
-        //}
-
-        // POST: GuestBookings/Save/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Save(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBookingAttendanceVM guestBooking)
-        //{
-        //    if (CustomerId != guestBooking.CustomerId || EventId != guestBooking.EventId)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var dbGuestBooking = await _context.Guests.FindAsync(guestBooking.CustomerId, guestBooking.EventId);
-        //            dbGuestBooking.Attended = guestBooking.Attended;
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!GuestBookingExists(guestBooking.CustomerId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        await CustomerBookings(CustomerId);
-        //    }
-        //    return View("CustomerBookings");
-        //}
 
         // Reusable method which returns confirmation view to ensure user wishes to cancel the guest booking
         // Origin string used to check which route the user used to cet to this screen, ensuring they are returned 
