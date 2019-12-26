@@ -1,8 +1,6 @@
 ﻿@model ThAmCo.Events.Models.GuestBookings.BookNewGuestVM
 
-
-<h2>Book additional guests for</h2>
-<h3>@Model.Event.Title</h3>
+<h2>Book additional guests for @Model.Event.Title</h2>
 
 <div>
     <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@Model.Event.Id">Back to bookings for @Model.Event.Title</a>

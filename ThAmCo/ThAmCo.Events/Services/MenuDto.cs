@@ -25,7 +25,7 @@ namespace ThAmCo.Events.Services
         public string Name { get; set; }
 
         [Required]
-        [DisplayName("Cost per guest")]
+        [DisplayName("Menu cost per guest")]
         public double CostPerHead { get; set; }
 
         public string Starter { get; set; }

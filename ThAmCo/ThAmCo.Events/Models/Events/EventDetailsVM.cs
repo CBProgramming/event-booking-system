@@ -27,16 +27,26 @@ namespace ThAmCo.Events.Models.Events
 
         public MenuDto Menu { get; set; }
 
-        [DisplayName("Menu Cost")]
+        [DisplayName("Total menu Cost")]
         public double MenuCost
         {
-            get { return Menu.CostPerHead * Customers.Count; }
+            get
+            {
+                return Menu.CostPerHead * Customers.Count;
+            }
         }
 
         [DisplayName("Venue Cost")]
         public double VenueCost
         {
-            get { return Event.VenueCost * ((TimeSpan)Event.Duration).TotalHours; }
+            get { 
+                if (Event.Duration != null)
+                {
+                    return Event.VenueCost * ((TimeSpan)Event.Duration).TotalHours;
+                }
+                return Event.VenueCost;
+            }
+                
         }
 
         [DisplayName("Total Cost")]
