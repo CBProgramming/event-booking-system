@@ -9,6 +9,9 @@ using ThAmCo.Events.Models.Customers;
 
 namespace ThAmCo.Events.Controllers
 {
+    //Customers controller to manage customer CRUD
+    //View models used throughout to separate processes from backend database
+
     public class CustomersController : Controller
     {
         private readonly EventsDbContext _context;
@@ -18,7 +21,7 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        // GET: Customers
+        //Returns view of list of all existing customers
         public async Task<IActionResult> Index()
         {
             var customers = await _context.Customers.Where(c => c.Deleted == false).ToListAsync();
@@ -31,7 +34,7 @@ namespace ThAmCo.Events.Controllers
             return View(customersVM);
         }
 
-        // GET: Customers/Details/5
+        //Returns view of details of existing customer based on customer id provided
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,15 +50,13 @@ namespace ThAmCo.Events.Controllers
             return View(customerVM);
         }
 
-        // GET: Customers/Create
+        //Returns view used to create new customer
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Creates new customer record based on customer view model provided
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Surname,FirstName,Email")] CustomerVM customerVM)
@@ -80,7 +81,7 @@ namespace ThAmCo.Events.Controllers
             return View(customerVM);
         }
 
-        // GET: Customers/Edit/5
+        //Returns view of customer details to be edited by user
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,9 +97,7 @@ namespace ThAmCo.Events.Controllers
             return View(customerVM);
         }
 
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Edits customer details held in database, based on customer view model provided
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,FirstName,Email")] CustomerVM customerVM)
@@ -131,7 +130,7 @@ namespace ThAmCo.Events.Controllers
             return View(customerVM);
         }
 
-        // GET: Customers/Delete/5
+        // Returns confirmation page with customer details prior to customer deletion
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +145,9 @@ namespace ThAmCo.Events.Controllers
             return View(customerVM);
         }
 
-        // POST: Customers/Delete/5
+        //Soft deletes customer record from database based on id provided by setting customer.deleted 
+        //flag to true and anonymising their personal data
+        //Logic in other methods throughout solution checks for this to filter deleted customers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -181,6 +182,7 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Method returning boolean as to whether customer is active or soft deleted
         private bool CustomerActive(int id)
         {
             return _context.Customers.Any(e => e.Id == id && e.Deleted != true);
