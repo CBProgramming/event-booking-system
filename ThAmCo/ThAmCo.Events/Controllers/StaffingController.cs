@@ -154,7 +154,7 @@ namespace ThAmCo.Events.Controllers
             var staffBooking = await _context.Staffing.FindAsync(staffId, eventId);
             _context.Staffing.Remove(staffBooking);
             await _context.SaveChangesAsync();
-            return RedirectToAction("StaffAtEvent", new { id = eventId });
+            return RedirectToAction("StaffEvents", new { id = staffId });
         }
 
         //Returns a view listing all events a staff member is currently allocated to, based on staff id
