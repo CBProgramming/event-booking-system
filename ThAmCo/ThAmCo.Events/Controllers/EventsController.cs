@@ -447,15 +447,6 @@ namespace ThAmCo.Events.Controllers
             return availabilities;
         }
 
-        //private string geenerateReservationRef(string code, DateTime date)
-        //{
-        //    string day = date.Day.ToString("00");
-        //    string month = date.Month.ToString("00");
-        //    string year = date.Year.ToString("0000");
-        //    string reference = code + year + month + day;
-        //    return reference;
-        //}
-
         //Reusable method to set up Http client for venues API
         private HttpClient setupVenueClient()
         {

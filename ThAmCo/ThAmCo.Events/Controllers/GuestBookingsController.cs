@@ -202,30 +202,6 @@ namespace ThAmCo.Events.Controllers
             return BadRequest();
         }
 
-
-
-        //// POST: GuestBookings/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> BookNewGuest(int CustomerId, int EventId, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var existingGuest = _context.Guests.Where(g => g.CustomerId == guestBooking.CustomerId && g.EventId == guestBooking.EventId).ToList();
-        //        if (existingGuest == null || existingGuest.Count == 0)
-        //        {
-        //            _context.Add(guestBooking);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });
-        //        }
-        //    }
-
-        //    return RedirectToAction("GuestsAtEvent", new { id = guestBooking.EventId });
-        //}
-
         //Reusable method to check if guest booking exists
         private bool GuestBookingExists(int id)
         {
