@@ -13,7 +13,7 @@ namespace ThAmCo.Events.Controllers
 {
 
     //GuestBookings controller to manage guestbooking CRUD
-    //View models used throughout to separate processes from backend database
+    //View models used instead of data models throughout to separate processes from backend database
     public class GuestBookingsController : Controller
     {
         private readonly EventsDbContext _context;

@@ -2,10 +2,6 @@
 
 <h2>Book additional guests for @Model.Event.Title</h2>
 
-<div>
-    <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@Model.Event.Id">Back to bookings for @Model.Event.Title</a>
-</div>
-
 <br />
 <input type="hidden" asp-for="@Model.Event.Id" name="EventId" />
 
@@ -33,6 +29,12 @@
         </div>
 
     }
+
+    <br/>
+    <div>
+        <a asp-controller="Events" asp-action="Index">Back to Events</a> |
+        <a asp-controller="GuestBookings" asp-action="GuestsAtEvent" asp-route-id="@Model.Event.Id">Back to bookings for @Model.Event.Title</a>
+    </div>
 
     <script type="text/javascript">
 

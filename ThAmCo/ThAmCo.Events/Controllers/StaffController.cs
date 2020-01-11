@@ -10,7 +10,7 @@ namespace ThAmCo.Events.Controllers
 {
 
     //Staff controller to manage staff CRUD
-    //View models used throughout to separate processes from backend database
+    //View models used instead of data models throughout to separate processes from backend database
     public class StaffController : Controller
     {
         private readonly EventsDbContext _context;

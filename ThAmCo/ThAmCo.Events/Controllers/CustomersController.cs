@@ -10,7 +10,7 @@ using ThAmCo.Events.Models.Customers;
 namespace ThAmCo.Events.Controllers
 {
     //Customers controller to manage customer CRUD
-    //View models used throughout to separate processes from backend database
+    //View models used throughout instead of data models to separate processes from backend database
 
     public class CustomersController : Controller
     {
@@ -24,7 +24,7 @@ namespace ThAmCo.Events.Controllers
         //Returns view of list of all existing customers
         public async Task<IActionResult> Index()
         {
-            var customers = await _context.Customers.Where(c => c.Deleted == false).ToListAsync();
+            var customers = await _context.Customers.Where(c => c.Deleted == false).OrderBy(c => c.Surname).ToListAsync();
             List<CustomerVM> customersVM = new List<CustomerVM>();
             foreach (Customer c in customers)
             {
@@ -75,6 +75,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 catch
                 {
+                    // view model error message var used instead of view bag
                     customerVM.Message = "Something went wrong.  Please ensure all fields are complete and try again";
                 }
             }

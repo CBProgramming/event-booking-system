@@ -42,9 +42,9 @@
 
 }
 
-</br>
+<br/>
 <div>
-    <a asp-action="Index">Back to Events</a> |
+    <a asp-controller="Events" asp-action="Index">Back to Events</a> |
     <a asp-action="StaffAtEvent" asp-route-id="@Model.EventId">Back to staff allocation for @Html.DisplayFor(model => model.EventTitle)</a>
 </div>
 

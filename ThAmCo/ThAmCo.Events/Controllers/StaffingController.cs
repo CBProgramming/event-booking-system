@@ -12,7 +12,7 @@ using ThAmCo.Events.Models.Staffing;
 namespace ThAmCo.Events.Controllers
 {
     //Staffing controller to manage staffing CRUD
-    //View models used throughout to separate processes from backend database
+    //View models used instead of data models throughout to separate processes from backend database
     public class StaffingController : Controller
 
     {

@@ -21,7 +21,7 @@ using ThAmCo.Venues.Data;
 namespace ThAmCo.Events.Controllers
 {
     //Events controller to manage event CRUD
-    //View models used throughout to separate processes from backend database
+    //View models used instead of data models throughout to separate processes from backend database
     public class EventsController : Controller
     {
         private readonly EventsDbContext _context;
@@ -44,7 +44,7 @@ namespace ThAmCo.Events.Controllers
             List<EventVM> eventsOk = new List<EventVM>();
             List<EventVM> eventsNeedStaff = new List<EventVM>();
             List<EventVM> eventsNeedFirstAid = new List<EventVM>();
-            var events = await _context.Events.Where(e => e.IsActive == true).ToListAsync();
+            var events = await _context.Events.Where(e => e.IsActive == true).OrderBy(e => e.Title).ToListAsync();
             foreach (Event e in events)
             {
                 var bookings = await _context.Guests.Include(g => g.Event).Where(g => g.EventId == e.Id).ToListAsync();
@@ -91,7 +91,6 @@ namespace ThAmCo.Events.Controllers
             }
             var eventVM = new EventVM(@event, true);
             eventVM.Message = message;
-            //EventToEditVM eventEditor = new EventToEditVM(eventVM);
             return View(eventVM);
         }
 
@@ -103,6 +102,7 @@ namespace ThAmCo.Events.Controllers
         {
             if(@event.Duration.HasValue && (@event.Duration).Value.TotalDays >= 1)
             {
+                // view model error message var used instead of view bag
                 @event.Message = "Duration must be less than 24 hours.  Please enter as HH:MM or HH:MM:SS";
                 return View(@event);
             }
@@ -153,14 +153,14 @@ namespace ThAmCo.Events.Controllers
             }
             var eventVM = new EventVM(@event);
             var bookings = _context.Guests.Include(g => g.Customer).Where(g => g.EventId == id);
-            var customers = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var customers = await _context.Customers.Where(c => c.Deleted == false).Where(e => bookings.Any(b => b.CustomerId.Equals(e.Id))).OrderBy(c => c.Surname).ToListAsync();
             List<CustomerVM> customersVM = new List<CustomerVM>();
             foreach (Customer c in customers)
             {
                 customersVM.Add(new CustomerVM(c));
             }
             var staffing = _context.Staffing.Include(g => g.Staff).Where(g => g.EventId == id);
-            var staff = await _context.Staff.Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(e => e.Id).ToListAsync();
+            var staff = await _context.Staff.Where(e => staffing.Any(b => b.StaffId.Equals(e.Id))).OrderBy(s => s.Surname).ToListAsync();
             List<StaffVM> staffVM = new List<StaffVM>();
             foreach (Staff s in staff)
             {
@@ -194,6 +194,7 @@ namespace ThAmCo.Events.Controllers
         //Second stage of create event process, displaying events available on date provided 
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
+            // multiple if statements ensure correct braching and catching or errors simultaneously
             if (@event == null)
             {
                 @event.Message = "Something went wrong.  Please ensure all fields are completed and try again.";
@@ -258,7 +259,6 @@ namespace ThAmCo.Events.Controllers
             ReservationPostDto res = new ReservationPostDto(booking.Date, booking.VenueRef);
             try
             {
-                //var getResponse = await client.GetAsync(uriOldRef);
                 if ((await client.GetAsync(uriOldRef)).IsSuccessStatusCode)
                 {
                     var deleteResponse = await client.DeleteAsync(uriOldRef);
@@ -351,7 +351,7 @@ namespace ThAmCo.Events.Controllers
                 string uri = "/api/EventTypes";
                 var response = await client.GetAsync(uri);
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsAsync<List<EventTypeDto>>();
+                return (await response.Content.ReadAsAsync<List<EventTypeDto>>()).OrderBy(e => e.Title);
             }
             catch (Exception e)
             {
@@ -372,7 +372,7 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
-            var eventVM = new Models.Events.EventVM(@event);
+            var eventVM = new EventVM(@event);
             return View(eventVM);
         }
 
@@ -527,7 +527,7 @@ namespace ThAmCo.Events.Controllers
             catch (HttpRequestException e)
             {
             }
-            return menus;
+            return menus.OrderBy(m => m.Name);
         }
 
         //Displays a list of menus to the user to select which to book to event
@@ -538,7 +538,7 @@ namespace ThAmCo.Events.Controllers
             return View(menuChoices);
         }
 
-        //Posts chosen menu to catering API and saves an event id to local database for reference
+        //Posts/puts chosen menu to catering API and saves an event id to local database for reference
         public async Task<IActionResult> SelectMenu(int menuId, int eventId)
         {
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
