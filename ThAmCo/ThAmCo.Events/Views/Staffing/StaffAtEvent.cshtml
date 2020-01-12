@@ -12,10 +12,8 @@
 {
     <h4><font color="red">Not enough staff allocated to event.  Please add @Model.NeededStaff more staff</font></h4>
 }
-
-<p>
-    @Html.ActionLink("Add Staff", "Create", new { eventId = Model.EventId })
-</p>
+<br/>
+<h4>@Html.ActionLink("Add Staff", "Create", new { eventId = Model.EventId })</h4>
 
 @if (@Model.Staff.Count() != 0)
 {

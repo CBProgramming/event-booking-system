@@ -3,10 +3,9 @@
 
 <h2>@Html.DisplayFor(model => model.Event.Title)'s Guests</h2>
 
-<br>
-<p>
-    @Html.ActionLink("Book new guest", "BookNewGuest", new { eventId = Model.Event.Id })
-</p>
+<br/>
+<h4>@Html.ActionLink("Book new guest", "BookNewGuest", new { eventId = Model.Event.Id })</h4>
+<br/>
 <div class="container">
     <div class="row">
         <div class="col-md-2">

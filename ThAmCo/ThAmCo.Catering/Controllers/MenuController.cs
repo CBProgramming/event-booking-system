@@ -28,7 +28,7 @@ namespace ThAmCo.Catering.Controllers
         {
             if (menuId == null)
             {
-                var menus = await _context.Menus.ToListAsync();
+                var menus = await _context.Menus.OrderBy(m => m.Name).ToListAsync();
                 List<MenuDto> menusDto = new List<MenuDto>();
                 foreach (Menu m in menus)
                 {

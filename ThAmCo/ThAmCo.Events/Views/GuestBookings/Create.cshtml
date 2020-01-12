@@ -3,8 +3,6 @@
 
 <h2>Available events for @Model.Customer.FullName</h2>
 
-<h4><a asp-controller="GuestBookings" asp-action="CustomerBookings" asp-route-id="@Model.Customer.Id">Back to @Model.Customer.FullName's bookings</a></h4>
-
 <input type="hidden" asp-for="@Model.Customer.Id" name="CustomerId" />
 
 <div class="container">
@@ -51,6 +49,10 @@
         </div>
     </div>
 }
+
+<br>
+<a asp-controller="Customers" asp-action="Index">Back to Customer List</a> |
+<a asp-controller="GuestBookings" asp-action="CustomerBookings" asp-route-id="@Model.Customer.Id">Back to @Model.Customer.FullName's bookings</a>
 
 <script type="text/javascript">
 

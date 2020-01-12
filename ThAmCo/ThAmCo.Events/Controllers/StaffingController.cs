@@ -40,7 +40,7 @@ namespace ThAmCo.Events.Controllers
                 if (firstAiderPresent == false && staffVM[i].FirstAider == true)
                     firstAiderPresent = true;
             }
-            BookNewStaffVM eventStaff = new BookNewStaffVM(staffVM, firstAiderPresent, id, @event.Title, numGuests);
+            BookNewStaffVM eventStaff = new BookNewStaffVM(staffVM.OrderBy(s => s.Surname).ToList(), firstAiderPresent, id, @event.Title, numGuests);
             return View(eventStaff);
         }
 
@@ -67,7 +67,7 @@ namespace ThAmCo.Events.Controllers
                 staffVM.Add(new StaffAttendanceVM(s));
             }
             var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
-            BookNewStaffVM creator = new BookNewStaffVM(staffVM, firstAiderPresent, eventVM.Id, eventVM.Title,numGuests);
+            BookNewStaffVM creator = new BookNewStaffVM(staffVM.OrderBy(s => s.Surname).ToList(), firstAiderPresent, eventVM.Id, eventVM.Title,numGuests);
             return View(creator);
         }
 
@@ -84,7 +84,7 @@ namespace ThAmCo.Events.Controllers
                 eventsVM.Add(new EventVM(e));
             }
             var staff = new StaffVM(await _context.Staff.FindAsync(staffId));
-            AllocateNewEventVM creator = new AllocateNewEventVM(staff, eventsVM);
+            AllocateNewEventVM creator = new AllocateNewEventVM(staff, eventsVM.OrderBy(e => e.Title).ToList());
             return View(creator);
         }
 
@@ -161,7 +161,7 @@ namespace ThAmCo.Events.Controllers
             {
                 eventStaffing.Add(new EventVM(events[i]));
             }
-            StaffEventsVM customerEvents = new StaffEventsVM(staffVM, eventStaffing);
+            StaffEventsVM customerEvents = new StaffEventsVM(staffVM, eventStaffing.OrderBy(e => e.Title).ToList());
             return View(customerEvents);
         }
     }

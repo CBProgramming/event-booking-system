@@ -34,7 +34,7 @@ namespace ThAmCo.Events.Controllers
             {
                 customerBookings.Add(new CustomerBookingVM(customer[i], bookings[i]));
             }
-            EventCustomersVM eventCustomers = new EventCustomersVM(events, customerBookings);
+            EventCustomersVM eventCustomers = new EventCustomersVM(events, customerBookings.OrderBy(c => c.FullName).ToList());
             return View(eventCustomers);
         }
 
@@ -82,7 +82,7 @@ namespace ThAmCo.Events.Controllers
             {
                 eventBookings.Add(new EventBookingVM(events[i],bookings[i]));
             }
-            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, eventBookings);
+            CustomerEventsVM customerEvents = new CustomerEventsVM(customer, eventBookings.OrderBy(e => e.Title).ToList());
             return View(customerEvents);
         }
 
@@ -150,7 +150,7 @@ namespace ThAmCo.Events.Controllers
             {
                 eventsVM.Add(new EventVM(e));
             }
-            GuestBookingCreateVM creator = new GuestBookingCreateVM(customer, eventsVM);
+            GuestBookingCreateVM creator = new GuestBookingCreateVM(customer, eventsVM.OrderBy(e => e.Title).ToList());
             return View(creator);
         }
 
@@ -167,7 +167,7 @@ namespace ThAmCo.Events.Controllers
                 customersVM.Add(new CustomerVM(c));
             }
             var eventVM = new EventVM(await _context.Events.FindAsync(eventId));
-            BookNewGuestVM creator = new BookNewGuestVM(eventVM, customersVM);
+            BookNewGuestVM creator = new BookNewGuestVM(eventVM, customersVM.OrderBy(c => c.FullName).ToList());
             return View(creator);
         }
 

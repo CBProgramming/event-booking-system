@@ -5,9 +5,7 @@
 <h4>@Html.DisplayNameFor(model => model.Customer.Email): @Html.DisplayFor(model => model.Customer.Email)</h4>
 
 <br>
-<p>
-    @Html.ActionLink("Book new event", "Create", new { customerId = Model.Customer.Id })
-</p>
+<h4>@Html.ActionLink("Book new event", "Create", new { customerId = Model.Customer.Id })</h4>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
@@ -57,7 +55,7 @@
         </div>
     </div>
 }
-
+<br/>
 <a asp-controller="Customers" asp-action="Index">Customer list</a> |
 <a asp-controller="Events" asp-action="Index">Event list</a>
 

@@ -23,7 +23,7 @@ namespace ThAmCo.Events.Controllers
         //Returns view of list of staff
         public async Task<IActionResult> Index()
         {
-            var staff = await _context.Staff.ToListAsync();
+            var staff = await _context.Staff.OrderBy(s => s.Surname).ToListAsync();
             List<StaffVM> staffVM = new List<StaffVM>();
             foreach (Staff s in staff)
             {
