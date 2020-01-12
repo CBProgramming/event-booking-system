@@ -11,7 +11,7 @@ namespace ThAmCo.Events.Controllers
 {
     //Customers controller to manage customer CRUD
     //View models used throughout instead of data models to separate processes from backend database
-
+    //Entire solution tested and functional on Teesside University lab PC 42823
     public class CustomersController : Controller
     {
         private readonly EventsDbContext _context;
