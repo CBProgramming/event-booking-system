@@ -34,6 +34,7 @@ namespace ThAmCo.Events.Controllers
             {
                 customerBookings.Add(new CustomerBookingVM(customer[i], bookings[i]));
             }
+            // lists are ordered as an alternative to unordered to improve user experience when lists become large
             EventCustomersVM eventCustomers = new EventCustomersVM(events, customerBookings.OrderBy(c => c.FullName).ToList());
             return View(eventCustomers);
         }
@@ -112,6 +113,8 @@ namespace ThAmCo.Events.Controllers
         }
 
         // Deletes a guest booking from database and then uses origin string to return user to correct page
+        // Due to multiple routes through site this string serves as an alternative to using multiple methods
+        // with different names which do the same thing, to reduce code duplication
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int eventId, int customerId, string origin)

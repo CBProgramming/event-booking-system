@@ -89,6 +89,8 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
+            // prevent menu cost being less than 0
+            // done locally rather than on API to prevent the API enforsing business logic on the API consumer
             if (menu.CostPerHead < 0)
             {
                 menu.Message = "Menu cost cannot be less than £0";
@@ -132,6 +134,8 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
+            // prevent menu cost being less than 0
+            // done locally rather than on API to prevent the API enforsing business logic on the API consumer
             if (menu.CostPerHead < 0)
             {
                 menu.Message = "Menu cost cannot be less than £0";

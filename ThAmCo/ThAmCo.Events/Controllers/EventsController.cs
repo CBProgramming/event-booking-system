@@ -58,6 +58,7 @@ namespace ThAmCo.Events.Controllers
                     MenuDto menu = menus.Where(m => m.MenuId == eventVM.MenuId).FirstOrDefault();
                     eventVM.MenuName = menu.Name;
                 }
+                // view model getter methods used to easily determine if staff and/or first aiders are needed
                 if (!eventVM.NeedStaff && firstAidStaff != null && firstAidStaff.Count > 0)
                 {
                     eventsOk.Add(eventVM);
@@ -71,6 +72,7 @@ namespace ThAmCo.Events.Controllers
                     eventsNeedFirstAid.Add(eventVM);
                 }
             }
+            // custom view models used where appropritate display information as required in brief
             EventsIndexVM eventLists = new EventsIndexVM(eventsOk, eventsNeedStaff, eventsNeedFirstAid);
             return View(eventLists);
         }
@@ -167,6 +169,8 @@ namespace ThAmCo.Events.Controllers
                 staffVM.Add(new StaffVM(s));
             }
             MenuDto menuDto = await getMenu(eventVM.MenuId);
+            // view model of view models used to pass multiple self contained groups of data to a customised view as required by the brief
+            // instead of creating one view model which contains every field of data requited
             EventDetailsVM eventDetailsVM = new EventDetailsVM(eventVM, customersVM, staffVM, menuDto);
             return View(eventDetailsVM);
         }
@@ -195,6 +199,7 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> SelectVenue(int day, int month, int year, int hour, int minute, int second, [Bind("Id,Title,Date,Duration,TypeId,VenueRef,Existing,VenueName,VenueDescription,VenueCapacity,VenueCost,OldRef")] EventVM @event)
         {
             // multiple if statements ensure correct braching and catching or errors simultaneously
+            // instead of having one route through the entire system
             if (@event == null)
             {
                 @event.Message = "Something went wrong.  Please ensure all fields are completed and try again.";
@@ -223,7 +228,10 @@ namespace ThAmCo.Events.Controllers
             else
             {
                 if (@event.Existing)
+                    // OldRef variable used to store the old referance when passinbg between views and actions
+                    //a llowing new reference to be stored without losing old reference which may be needed when accessing Venues API later in process 
                     @event.OldRef = @event.getBookingRef;
+                @event.OldRef = @event.getBookingRef;
                 List<AvailabilitiesVM> availabilities = GetAvailability(@event.TypeId, @event.Date, @event.Date).Result.ToList();
                 if (availabilities.Count == 0)
                 {
@@ -280,6 +288,7 @@ namespace ThAmCo.Events.Controllers
                 }
                 else
                 {
+                    // all relevant venue data saved locally to prevent the alternative of having to query the API constantly to display venue information
                     Event @event = new Event();
                     @event.Date = booking.Date;
                     @event.Title = booking.Title;
@@ -418,12 +427,14 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // reusable method to check if an event already exists
         private bool EventExists(int id)
         {
             return _context.Events.Where(e => e.IsActive == true).Any(e => e.Id == id);
         }
-    
+
         //Reusable method to get all available venues from Venues API, based on date range and event type
+        // Allows multiple routes though the site to be coded without having to recode this query each time
         private async Task<IEnumerable<AvailabilitiesVM>> GetAvailability (string eventType, DateTime beginDate, DateTime endDate)
         {
             var client = setupVenueClient();
@@ -538,7 +549,9 @@ namespace ThAmCo.Events.Controllers
             return View(menuChoices);
         }
 
-        //Posts/puts chosen menu to catering API and saves an event id to local database for reference
+        //Posts/puts chosen menu to catering API and saves a menu id to local database for reference
+        //Unlike venue information, menu data stored locally is minimal to prevent too much unecessary data duplication
+        //and to ensure menu info is always queries from the API to ensure it is up to date
         public async Task<IActionResult> SelectMenu(int menuId, int eventId)
         {
             FoodBookingDto booking = new FoodBookingDto(menuId, eventId);
@@ -576,7 +589,8 @@ namespace ThAmCo.Events.Controllers
             });
         }
 
-        //Cancel menu screen to enusure user wishes to cancel menu
+        // Cancel menu screen to enusure user wishes to cancel menu, for better user experience
+        // Alternative to simply cancelling without confirmation
         public async Task<IActionResult> CancelMenu(int eventId, int menuId, string message)
         {
             return View(await getEventMenuVM(eventId, menuId, message));
