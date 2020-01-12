@@ -113,9 +113,9 @@ namespace ThAmCo.Events.Controllers
         }
 
         //Returns view used to create new menu
-        public IActionResult Create()
+        public IActionResult Create(MenuDto menu)
         {
-            return View();
+            return View(menu);
         }
 
         //Accesses catering API and creates new menu record, using menudto provided
@@ -127,6 +127,11 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
+            if (menu.CostPerHead < 0)
+            {
+                menu.Message = "Menu cost cannot be less than £0";
+                return RedirectToAction("Create", menu);
+            }
             string uri = "/api/Menu/";
             var client = setupClient();
             if ((await client.PostAsJsonAsync<MenuDto>(uri, menu)).IsSuccessStatusCode)
@@ -136,7 +141,7 @@ namespace ThAmCo.Events.Controllers
             else
             {
                 menu.Message = "Something went wrong, please try again.";
-                return View(menu);
+                return RedirectToAction("Create", menu);
             }
         }
     }
