@@ -6,25 +6,29 @@
 
 <br>
 <h4>@Html.ActionLink("Book new event", "Create", new { customerId = Model.Customer.Id })</h4>
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
-            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)</strong>
-        </div>
-        <div class="col-md-2">
-            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)</strong>
-        </div>
-        <div class="col-md-2">
-            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)</strong>
-        </div>
-        <div class="col-md-1">
-            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)</strong>
-        </div>
-        <div class="col-md-1">
-            <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Attended)</strong>
+@if (@Model.Events.Count() != 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Title)</strong>
+            </div>
+            <div class="col-md-2">
+                <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Date)</strong>
+            </div>
+            <div class="col-md-2">
+                <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Duration)</strong>
+            </div>
+            <div class="col-md-1">
+                <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Type)</strong>
+            </div>
+            <div class="col-md-1">
+                <strong>@Html.DisplayNameFor(model => model.Events.FirstOrDefault().Attended)</strong>
+            </div>
         </div>
     </div>
-</div>
+}
+
 
 <input type="hidden" asp-for="@Model.Customer.Id" name="Customer" />
 
@@ -55,7 +59,7 @@
         </div>
     </div>
 }
-<br/>
+<br />
 <a asp-controller="Customers" asp-action="Index">Customer list</a> |
 <a asp-controller="Events" asp-action="Index">Event list</a>
 
