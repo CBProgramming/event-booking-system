@@ -89,6 +89,11 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
+            if (menu.CostPerHead < 0)
+            {
+                menu.Message = "Menu cost cannot be less than £0";
+                return View(menu);
+            }
             string uri = "/api/Menu/";
             var client = setupClient();
             if((await client.PutAsJsonAsync<MenuDto>(uri, menu)).IsSuccessStatusCode)
